@@ -2,11 +2,14 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.GestionadorFutbol</groupId>
-  <artifactId>GestorFutbol</artifactId>
+  <artifactId>GR05_1BT3_622_25A</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>GestorFutbol Maven Webapp</name>
   <url>http://maven.apache.org</url>
+
+
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -14,7 +17,42 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+
+
+    <!--DEPENDENCIAS RELACIONADAS CON EL ORM-->
+    <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
+    <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>6.4.4.Final</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.hibernate.common/hibernate-commons-annotations -->
+    <dependency>
+      <groupId>org.hibernate.common</groupId>
+      <artifactId>hibernate-commons-annotations</artifactId>
+      <version>6.0.6.Final</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
+    <dependency>
+      <groupId>jakarta.persistence</groupId>
+      <artifactId>jakarta.persistence-api</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
+    <dependency>
+      <groupId>com.microsoft.sqlserver</groupId>
+      <artifactId>mssql-jdbc</artifactId>
+      <version>11.2.3.jre18</version>
+      <scope>compile</scope>
+    </dependency>
+
+
+
   </dependencies>
+
+
+
+
   <build>
     <finalName>GestorFutbol</finalName>
   </build>

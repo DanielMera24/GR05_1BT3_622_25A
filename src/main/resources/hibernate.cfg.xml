@@ -1,0 +1,34 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- Configuración de SQL Server -->
+        <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+        <property name="hibernate.connection.url">jdbc:sqlserver://MRASDRUBAL\MRASDRUBALSERVER:1433;databaseName=GestorTorneos</property>
+        <property name="hibernate.connection.username">sa</property>
+        <property name="hibernate.connection.password">12345</property>
+
+        <!-- Dialecto de Hibernate para SQL Server -->
+        <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
+
+        <!-- Mostrar consultas en consola -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+
+        <!-- Opciones de creación de tablas -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- Clases mapeadas -->
+        <mapping class="com.gestorfutbol.entity.Equipo"/>
+        <mapping class="com.gestorfutbol.entity.EquipoPartido"/>
+        <mapping class="com.gestorfutbol.entity.Jugador"/>
+        <mapping class="com.gestorfutbol.entity.JugadorPartido"/>
+        <mapping class="com.gestorfutbol.entity.Partido"/>
+        <mapping class="com.gestorfutbol.entity.TablaPosiciones"/>
+        <mapping class="com.gestorfutbol.entity.Torneo"/>
+
+    </session-factory>
+</hibernate-configuration>
