@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fútbol Manager</title>
+  <link rel="stylesheet" href="/css/index.css" />
+
+</head>
+
+<body>
+  <div class="aplicacion">
+    <aside class="barra_lateral">
+      <h2>
+        <img src="/imagenes/pelota.png" alt="Logo" class="icono" />
+        FútbolManager
+      </h2>
+      <nav>
+        <a href="/html/index.html" class="activo">
+          <img src="/imagenes/trofeo.png" class="icono" />
+          Torneos
+        </a>
+        <a href="/html/equipos.html">
+          <img src="/imagenes/equipo.png" class="icono" />
+          Equipos
+        </a>
+        <a href="/html/tabla.html">
+          <img src="/imagenes/tabla.png" class="icono" />
+          Tabla de Posiciones
+        </a>
+        <a href="/html/partidos.html">
+          <img src="/imagenes/calendario.png" class="icono" />
+          Partidos
+        </a>
+      </nav>
+    </aside>
+
+    <main class="contenido_principal">
+      <div class="encabezado">
+        <h1>Torneos</h1>
+        <button class="boton_nuevo">+ Nuevo Torneo</button>
+      </div>
+
+      <div class="tarjetas">
+        <div class="tarjeta">
+          <div class="encabezado_tarjeta fondo_azul">
+            <h3>Liga Nacional</h3>
+            <span>2023-2024</span>
+          </div>
+          <div class="cuerpo_tarjeta">
+            <span class="etiqueta verde">En progreso</span>
+            <p>Jornada actual: 15 de 38</p>
+            <div class="acciones_tarjeta">
+              <a href="#">Detalles</a>
+              <a href="#">Editar</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="tarjeta">
+          <div class="encabezado_tarjeta fondo_rosado">
+            <h3>Copa del Rey</h3>
+            <span>2024</span>
+          </div>
+          <div class="cuerpo_tarjeta">
+            <span class="etiqueta amarilla">Próximo</span>
+            <p>Inicio: 15 de junio, 2024</p>
+            <div class="acciones_tarjeta">
+              <a href="#">Detalles</a>
+              <a href="#">Editar</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="tarjeta">
+          <div class="encabezado_tarjeta fondo_rojo">
+            <h3>Torneo Verano</h3>
+            <span>2023</span>
+          </div>
+          <div class="cuerpo_tarjeta">
+            <span class="etiqueta gris">Finalizado</span>
+            <p>Ganador: FC Barcelona</p>
+            <div class="acciones_tarjeta">
+              <a href="#">Detalles</a>
+              <a href="#">Editar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Formulario dentro del modal -->
+<div id="modalFormulario" class="modal">
+  <div class="modal_contenido">
+    <span class="cerrar" id="cerrarModal">&times;</span>
+    <h2>Nuevo Torneo</h2>
+    <form id="formTorneo" class="formulario_encuesta">
+      <div class="campo">
+        <label for="nombreTorneo">Nombre del Torneo</label>
+        <input type="text" id="nombreTorneo" name="nombreTorneo"  />
+      </div>
+      <div class="campo">
+        <label for="fechaInicio">Fecha de Inicio</label>
+        <input type="date" id="fechaInicio" name="fechaInicio"  />
+      </div>
+      <button type="submit" class="boton_submit">Crear Torneo</button>
+    </form>
+  </div>
+</div>
+
+
+  </div>
+  <script src="/js/index.js"></script>
+
+</body>
+</html>
