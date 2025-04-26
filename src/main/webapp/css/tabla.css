@@ -1,0 +1,212 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
+  
+  body {
+    background: #f9f9f9;
+    color: #333;
+  }
+  
+  .aplicacion {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .barra_lateral {
+    width: 220px;
+    background: #f3f4f6;
+    padding: 20px;
+  }
+  
+  .barra_lateral h2 {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 30px;
+    color: #4f46e5;
+    word-break: break-word;
+    max-width: 100%;
+    font-size: 18px;
+  }
+  
+  .barra_lateral nav a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  
+  .barra_lateral nav a.activo,
+  .barra_lateral nav a:hover {
+    background: #6366f1;
+    color: white;
+  }
+  
+  .contenido_principal {
+    flex: 1;
+    padding: 30px;
+  }
+  
+  .encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .boton_nuevo {
+    background: #6366f1;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .tabla_contenedor {
+    margin-top: 30px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+  
+  .tabla_equipos {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  
+  .tabla_equipos th,
+  .tabla_equipos td {
+    padding: 10px 15px;
+    border: 1px solid #d1d5db;
+  }
+  
+  .tabla_equipos th {
+    background-color: #f9fafb;
+  }
+  
+  .accion {
+    margin-right: 5px;
+    padding: 5px 10px;
+    border: 1px solid #333;
+    background: white;
+    cursor: pointer;
+  }
+  
+  .icono {
+    width: 18px;
+    height: 18px;
+  }
+  .selector_torneo select {
+    background: #6366f1;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    appearance: none;
+    outline: none;
+    text-align: center;
+    min-width: 180px;
+  }
+  
+  .selector_torneo {
+    position: relative;
+  }
+  
+  .selector_torneo::after {
+    content: "▼";
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: white;
+    font-size: 12px;
+  }
+  
+  
+  .tabla_posiciones_equipo {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow: hidden;
+    text-align: center;
+  }
+  
+  .tabla_posiciones_equipo th {
+    background: #eef2ff;
+    color: #4f46e5;
+    font-weight: 600;
+    padding: 10px;
+  }
+  
+  .tabla_posiciones_equipo td {
+    padding: 10px;
+    border-top: 1px solid #e5e7eb;
+    color: #333;
+  }
+  
+  .tabla_posiciones_equipo td:first-child {
+    font-weight: bold;
+  }
+  
+  .tabla_posiciones_equipo img.icono_escudo {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  
+  .equipo_info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: start;
+  }
+  
+  .equipo_info .icono_escudo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+
+  .tabla_posiciones_equipo td:nth-child(2),
+.tabla_posiciones_equipo th:nth-child(2) {
+  width: 180px; /* o ajusta según veas visualmente */
+  max-width: 180px;
+  text-align: left;
+}
+
+.tabla_posiciones_equipo td:nth-child(2) span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+.tabla_posiciones_equipo th:nth-child(3) {
+    background-color: #c7d2fe; 
+    color: #1e3a8a;
+  }
+  
+  .tabla_posiciones_equipo td:nth-child(3) {
+    font-weight: bold;
+    color: #1e40af;
+    background-color: #eef2ff;
+  }
+    
+  
