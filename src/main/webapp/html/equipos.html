@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Equipos</title>
+  <link rel="stylesheet" href="/css/equipos.css" />
+</head>
+<body>
+  <div class="aplicacion">
+    <aside class="barra_lateral">
+      <h2>
+        <img src="/imagenes/pelota.png" class="icono" />
+        FútbolManager
+      </h2>
+      <nav>
+        <a href="/html/index.html">
+          <img src="/imagenes/trofeo.png" class="icono" />
+          Torneos
+        </a>
+        <a href="/html/equipos.html" class="activo">
+          <img src="/imagenes/equipo.png" class="icono" />
+          Equipos
+        </a>
+        <a href="/html/tabla.html">
+          <img src="/imagenes/tabla.png" class="icono" />
+          Tabla de Posiciones
+        </a>
+        <a href="/html/partidos.html">
+          <img src="/imagenes/calendario.png" class="icono" />
+          Partidos
+        </a>
+      </nav>
+    </aside>
+
+    <main class="contenido_principal">
+      <div class="encabezado">
+        <h1>Equipos</h1>
+        <button class="boton_nuevo">+ Nuevo Equipo</button>
+      </div>
+
+      <div class="tabla_contenedor">
+        <table class="tabla_equipos">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Ciudad</th>
+              <th>Estadio</th>
+              <th>Jugadores</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="equipo_info">
+                  <img src="/imagenes/barcelona.png" class="icono_escudo" />
+                  <div>
+                    <strong>FCB</strong><br>
+                    FC Barcelona
+                  </div>
+                </div>
+              </td>
+              <td>Barcelona</td>
+              <td>Camp Nou</td>
+              <td>26</td>
+              <td>
+                <button class="accion_enlace">Ver</button>
+                <button class="accion_enlace">Editar</button>
+              </td>
+              
+            </tr>
+            <tr>
+              <td>
+                <div class="equipo_info">
+                  <img src="/imagenes/madrid.png" class="icono_escudo" />
+                  <div>
+                    <strong>RM</strong><br>
+                    Real Madrid
+                  </div>
+                </div>
+              </td>
+              <td>Madrid</td>
+              <td>Santiago Bernabéu</td>
+              <td>25</td>
+              <td>
+                <button class="accion_enlace">Ver</button>
+                <button class="accion_enlace">Editar</button>
+              </td>
+              
+            </tr>
+            <tr>
+              <td>
+                <div class="equipo_info">
+                  <img src="/imagenes/atleti.png" class="icono_escudo" />
+                  <div>
+                    <strong>AM</strong><br>
+                    Atlético de Madrid
+                  </div>
+                </div>
+              </td>
+              <td>Madrid</td>
+              <td>Metropolitano</td>
+              <td>28</td>
+              <td>
+                <button class="accion_enlace">Ver</button>
+                <button class="accion_enlace">Editar</button>
+              </td>              
+            </tr>
+          </tbody>
+          
+
+        </table>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
