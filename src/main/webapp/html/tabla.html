@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tabla de Posiciones</title>
+    <link rel="stylesheet" href="/css/tabla.css" />
+</head>
+
+<body>
+    <div class="aplicacion">
+        <aside class="barra_lateral">
+            <h2>
+                <img src="/imagenes/pelota.png"  class="icono" />
+                FútbolManager
+            </h2>
+            <nav>
+                <a href="/html/index.html">
+                    <img src="/imagenes/trofeo.png" class="icono" />
+                    Torneos
+                </a>
+                <a href="/html/equipos.html">
+                    <img src="/imagenes/equipo.png" class="icono" />
+                    Equipos
+                </a>
+                <a href="/html/tabla.html" class="activo">
+                    <img src="/imagenes/tabla.png" class="icono" />
+                    Tabla de Posiciones
+                </a>
+                <a href="/html/partidos.html">
+                    <img src="/imagenes/calendario.png" class="icono" />
+                    Partidos
+                </a>
+            </nav>
+        </aside>
+
+        <main class="contenido_principal">
+            <div class="encabezado">
+                <h1>Tabla de Posiciones</h1>
+                <div class="selector_torneo">
+                  <select>
+                    <option>Liga Nacional 2023</option>
+                    <option>Copa del Rey 2024</option>
+                    <option>Torneo Verano 2023</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="tabla_posiciones">
+                <table class="tabla_posiciones_equipo">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Equipo</th>
+                      <th>PTS</th>
+                      <th>PJ</th>
+                      <th>PG</th>
+                      <th>PE</th>
+                      <th>PP</th>
+                      <th>DG</th>
+                      <th>GF</th>
+                      <th>GC</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>
+                        <div class="equipo_info">
+                          <img src="/imagenes/argentina.png" class="icono_escudo" />
+                          <span>Argentina</span>
+                        </div>
+                      </td>
+                      <td>19</td><td>9</td><td>6</td><td>1</td><td>2</td><td>+8</td><td>13</td><td>5</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>
+                        <div class="equipo_info">
+                          <img src="/imagenes/colombia.png" class="icono_escudo" />
+                          <span>Colombia</span>
+                        </div>
+                      </td>
+                      <td>16</td><td>9</td><td>4</td><td>4</td><td>1</td><td>+3</td><td>9</td><td>6</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>
+                        <div class="equipo_info">
+                          <img src="/imagenes/uruguay.png" class="icono_escudo" />
+                          <span>Uruguay</span>
+                        </div>
+                      </td>
+                      <td>15</td><td>9</td><td>4</td><td>3</td><td>2</td><td>+7</td><td>13</td><td>6</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>
+                        <div class="equipo_info">
+                          <img src="/imagenes/brasil.png" class="icono_escudo" />
+                          <span>Brasil</span>
+                        </div>
+                      </td>
+                      <td>13</td><td>9</td><td>4</td><td>1</td><td>4</td><td>+2</td><td>11</td><td>9</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>
+                        <div class="equipo_info">
+                          <img src="/imagenes/ecuador.png" class="icono_escudo" />
+                          <span>Ecuador</span>
+                        </div>
+                      </td>
+                      <td>12</td><td>9</td><td>4</td><td>3</td><td>2</td><td>+2</td><td>6</td><td>4</td>
+                    </tr>
+                    <tr>
+                      <td>6</td>
+                      <td>
+                        <div class="equipo_info">
+                          <img src="/imagenes/bolivia.png" class="icono_escudo" />
+                          <span>Bolivia</span>
+                        </div>
+                      </td>
+                      <td>12</td><td>9</td><td>4</td><td>0</td><td>5</td><td>-4</td><td>11</td><td>15</td>
+                    </tr>
+                    <tr>
+                      <td>7</td>
+                      <td>
+                        <div class="equipo_info">
+                          <img src="/imagenes/venezuela.png" class="icono_escudo" />
+                          <span>Venezuela</span>
+                        </div>
+                      </td>
+                      <td>11</td><td>9</td><td>2</td><td>5</td><td>2</td><td>-1</td><td>7</td><td>8</td>
+                    </tr>
+                    <tr>
+                      <td>8</td>
+                      <td>
+                        <div class="equipo_info">
+                          <img src="/imagenes/paraguay.png" class="icono_escudo" />
+                          <span>Paraguay</span>
+                        </div>
+                      </td>
+                      <td>10</td><td>9</td><td>2</td><td>4</td><td>3</td><td>-1</td><td>2</td><td>3</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+        </main>
+    </div>
+</body>
+
+</html>
