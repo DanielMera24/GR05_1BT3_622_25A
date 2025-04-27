@@ -1,3 +1,8 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.gestorfutbol.entity.Equipo" %>
+<%@ page import="java.util.List" %>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,7 +23,7 @@
         <img src="/imagenes/trofeo.png" class="icono" />
         Torneos
       </a>
-      <a href="/html/equipos.html" class="activo">
+      <a href="/mostrarEquipos" class="activo">
         <img src="/imagenes/equipo.png" class="icono" />
         Equipos
       </a>
@@ -33,6 +38,20 @@
     </nav>
   </aside>
 
+  <%
+    List<Equipo> equipos = (List<Equipo>) request.getAttribute("equipos");
+    String test = "";
+    if (equipos == null){
+      test = "Nulo";
+    }else{
+      test = "No nulo";
+    }
+  %>
+  <h1><%=test %></h1>
+
+
+
+
   <main class="contenido_principal">
     <div class="encabezado">
       <h1>Equipos</h1>
@@ -46,65 +65,32 @@
           <th>Nombre</th>
           <th>Ciudad</th>
           <th>Estadio</th>
-          <th>Jugadores</th>
           <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
+
+        <% for(Equipo e: equipos) {%>
         <tr>
           <td>
             <div class="equipo_info">
               <img src="/imagenes/barcelona.png" class="icono_escudo" />
               <div>
                 <strong>FCB</strong><br>
-                FC Barcelona
+                <%= e.getNombre()%>
               </div>
             </div>
           </td>
-          <td>Barcelona</td>
-          <td>Camp Nou</td>
-          <td>26</td>
+          <td> <%= e.getCiudad()%></td>
+          <td><%= e.getEstadio()%> </td>
           <td>
             <button class="accion_enlace ver-equipo">Ver</button>
             <button class="accion_enlace editar-equipo">Editar</button>
           </td>
         </tr>
-        <tr>
-          <td>
-            <div class="equipo_info">
-              <img src="/imagenes/madrid.png" class="icono_escudo" />
-              <div>
-                <strong>RM</strong><br>
-                Real Madrid
-              </div>
-            </div>
-          </td>
-          <td>Madrid</td>
-          <td>Santiago Bernabéu</td>
-          <td>25</td>
-          <td>
-            <button class="accion_enlace ver-equipo">Ver</button>
-            <button class="accion_enlace editar-equipo">Editar</button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="equipo_info">
-              <img src="/imagenes/atleti.png" class="icono_escudo" />
-              <div>
-                <strong>AM</strong><br>
-                Atlético de Madrid
-              </div>
-            </div>
-          </td>
-          <td>Madrid</td>
-          <td>Metropolitano</td>
-          <td>28</td>
-          <td>
-            <button class="accion_enlace ver-equipo">Ver</button>
-            <button class="accion_enlace editar-equipo">Editar</button>
-          </td>
-        </tr>
+        <%}%>
+
+
         </tbody>
       </table>
     </div>

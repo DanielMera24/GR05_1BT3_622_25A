@@ -1,6 +1,8 @@
 package com.gestorfutbol.servlet;
 
+import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.entity.Equipo;
+import com.gestorfutbol.entity.Torneo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceUnit;
@@ -9,6 +11,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,15 +26,19 @@ public class MostrarEquipoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("Iniciando doGet para mostrar equipos!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-        EntityManager em = emf.createEntityManager();
-        List<Equipo> equipos = em.createQuery("SELECT e FROM Equipo e", Equipo.class)
-                .getResultList();
-        em.close();
+        List<Equipo> equipos = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            equipos = session.createQuery("FROM Equipo", Equipo.class).list();
+            tx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         request.setAttribute("equipos", equipos);
-        // <-- Aquí ajustamos AL DIRECTORIO real de tu JSP:
-        request.getRequestDispatcher("/html/equipos.jsp")
-                .forward(request, response);
+        request.getRequestDispatcher("/html/equipos.jsp").forward(request, response);
     }
 }
