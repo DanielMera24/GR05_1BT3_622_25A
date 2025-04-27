@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Partidos</title>
+    <link href="/css/partidos.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="aplicacion">
+    <aside class="barra_lateral">
+        <h2>
+            <img alt="Logo" class="icono" src="/imagenes/pelota.png"/>
+            FútbolManager
+        </h2>
+        <nav>
+            <a href="/html/index.html">
+                <img class="icono" src="/imagenes/trofeo.png"/>
+                Torneos
+            </a>
+            <a>
+                <img class="icono" src="/imagenes/equipo.png"/>
+                Equipos
+            </a>
+            <a>
+                <img class="icono" src="/imagenes/tabla.png"/>
+                Tabla de Posiciones
+            </a>
+            <a class="activo">
+                <img class="icono" src="/imagenes/calendario.png"/>
+                Partidos
+            </a>
+        </nav>
+    </aside>
+
+    <main class="contenido_principal">
+        <div class="encabezado">
+            <h1>Partidos</h1>
+            <button class="boton_nuevo" id="abrirModal">+ Nuevo Partido</button>
+        </div>
+
+        <div class="filtros">
+            <select>
+                <option>Todos los torneos</option>
+                <option>Liga Nacional</option>
+                <option>Copa del Rey</option>
+            </select>
+            <select>
+                <option>Todos los equipos</option>
+                <option>FC Barcelona</option>
+                <option>Atlético de Madrid</option>
+            </select>
+            <select>
+                <option>Estado: Todos</option>
+                <option>Finalizado</option>
+                <option>En curso</option>
+            </select>
+        </div>
+
+        <div class="partidos">
+            <div class="partido">
+                <div class="info_partido">
+                    <img class="icono_escudo" src="/imagenes/barcelona.png"/>
+                    <span>FC Barcelona</span>
+                    <strong>3 - 1</strong>
+                    <span>Atlético de Madrid</span>
+                    <img class="icono_escudo" src="/imagenes/atleti.png"/>
+                </div>
+                <p class="detalle_partido">Liga Nacional · Jornada 14 · Finalizado</p>
+                <p class="fecha_partido">20 de mayo - 2024 - 20:00 - Camp Nou</p>
+                <a class="accion_enlace" href="#">Ver detalles</a>
+            </div>
+
+            <div class="partido">
+                <div class="info_partido">
+                    <img class="icono_escudo" src="/imagenes/colombia.png"/>
+                    <span>Colombia</span>
+                    <strong>2 - 0</strong>
+                    <span>Brasil</span>
+                    <img class="icono_escudo" src="/imagenes/brasil.png"/>
+                </div>
+                <p class="detalle_partido">Copa del Rey · Jornada 5 · Finalizado</p>
+                <p class="fecha_partido">15 de junio - 2024 - 18:00 - Estadio Metropolitano</p>
+                <a class="accion_enlace" href="#">Ver detalles</a>
+            </div>
+        </div>
+
+        <!-- Modal para nuevo partido -->
+        <div class="modal" id="modalNuevoPartido">
+            <div class="modal-contenido">
+                <span class="cerrar-modal">&times;</span>
+                <h2>Nuevo Partido</h2>
+                <form id="formNuevoPartido">
+                    <div class="form-grupo">
+                        <label for="torneo">Torneo</label>
+                        <select id="torneo" required>
+                            <option value="">Seleccione un torneo</option>
+                            <option value="Liga Nacional">Liga Nacional</option>
+                            <option value="Copa del Rey">Copa del Rey</option>
+                        </select>
+                    </div>
+
+                    <div class="form-grupo">
+                        <label for="jornada">Jornada</label>
+                        <input id="jornada" min="1" required type="number">
+                    </div>
+
+                    <div class="equipos-container">
+                        <div class="form-grupo equipo">
+                            <label for="equipoLocal">Equipo Local</label>
+                            <select id="equipoLocal" required>
+                                <option value="">Seleccione equipo</option>
+                                <option value="FC Barcelona">FC Barcelona</option>
+                                <option value="Atlético de Madrid">Atlético de Madrid</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="Brasil">Brasil</option>
+                            </select>
+                        </div>
+
+                        <div class="vs">VS</div>
+
+                        <div class="form-grupo equipo">
+                            <label for="equipoVisitante">Equipo Visitante</label>
+                            <select id="equipoVisitante" required>
+                                <option value="">Seleccione equipo</option>
+                                <option value="FC Barcelona">FC Barcelona</option>
+                                <option value="Atlético de Madrid">Atlético de Madrid</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="Brasil">Brasil</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grupo">
+                        <label for="fecha">Fecha y Hora</label>
+                        <input id="fecha" required type="datetime-local">
+                    </div>
+
+                    <div class="form-grupo">
+                        <label for="estadio">Estadio</label>
+                        <input id="estadio" required type="text">
+                    </div>
+
+                    <div class="form-grupo acciones">
+                        <button class="boton boton-secundario cerrar-modal" type="button">Cancelar</button>
+                        <button class="boton boton-primario" type="submit">Guardar Partido</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="/js/partido.js"></script>
+</body>
+</html>
