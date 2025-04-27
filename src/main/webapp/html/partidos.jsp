@@ -146,6 +146,75 @@
         </div>
     </main>
 </div>
+<!-- Modal Detalle Partido -->
+<!-- Modal Detalle Partido -->
+<!-- Modal Detalle Partido -->
+<div class="modal" id="modalDetallePartido">
+    <div class="modal-contenido-detalle">
+        <span class="cerrar-modal-detalle">&times;</span>
+        <h2>Detalles de encuentro</h2>
+
+        <!-- 🛠️ Formulario para actualizar los datos -->
+        <form id="formDetallePartido" action="/actualizarPartido" method="post">
+
+            <p><strong>(Nombre Local)</strong> vs <strong>(Nombre Visitante)</strong></p>
+            <p>(Nombre Torneo) · Jornada (n)</p>
+
+            <div class="resultado_partido">
+                <div class="equipo_detalle">
+                    <img src="/imagenes/barcelona.png" alt="Local" class="icono_detalle" />
+                    <p>Foto Local</p>
+                </div>
+
+                <div class="marcador_detalle">
+                    <!-- Select para los goles del equipo local -->
+                    <select class="select_goles" name="golesLocal">
+                        <option>0</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+
+                    <span>-</span>
+
+                    <!-- Select para los goles del equipo visitante -->
+                    <select class="select_goles" name="golesVisitante">
+                        <option>0</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+
+                <div class="equipo_detalle">
+                    <img src="/imagenes/atleti.png" alt="Visitante" class="icono_detalle" />
+                    <p>Foto Visitante</p>
+                </div>
+            </div>
+
+            <div class="form-grupo">
+                <label for="estadoPartido">Estado del partido</label>
+                <select id="estadoPartido" name="estadoPartido">
+                    <option>Finalizado</option>
+                    <option>En curso</option>
+                    <option>Pendiente</option>
+                </select>
+            </div>
+
+            <!-- Botón Guardar cambios dentro del form -->
+            <div class="acciones">
+                <button class="boton boton-primario" type="submit">Guardar cambios</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
 
 <%-- Leer listas desde el servlet una sola vez --%>
 <%
