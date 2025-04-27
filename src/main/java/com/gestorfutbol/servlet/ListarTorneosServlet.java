@@ -2,6 +2,7 @@ package com.gestorfutbol.servlet;
 
 import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.entity.Torneo;
+import com.gestorfutbol.service.ValidadorTorneo;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -38,7 +39,19 @@ public class ListarTorneosServlet extends HttpServlet {
         String nombre = request.getParameter("nombreTorneo");
         String fechaInicioStr = request.getParameter("fechaInicio");
 
+        // Crear una instancia del validador
+        ValidadorTorneo validador = new ValidadorTorneo();
+
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            // Verificar si ya existe un torneo con el mismo nombre
+            if (validador.torneoYaExiste(nombre, session)) {
+                // Si ya existe, devolver un código de estado HTTP 400
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
+                response.getWriter().write("Error: Ya existe un torneo con ese nombre.");
+                return; // Evitar continuar con la persistencia
+            }
+
             Transaction tx = session.beginTransaction();
 
             Torneo nuevoTorneo = new Torneo();
