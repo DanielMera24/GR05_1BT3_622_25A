@@ -24,10 +24,10 @@ public class Torneo {
     private int numFechas;
 
     @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL)
-    private List<Torneo> equipos;
+    private List<Equipo> equipos;
 
 
-    @OneToOne(mappedBy = "tablaPosiciones", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "torneo", cascade = CascadeType.ALL)
     private TablaPosiciones tablaPosiciones;
 
     @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL)

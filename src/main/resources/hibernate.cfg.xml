@@ -6,14 +6,13 @@
     <session-factory>
 
         <!-- Configuración de SQL Server -->
-        <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-        <property name="hibernate.connection.url">jdbc:sqlserver://MRASDRUBAL\MRASDRUBALSERVER:1433;databaseName=GestorTorneos</property>
-        <property name="hibernate.connection.username">sa</property>
-        <property name="hibernate.connection.password">12345</property>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/GestorFutbol2</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">RockoDB44</property>
 
         <!-- Dialecto de Hibernate para SQL Server -->
-        <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
-
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <!-- Mostrar consultas en consola -->
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
@@ -23,7 +22,6 @@
 
         <!-- Clases mapeadas -->
         <mapping class="com.gestorfutbol.entity.Equipo"/>
-        <mapping class="com.gestorfutbol.entity.EquipoPartido"/>
         <mapping class="com.gestorfutbol.entity.Jugador"/>
         <mapping class="com.gestorfutbol.entity.JugadorPartido"/>
         <mapping class="com.gestorfutbol.entity.Partido"/>

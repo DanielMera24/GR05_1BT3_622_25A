@@ -236,7 +236,7 @@
   <div class="modal_contenido">
     <span class="cerrar" id="cerrarNuevoEquipo">&times;</span>
     <h2 id="tituloNuevoEquipo">Nuevo Equipo</h2>
-    <form id="formNuevoEquipo" class="formulario_equipo">
+    <form id="formNuevoEquipo" class="formulario_equipo" action="crearEquipo" method="post">
       <div class="campo">
         <label for="nombreNuevoEquipo">Nombre del Equipo</label>
         <input type="text" id="nombreNuevoEquipo" name="nombreNuevoEquipo" required />
@@ -269,8 +269,8 @@
         <!-- Aquí se agregarán dinámicamente los jugadores -->
       </div>
       <div class="form_agregar">
-        <input type="text" id="nombreJugador" placeholder="Nombre del jugador" required>
-        <input type="number" id="numeroJugador" placeholder="Número de camiseta" required>
+        <input type="text" id="nombreJugador" placeholder="Nombre del jugador" name="nombreJugador" required>
+        <input type="number" id="numeroJugador" placeholder="Número de camiseta" name="numeroJugador" required>
         <button type="button" id="agregarJugador">Agregar Jugador</button>
       </div>
       <button type="submit" class="boton_guardar">Guardar Cambios</button>
