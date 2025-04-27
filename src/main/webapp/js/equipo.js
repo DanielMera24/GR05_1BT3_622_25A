@@ -41,15 +41,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Ahora permitimos el envío normal del formulario para que llegue al servlet
     function manejarEnvioNuevoEquipo(e) {
-        e.preventDefault();
-        // Lógica para guardar el nuevo equipo
+        // No hacemos preventDefault, dejamos que el formulario se envíe al servlet
+        // Podrías mostrar aquí un loader o mensaje antes de la recarga
         cerrarModalNuevoEquipo();
+        // El formulario seguirá su acción (POST a /crearEquipo)
     }
 
     function manejarEnvioJugadores(e) {
         e.preventDefault();
-        // Lógica para guardar los jugadores editados
+        // Lógica para guardar los jugadores editados (AJAX o similar)
         cerrarModalEditarJugadores();
     }
 

@@ -13,11 +13,12 @@ import org.hibernate.Transaction;
 import java.io.IOException;
 
 
-@WebServlet(name = "crearEquipo", urlPatterns = {"/crearEquipo"})
-public class ControladorEquipo extends HttpServlet {
+@WebServlet("/crearEquipo")
+public class EquipoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Creando Equipo");
+        System.out.println("CREANDO EQUIPO-CREANDO EQUIPO-CREANDO EQUIPO-CREANDO EQUIPO");
         String nombreEquipo = request.getParameter("nombreNuevoEquipo");
         String inicialesEquipo = request.getParameter("inicialesNuevoEquipo");
         String ciudadEquipo = request.getParameter("ciudadNuevoEquipo");

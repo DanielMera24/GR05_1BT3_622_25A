@@ -116,7 +116,7 @@
   <div class="modal_contenido">
     <span class="cerrar" id="cerrarNuevoEquipo">&times;</span>
     <h2 id="tituloNuevoEquipo">Nuevo Equipo</h2>
-    <form id="formNuevoEquipo" class="formulario_equipo" action="crearEquipo" method="post">
+    <form id="formNuevoEquipo" class="formulario_equipo" action = "/crearEquipo" method="post">
       <div class="campo">
         <label for="nombreNuevoEquipo">Nombre del Equipo</label>
         <input type="text" id="nombreNuevoEquipo" name="nombreNuevoEquipo" required />
@@ -140,7 +140,7 @@
 
 
 <!-- Modal Editar Jugadores -->
-<<div id="modalEditarJugadores" class="modal">
+<div id="modalEditarJugadores" class="modal">
   <div class="modal_contenido">
     <span id="cerrarEditarJugadores" class="cerrar">&times;</span>
     <h2>Editar Jugadores</h2>
@@ -160,5 +160,6 @@
 
 
 <script src="/js/equipo.js"></script>
+
 </body>
 </html>

@@ -24,7 +24,7 @@
                 <img class="icono" src="/imagenes/trofeo.png"/>
                 <span class="opciones">Torneos</span>
             </a>
-            <a href="/html/equipos.html">
+            <a href="/html/equipos.jsp">
                 <img class="icono" src="/imagenes/equipo.png"/>
                 <span class="opciones">Equipos</span>
             </a>
