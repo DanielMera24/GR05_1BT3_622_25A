@@ -8,20 +8,38 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class JugadorPartido {
 
-    @EmbeddedId
-    private JugadorPartidoId id;
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "idPartido")
+    private Partido partido;
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "idJugador")
+    private Jugador jugador;
+
 
     private int numTarjetasAmarillas;
+
     private int numTarjetasRojas;
 
     public JugadorPartido() {}
 
-    public JugadorPartidoId getId() {
-        return id;
+
+    public Partido getPartido() {
+        return partido;
     }
 
-    public void setId(JugadorPartidoId id) {
-        this.id = id;
+    public void setPartido(Partido partido) {
+        this.partido = partido;
+    }
+
+    public Jugador getJugador() {
+        return jugador;
+    }
+
+    public void setJugador(Jugador jugador) {
+        this.jugador = jugador;
     }
 
     public int getNumTarjetasAmarillas() {
@@ -38,29 +56,5 @@ public class JugadorPartido {
 
     public void setNumTarjetasRojas(int numTarjetasRojas) {
         this.numTarjetasRojas = numTarjetasRojas;
-    }
-
-    // Métodos auxiliares para acceder a los objetos relacionados
-    @Transient
-    public Partido getPartido() {
-        return id.getPartido();
-    }
-
-    public void setPartido(Partido partido) {
-        if (id == null) {
-            id = new JugadorPartidoId();
-        }
-        id.setPartido(partido);
-    }
-
-    @Transient
-    public Jugador getJugador() {
-        return id.getJugador();    }
-
-    public void setJugador(Jugador jugador) {
-        if (id == null) {
-            id = new JugadorPartidoId();
-        }
-        id.setJugador(jugador);
     }
 }
