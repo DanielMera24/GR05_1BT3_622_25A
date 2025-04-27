@@ -71,6 +71,7 @@
     padding: 10px 15px;
     border-radius: 6px;
     cursor: pointer;
+    font-size: 16px;
   }
   
   .tabla_contenedor {
@@ -290,9 +291,10 @@
 
 .boton {
   padding: 10px 20px;
-  border-radius: 6px;
+  border-radius: 16px;
   cursor: pointer;
   font-weight: 500;
+  font-size: 16px;
   transition: background-color 0.2s;
 }
 
@@ -300,6 +302,7 @@
   background-color: #6366f1;
   color: white;
   border: none;
+
 }
 
 .boton-primario:hover {
@@ -314,4 +317,56 @@
 
 .boton-secundario:hover {
   background-color: #f9fafb;
+}
+/* Modal de Detalle Partido */
+.modal-contenido-detalle {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 25px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.cerrar-modal-detalle {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.cerrar-modal-detalle:hover {
+  color: #333;
+}
+
+.resultado_partido {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 30px 0;
+}
+
+.equipo_detalle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icono_detalle {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 0; /* sin bordes redondeados */
+  background: none; /* sin fondo */
+}
+
+.marcador_detalle {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
 }

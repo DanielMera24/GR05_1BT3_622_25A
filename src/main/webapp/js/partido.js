@@ -77,6 +77,31 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         return new Date(fechaISO).toLocaleDateString('es-ES', opciones);
     }
+// Modal de Detalles
+    const modalDetalle = document.getElementById('modalDetallePartido');
+    const botonesDetalles = document.querySelectorAll('.ver-equipo, .accion_enlace'); // Ajusta si cambia tu botón
+    const cerrarDetalle = document.querySelector('.cerrar-modal-detalle');
+
+// Abrir modal de detalle al hacer click en cualquier botón "Ver detalles"
+    botonesDetalles.forEach(btn => {
+        btn.addEventListener('click', function(event) {
+            event.preventDefault();
+            modalDetalle.style.display = 'block';
+        });
+    });
+
+// Cerrar modal detalle
+    cerrarDetalle.addEventListener('click', function() {
+        modalDetalle.style.display = 'none';
+    });
+
+// También cerrar si clickea afuera del contenido
+    window.addEventListener('click', function(event) {
+        if (event.target === modalDetalle) {
+            modalDetalle.style.display = 'none';
+        }
+    });
 
 
 });
+
