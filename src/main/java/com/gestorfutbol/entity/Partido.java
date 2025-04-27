@@ -26,12 +26,13 @@ public class Partido {
     private int jornadaActual;
 
     @OneToOne
-    @JoinColumn(name = "idEquipo")
+    @JoinColumn(name = "idEquipoLocal")
     private Equipo equipoLocal;
 
     @OneToOne
-    @JoinColumn(name = "idEquipo")
+    @JoinColumn(name = "idEquipoVisita")
     private Equipo equipoVisita;
+
 
     @ManyToOne()
     @JoinColumn(name = "idTorneo")
