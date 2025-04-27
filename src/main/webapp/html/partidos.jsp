@@ -1,3 +1,9 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.gestorfutbol.entity.Partido" %>
+<%@ page import="com.gestorfutbol.entity.Torneo" %>
+<%@ page import="com.gestorfutbol.entity.Equipo" %>
+<%@ page import="java.util.List" %>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -27,7 +33,7 @@
                 <img class="icono" src="/imagenes/tabla.png"/>
                 <span class="opciones">Tabla de Posiciones</span>
             </a>
-            <a href="/html/partidos.html" class="activo">
+            <a href="/mostrarOpcionesPartido" class="activo">
                 <img class="icono" src="/imagenes/calendario.png"/>
                 <span class="opciones">Partidos</span>
             </a>
@@ -59,6 +65,7 @@
         </div>
 
         <div class="partidos">
+            <!-- Ejemplos de partidos -->
             <div class="partido">
                 <div class="info_partido">
                     <img class="icono_escudo" src="/imagenes/barcelona.png"/>
@@ -71,7 +78,6 @@
                 <p class="fecha_partido">20 de mayo - 2024 - 20:00 - Camp Nou</p>
                 <a class="accion_enlace" href="#">Ver detalles</a>
             </div>
-
             <div class="partido">
                 <div class="info_partido">
                     <img class="icono_escudo" src="/imagenes/colombia.png"/>
@@ -90,56 +96,45 @@
         <div class="modal" id="modalNuevoPartido">
             <div class="modal-contenido">
                 <span class="cerrar-modal">&times;</span>
+
                 <h2>Nuevo Partido</h2>
-                <form id="formNuevoPartido">
+                <form id="formNuevoPartido" action="/crearPartido" method="post">
                     <div class="form-grupo">
                         <label for="torneo">Torneo</label>
-                        <select id="torneo" required>
+                        <select id="torneo" name="torneo" required>
                             <option value="">Seleccione un torneo</option>
-                            <option value="Liga Nacional">Liga Nacional</option>
-                            <option value="Copa del Rey">Copa del Rey</option>
                         </select>
                     </div>
 
                     <div class="form-grupo">
                         <label for="jornada">Jornada</label>
-                        <input id="jornada" min="1" required type="number">
+                        <input id="jornada" name="jornada" min="1" type="number" required>
                     </div>
 
                     <div class="equipos-container">
                         <div class="form-grupo equipo">
                             <label for="equipoLocal">Equipo Local</label>
-                            <select id="equipoLocal" required>
+                            <select id="equipoLocal" name="equipoLocal" required>
                                 <option value="">Seleccione equipo</option>
-                                <option value="FC Barcelona">FC Barcelona</option>
-                                <option value="Atlético de Madrid">Atlético de Madrid</option>
-                                <option value="Colombia">Colombia</option>
-                                <option value="Brasil">Brasil</option>
                             </select>
                         </div>
-
                         <div class="vs">VS</div>
-
                         <div class="form-grupo equipo">
                             <label for="equipoVisitante">Equipo Visitante</label>
-                            <select id="equipoVisitante" required>
+                            <select id="equipoVisitante" name="equipoVisitante" required>
                                 <option value="">Seleccione equipo</option>
-                                <option value="FC Barcelona">FC Barcelona</option>
-                                <option value="Atlético de Madrid">Atlético de Madrid</option>
-                                <option value="Colombia">Colombia</option>
-                                <option value="Brasil">Brasil</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-grupo">
                         <label for="fecha">Fecha y Hora</label>
-                        <input id="fecha" required type="datetime-local">
+                        <input id="fecha" name="fecha" type="datetime-local" required>
                     </div>
 
                     <div class="form-grupo">
                         <label for="estadio">Estadio</label>
-                        <input id="estadio" required type="text">
+                        <input id="estadio" name="estadio" type="text" required>
                     </div>
 
                     <div class="form-grupo acciones">
@@ -152,6 +147,34 @@
     </main>
 </div>
 
+<%-- Leer listas desde el servlet una sola vez --%>
+<%
+    List<Equipo> equipos = (List<Equipo>) request.getAttribute("equipos");
+    List<Torneo> torneos = (List<Torneo>) request.getAttribute("torneos");
+%>
+
+<%-- 1. Define JSON de torneos y equipos justo antes de importar el JS --%>
+<script>
+    window.torneos = [
+        <% for (int i = 0; i < torneos.size(); i++) {
+             Torneo t = torneos.get(i); %>
+        { id: "<%= t.getIdTorneo() %>", nombre: "<%= t.getNombre() %>" }<%= (i < torneos.size() - 1) ? "," : "" %>
+        <% } %>
+    ];
+    window.equipos = [
+        <% for (int i = 0; i < equipos.size(); i++) {
+             Equipo e = equipos.get(i); %>
+        {
+            id: "<%= e.getIdEquipo() %>",
+            nombre: "<%= e.getNombre() %>",
+            torneoId: "<%= e.getTorneo().getIdTorneo() %>"
+        }<%= (i < equipos.size() - 1) ? "," : "" %>
+        <% } %>
+    ];
+    console.log('Datos cargados:', window.torneos, window.equipos);
+</script>
+
+<%-- 2. Importar tu JS dinámico --%>
 <script src="/js/partido.js"></script>
 </body>
 </html>

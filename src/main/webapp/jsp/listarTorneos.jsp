@@ -32,7 +32,7 @@
                 <img class="icono" src="/imagenes/tabla.png"/>
                 <span class="opciones">Tabla de Posiciones</span>
             </a>
-            <a href="/html/partidos.html">
+            <a href="/mostrarOpcionesPartido">
                 <img class="icono" src="/imagenes/calendario.png"/>
                 <span class="opciones">Partidos</span>
             </a>
