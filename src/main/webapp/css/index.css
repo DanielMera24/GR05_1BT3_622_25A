@@ -17,6 +17,7 @@ body {
   min-height: 100vh;
 }
 
+
 .barra_lateral {
   width: 220px;
   background: #E7E8ED;
@@ -32,7 +33,7 @@ body {
   color: #4f46e5;
   word-break: break-word;
   max-width: 100%;
-  font-size: 20px;
+  font-size: 26px;
 }
 
 
@@ -74,15 +75,18 @@ body {
   border: none;
   padding: 10px 15px;
   font-size: 16px;
-  border-radius: 6px;
+  border-radius: 15px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .boton_nuevo:hover {
   background: #4f46e5;
-  transition: background 0.3s, transform 0.3s;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transform: scale(1.05);
+  transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+  /* Quiero un poco más de sombra*/
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+
+  transform: scale(1.02);
 }
 
 
