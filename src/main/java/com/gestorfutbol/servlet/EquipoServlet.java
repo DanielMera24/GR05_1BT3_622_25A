@@ -18,28 +18,30 @@ public class EquipoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Creando Equipo");
-        System.out.println("CREANDO EQUIPO-CREANDO EQUIPO-CREANDO EQUIPO-CREANDO EQUIPO");
+
         String nombreEquipo = request.getParameter("nombreNuevoEquipo");
         String inicialesEquipo = request.getParameter("inicialesNuevoEquipo");
         String ciudadEquipo = request.getParameter("ciudadNuevoEquipo");
         String estadioEquipo = request.getParameter("estadioNuevoEquipo");
+        int idTorneo = Integer.parseInt(request.getParameter("torneoPerteneciente"));
 
-        System.out.println(nombreEquipo);
-        System.out.println(ciudadEquipo);
-        System.out.println(estadioEquipo);
-        System.out.println(inicialesEquipo);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+
+        com.gestorfutbol.entity.Torneo torneo = session.get(com.gestorfutbol.entity.Torneo.class, idTorneo);
 
         Equipo equipo = new Equipo();
         equipo.setCiudad(ciudadEquipo);
         equipo.setNombre(nombreEquipo);
         equipo.setEstadio(estadioEquipo);
+        equipo.setTorneo(torneo);
 
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
         session.persist(equipo);
         tx.commit();
         session.close();
 
-        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        response.sendRedirect(request.getContextPath() + "/mostrarEquipos");
     }
 }
+
+

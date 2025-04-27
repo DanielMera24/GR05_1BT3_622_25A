@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: sans-serif;
+    font-family: 'Jaldi';
   }
   
   body {
@@ -18,10 +18,12 @@
   
   .barra_lateral {
     width: 220px;
-    background: #f3f4f6;
+    background: #E7E8ED;
     padding: 20px;
   }
-  
+.opciones{
+  font-size: 17px;
+}
   .barra_lateral h2 {
     display: flex;
     align-items: center;
@@ -31,7 +33,7 @@
     color: #4f46e5;
     word-break: break-word;
     max-width: 100%;
-    font-size: 18px;
+    font-size: 26px;
   }
   
   .barra_lateral nav a {
@@ -41,7 +43,7 @@
     padding: 12px;
     color: #333;
     text-decoration: none;
-    border-radius: 6px;
+    border-radius: 20px;
     margin-bottom: 10px;
   }
   
@@ -128,7 +130,7 @@
     cursor: pointer;
     margin-right: 10px;
     padding: 0;
-    font-size: 14px;
+    font-size: 16px;
   }
   
   .accion_enlace:hover {
@@ -145,7 +147,7 @@
   
   .filtros select {
     padding: 10px;
-    font-size: 14px;
+    font-size: 16px;
     border-radius: 8px;
     border: 1px solid #e5e7eb;
   }
@@ -177,7 +179,7 @@
   }
   
   .detalle_partido, .fecha_partido {
-    font-size: 14px;
+    font-size: 16px;
     color: #555;
   }
   
@@ -185,7 +187,7 @@
     color: #6366f1;
     font-weight: 500;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
   }
   
   .accion_enlace:hover {
@@ -253,7 +255,7 @@
   padding: 10px;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .form-grupo input:focus,

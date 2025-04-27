@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: sans-serif;
+    font-family: 'Jaldi';
   }
   
   body {
@@ -17,10 +17,12 @@
   
   .barra_lateral {
     width: 220px;
-    background: #f3f4f6;
+    background: #E7E8ED;
     padding: 20px;
   }
-  
+.opciones{
+  font-size: 17px;
+}
   .barra_lateral h2 {
     display: flex;
     align-items: center;
@@ -30,7 +32,7 @@
     color: #4f46e5;
     word-break: break-word;
     max-width: 100%;
-    font-size: 18px;
+    font-size: 26px;
   }
   
   .barra_lateral nav a {
@@ -40,7 +42,7 @@
     padding: 12px;
     color: #333;
     text-decoration: none;
-    border-radius: 6px;
+    border-radius: 20px;
     margin-bottom: 10px;
   }
   
@@ -54,7 +56,7 @@
     flex: 1;
     padding: 30px;
   }
-  
+
   .encabezado {
     display: flex;
     justify-content: space-between;
@@ -204,6 +206,28 @@
   border-radius: 4px;
   font-size: 16px;
 }
+
+.campo select {
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #fff;
+  color: #495057;
+  appearance: none; /* Elimina el estilo nativo del navegador */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23495057' class='bi bi-caret-down-fill' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658A.5.5 0 0 1 2.854 5h10.292a.5.5 0 0 1 .403.658l-4.796 5.482a.5.5 0 0 1-.758 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+.campo select:focus {
+  border-color: #007BFF;
+  outline: none;
+}
+
 ----------------
 
 h2 {

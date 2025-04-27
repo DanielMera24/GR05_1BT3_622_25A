@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.gestorfutbol.entity.Equipo" %>
+<%@ page import="com.gestorfutbol.entity.Torneo" %>
 <%@ page import="java.util.List" %>
 
 
@@ -10,6 +11,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Equipos</title>
   <link rel="stylesheet" href="/css/equipos.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Jaldi:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="aplicacion">
@@ -21,19 +23,19 @@
     <nav>
       <a href="/listarTorneos">
         <img src="/imagenes/trofeo.png" class="icono" />
-        Torneos
+        <span class="opciones">Torneos</span>
       </a>
       <a href="/mostrarEquipos" class="activo">
         <img src="/imagenes/equipo.png" class="icono" />
-        Equipos
+        <span class="opciones">Equipos</span>
       </a>
       <a href="/html/tabla.html">
         <img src="/imagenes/tabla.png" class="icono" />
-        Tabla de Posiciones
+        <span class="opciones">Tabla de Posiciones</span>
       </a>
       <a href="/html/partidos.html">
         <img src="/imagenes/calendario.png" class="icono" />
-        Partidos
+        <span class="opciones">Partidos</span>
       </a>
     </nav>
   </aside>
@@ -43,14 +45,12 @@
     String test = "";
     if (equipos == null){
       test = "Nulo";
-    }else{
-      test = "No nulo";
+    } else {
+      test = "";
     }
+    int contador = 0; // 👈 contador para rotar imágenes
   %>
-  <h1><%=test %></h1>
-
-
-
+  <h1><%= test %></h1>
 
   <main class="contenido_principal">
     <div class="encabezado">
@@ -70,31 +70,38 @@
         </thead>
         <tbody>
 
-        <% for(Equipo e: equipos) {%>
+        <%
+          String[] imagenes = {"barcelona.png", "madrid.png", "atleti.png"}; // 👈 nombres de las imágenes
+          for (Equipo e : equipos) {
+            String imagenActual = imagenes[contador % imagenes.length]; // 👈 rotar las imágenes
+        %>
         <tr>
           <td>
             <div class="equipo_info">
-              <img src="/imagenes/barcelona.png" class="icono_escudo" />
+              <img src="/imagenes/<%= imagenActual %>" class="icono_escudo" />
               <div>
                 <strong>FCB</strong><br>
-                <%= e.getNombre()%>
+                <%= e.getNombre() %>
               </div>
             </div>
           </td>
-          <td> <%= e.getCiudad()%></td>
-          <td><%= e.getEstadio()%> </td>
+          <td> <%= e.getCiudad() %> </td>
+          <td> <%= e.getEstadio() %> </td>
           <td>
             <button class="accion_enlace ver-equipo">Ver</button>
             <button class="accion_enlace editar-equipo">Editar</button>
           </td>
         </tr>
-        <%}%>
-
+        <%
+            contador++;
+          }
+        %>
 
         </tbody>
       </table>
     </div>
   </main>
+
 </div>
 
 <!-- Modal para nuevo equipo -->
@@ -119,6 +126,24 @@
         <label for="estadioNuevoEquipo">Estadio/Cancha</label>
         <input type="text" id="estadioNuevoEquipo" name="estadioNuevoEquipo" required />
       </div>
+      <div class="campo">
+        <label for="torneoPerteneciente">Torneo</label>
+        <select id="torneoPerteneciente" name="torneoPerteneciente" required>
+          <option value="">Seleccione un torneo</option>
+          <%
+            List<com.gestorfutbol.entity.Torneo> torneos = (List<com.gestorfutbol.entity.Torneo>) request.getAttribute("torneos");
+            if (torneos != null) {
+              for (com.gestorfutbol.entity.Torneo torneo : torneos) {
+          %>
+          <option value="<%= torneo.getIdTorneo() %>"><%= torneo.getNombre() %></option>
+          <%
+              }
+            }
+          %>
+        </select>
+      </div>
+
+
       <button type="submit" class="boton_submit">Guardar Equipo</button>
     </form>
   </div>

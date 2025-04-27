@@ -61,4 +61,13 @@ public class Equipo {
     public void setEstadio(String estadio) {
         this.estadio = estadio;
     }
+
+    public Torneo getTorneo() {
+        return torneo;
+    }
+
+    public void setTorneo(Torneo torneo) {
+        this.torneo = torneo;
+    }
+
 }
