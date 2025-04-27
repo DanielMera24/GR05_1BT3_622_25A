@@ -146,17 +146,14 @@
         </div>
     </main>
 </div>
-<!-- Modal Detalle Partido -->
-<!-- Modal Detalle Partido -->
+
 <!-- Modal Detalle Partido -->
 <div class="modal" id="modalDetallePartido">
     <div class="modal-contenido-detalle">
         <span class="cerrar-modal-detalle">&times;</span>
         <h2>Detalles de encuentro</h2>
 
-        <!-- 🛠️ Formulario para actualizar los datos -->
         <form id="formDetallePartido" action="/actualizarPartido" method="post">
-
             <p><strong>(Nombre Local)</strong> vs <strong>(Nombre Visitante)</strong></p>
             <p>(Nombre Torneo) · Jornada (n)</p>
 
@@ -167,26 +164,12 @@
                 </div>
 
                 <div class="marcador_detalle">
-                    <!-- Select para los goles del equipo local -->
                     <select class="select_goles" name="golesLocal">
-                        <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
+                        <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
                     </select>
-
                     <span>-</span>
-
-                    <!-- Select para los goles del equipo visitante -->
                     <select class="select_goles" name="golesVisitante">
-                        <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
+                        <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
                     </select>
                 </div>
 
@@ -205,7 +188,6 @@
                 </select>
             </div>
 
-            <!-- Botón Guardar cambios dentro del form -->
             <div class="acciones">
                 <button class="boton boton-primario" type="submit">Guardar cambios</button>
             </div>
@@ -214,15 +196,21 @@
     </div>
 </div>
 
-
-
-<%-- Leer listas desde el servlet una sola vez --%>
+<%-- Leer listas desde el servlet --%>
 <%
     List<Equipo> equipos = (List<Equipo>) request.getAttribute("equipos");
     List<Torneo> torneos = (List<Torneo>) request.getAttribute("torneos");
+
+    if (equipos == null) {
+        equipos = java.util.Collections.emptyList();
+    }
+    if (torneos == null) {
+        torneos = java.util.Collections.emptyList();
+    }
 %>
 
-<%-- 1. Define JSON de torneos y equipos justo antes de importar el JS --%>
+
+<%-- Variables para torneos y equipos para JS --%>
 <script>
     window.torneos = [
         <% for (int i = 0; i < torneos.size(); i++) {
@@ -232,18 +220,21 @@
     ];
     window.equipos = [
         <% for (int i = 0; i < equipos.size(); i++) {
-             Equipo e = equipos.get(i); %>
+             Equipo e = equipos.get(i);
+             Torneo t = e.getTorneo();
+        %>
         {
             id: "<%= e.getIdEquipo() %>",
             nombre: "<%= e.getNombre() %>",
-            torneoId: "<%= e.getTorneo().getIdTorneo() %>"
+            torneoId: "<%= (t != null) ? t.getIdTorneo() : "" %>"
         }<%= (i < equipos.size() - 1) ? "," : "" %>
         <% } %>
     ];
-    console.log('Datos cargados:', window.torneos, window.equipos);
 </script>
 
-<%-- 2. Importar tu JS dinámico --%>
+
+<%-- Tu JavaScript final --%>
 <script src="/js/partido.js"></script>
+
 </body>
 </html>

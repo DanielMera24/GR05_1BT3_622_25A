@@ -1,30 +1,68 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // —— REFERENCIAS A ELEMENTOS —————————————————————————————————————
-    const modal           = document.getElementById('modalNuevoPartido');
-    const btnAbrir        = document.getElementById('abrirModal');
-    const btnCerrar       = document.querySelector('.cerrar-modal');
-    const btnCancelar     = document.querySelector('.boton-secundario');
-    const form            = document.getElementById('formNuevoPartido');
-    const torneoSelect    = document.getElementById('torneo');
-    const localSelect     = document.getElementById('equipoLocal');
-    const visitanteSelect = document.getElementById('equipoVisitante');
-    const jornadaInput    = document.getElementById('jornada');
-    const fechaInput      = document.getElementById('fecha');
-    const estadioInput    = document.getElementById('estadio');
+    const modalNuevo = document.getElementById('modalNuevoPartido');
+    const modalDetalle = document.getElementById('modalDetallePartido');
 
-    // —— POBLAR SELECT DE TORNEOS ——————————————————————————————————————
+    const btnAbrirNuevo = document.getElementById('abrirModal');
+    const cerrarModalButtons = document.querySelectorAll('.cerrar-modal');
+    const cerrarDetalleButton = document.querySelector('.cerrar-modal-detalle');
+
+    const formNuevo = document.getElementById('formNuevoPartido');
+    const torneoSelect = document.getElementById('torneo');
+    const localSelect = document.getElementById('equipoLocal');
+    const visitanteSelect = document.getElementById('equipoVisitante');
+    const jornadaInput = document.getElementById('jornada');
+    const fechaInput = document.getElementById('fecha');
+    const estadioInput = document.getElementById('estadio');
+
+    const botonesDetalles = document.querySelectorAll('.accion_enlace');
+
+    if (btnAbrirNuevo && modalNuevo) {
+        btnAbrirNuevo.addEventListener('click', () => modalNuevo.style.display = 'block');
+    }
+
+    cerrarModalButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            modalNuevo.style.display = 'none';
+        });
+    });
+
+    if (botonesDetalles.length && modalDetalle) {
+        botonesDetalles.forEach(btn => {
+            btn.addEventListener('click', function(event) {
+                event.preventDefault();
+                modalDetalle.style.display = 'block';
+            });
+        });
+    }
+
+    if (cerrarDetalleButton && modalDetalle) {
+        cerrarDetalleButton.addEventListener('click', () => {
+            modalDetalle.style.display = 'none';
+        });
+    }
+
+    window.addEventListener('click', (e) => {
+        if (e.target === modalNuevo) {
+            modalNuevo.style.display = 'none';
+        }
+        if (e.target === modalDetalle) {
+            modalDetalle.style.display = 'none';
+        }
+    });
+
     function poblarTorneos() {
+        if (!window.torneos) return;
         torneoSelect.innerHTML = '<option value="">Seleccione un torneo</option>';
         window.torneos.forEach(t => {
             const opt = document.createElement('option');
-            opt.value       = t.id;
+            opt.value = t.id;
             opt.textContent = t.nombre;
             torneoSelect.appendChild(opt);
         });
     }
 
-    // —— POBLAR SELECTS DE EQUIPOS SEGÚN TORNEO ————————————————————————
     function repoblarEquipos() {
+        if (!window.equipos) return;
         const torneoId = torneoSelect.value;
         const lista = torneoId
             ? window.equipos.filter(e => e.torneoId === torneoId)
@@ -34,45 +72,33 @@ document.addEventListener('DOMContentLoaded', function() {
             selectEl.innerHTML = '<option value="">Seleccione equipo</option>';
             lista.forEach(eq => {
                 const opt = document.createElement('option');
-                opt.value       = eq.id;
+                opt.value = eq.id;
                 opt.textContent = eq.nombre;
                 selectEl.appendChild(opt);
             });
         });
     }
 
-    // —— MODAL ——————————————————————————————————————————————————————
-    btnAbrir.addEventListener('click',    () => modal.style.display = 'block');
-    btnCerrar.addEventListener('click',   () => modal.style.display = 'none');
-    btnCancelar.addEventListener('click', () => modal.style.display = 'none');
-    window.addEventListener('click', e => {
-        if (e.target === modal) modal.style.display = 'none';
-    });
+    if (formNuevo) {
+        formNuevo.addEventListener('submit', function(event) {
+            if (!torneoSelect.value ||
+                !jornadaInput.value ||
+                !localSelect.value ||
+                !visitanteSelect.value ||
+                !fechaInput.value ||
+                !estadioInput.value) {
+                event.preventDefault();
+                alert('Por favor, complete todos los campos.');
+                return;
+            }
+            if (localSelect.value === visitanteSelect.value) {
+                event.preventDefault();
+                alert('Los equipos no pueden ser iguales.');
+                return;
+            }
+        });
+    }
 
-    // —— ENVÍO DE FORMULARIO ———————————————————————————————————————
-    form.addEventListener('submit', function(event) {
-        // 1) validación de campos obligatorios
-        if (!torneoSelect.value ||
-            !jornadaInput.value ||
-            !localSelect.value ||
-            !visitanteSelect.value ||
-            !fechaInput.value ||
-            !estadioInput.value) {
-            event.preventDefault();
-            alert('Por favor, complete todos los campos.');
-            return;
-        }
-        // 2) validar que no sean el mismo equipo
-        if (localSelect.value === visitanteSelect.value) {
-            event.preventDefault();
-            alert('Los equipos no pueden ser iguales.');
-            return;
-        }
-        // 3) si llega aquí, no llamamos preventDefault(),
-        //    el formulario se envía de forma tradicional a /crearPartido
-    });
-
-    // —— INICIALIZACIÓN ———————————————————————————————————————————
     poblarTorneos();
     repoblarEquipos();
     torneoSelect.addEventListener('change', repoblarEquipos);

@@ -39,6 +39,7 @@ public class PartidoServlet extends HttpServlet {
         partido.setEquipoVisita(equipoVisita);
         partido.setEquipoLocal(equipoLocal);
         partido.setJornadaActual(jornadaActual);
+        partido.setEstado("Pendiente");
 
         // Parsear la fecha si quieres guardarla como java.util.Date
         try {
