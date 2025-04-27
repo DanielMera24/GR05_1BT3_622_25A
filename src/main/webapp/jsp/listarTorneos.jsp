@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Fútbol Manager</title>
     <link href="/css/index.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Jaldi:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -21,19 +22,19 @@
         <nav>
             <a class="activo" href="/listarTorneos">
                 <img class="icono" src="/imagenes/trofeo.png"/>
-                Torneos
+                <span class="opciones">Torneos</span>
             </a>
             <a href="/html/equipos.html">
                 <img class="icono" src="/imagenes/equipo.png"/>
-                Equipos
+                <span class="opciones">Equipos</span>
             </a>
             <a href="/html/tabla.html">
                 <img class="icono" src="/imagenes/tabla.png"/>
-                Tabla de Posiciones
+                <span class="opciones">Tabla de Posiciones</span>
             </a>
             <a href="/html/partidos.html">
                 <img class="icono" src="/imagenes/calendario.png"/>
-                Partidos
+                <span class="opciones">Partidos</span>
             </a>
         </nav>
     </aside>
@@ -48,10 +49,19 @@
             <%
                 List<Torneo> torneos = (List<Torneo>) request.getAttribute("torneos");
                 if (torneos != null && !torneos.isEmpty()) {
+                    int index = 0;
                     for (Torneo torneo : torneos) {
+                        String fondo = "";
+                        if (index % 3 == 0) {
+                            fondo = "fondo_azul";
+                        } else if (index % 3 == 1) {
+                            fondo = "fondo_rosado";
+                        } else {
+                            fondo = "fondo_rojo";
+                        }
             %>
             <div class="tarjeta">
-                <div class="encabezado_tarjeta fondo_azul">
+                <div class="encabezado_tarjeta <%= fondo %>">
                     <h3><%= torneo.getNombre() %></h3>
                     <span><%= torneo.getFechaInicio() != null ? torneo.getFechaInicio() : "Sin fecha" %></span>
                 </div>
@@ -64,6 +74,7 @@
                 </div>
             </div>
             <%
+                    index++;
                 }
             } else {
             %>
@@ -72,15 +83,15 @@
                 }
             %>
         </div>
+
     </main>
 
-    <!-- Modal de nuevo torneo (si quieres conservarlo en el futuro) -->
     <div class="modal" id="modalFormulario">
         <div class="modal_contenido">
             <span class="cerrar" id="cerrarModal">&times;</span>
             <h2>Nuevo Torneo</h2>
-            <form class="formulario_encuesta" id="formTorneo">
-                <div class="campo">
+            <form class="formulario_encuesta" id="formTorneo" method="post" action="/listarTorneos">
+            <div class="campo">
                     <label for="nombreTorneo">Nombre del Torneo</label>
                     <input id="nombreTorneo" name="nombreTorneo" type="text"/>
                 </div>
