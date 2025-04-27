@@ -65,32 +65,37 @@
         </div>
 
         <div class="partidos">
-            <!-- Ejemplos de partidos -->
+            <%
+                List<Partido> partidos = (List<Partido>) request.getAttribute("partidos");
+                if (partidos != null && !partidos.isEmpty()) {
+                    for (Partido p : partidos) {
+                        String nombreLocal = p.getEquipoLocal() != null ? p.getEquipoLocal().getNombre() : "Equipo Local";
+                        String nombreVisitante = p.getEquipoVisita() != null ? p.getEquipoVisita().getNombre() : "Equipo Visitante";
+                        String nombreTorneo = p.getTorneo() != null ? p.getTorneo().getNombre() : "Torneo";
+                        String fechaFormateada = (p.getFechaPartido() != null) ? new java.text.SimpleDateFormat("dd 'de' MMMM 'de' yyyy - HH:mm").format(p.getFechaPartido()) : "Fecha no disponible";
+            %>
             <div class="partido">
                 <div class="info_partido">
                     <img class="icono_escudo" src="/imagenes/barcelona.png"/>
-                    <span>FC Barcelona</span>
-                    <strong>3 - 1</strong>
-                    <span>Atlético de Madrid</span>
+                    <span><%= nombreLocal %></span>
+                    <strong><%= p.getGolesLocal() %> - <%= p.getGolesVisita() %></strong>
+                    <span><%= nombreVisitante %></span>
                     <img class="icono_escudo" src="/imagenes/atleti.png"/>
                 </div>
-                <p class="detalle_partido">Liga Nacional · Jornada 14 · Finalizado</p>
-                <p class="fecha_partido">20 de mayo - 2024 - 20:00 - Camp Nou</p>
+                <p class="detalle_partido"><%= nombreTorneo %> · Jornada <%= p.getJornadaActual() %> · <%= p.getEstado() %></p>
+                <p class="fecha_partido"><%= fechaFormateada %> - <%= p.getEquipoLocal() != null ? p.getEquipoLocal().getEstadio() : "Estadio" %></p>
                 <a class="accion_enlace" href="#">Ver detalles</a>
             </div>
-            <div class="partido">
-                <div class="info_partido">
-                    <img class="icono_escudo" src="/imagenes/colombia.png"/>
-                    <span>Colombia</span>
-                    <strong>2 - 0</strong>
-                    <span>Brasil</span>
-                    <img class="icono_escudo" src="/imagenes/brasil.png"/>
-                </div>
-                <p class="detalle_partido">Copa del Rey · Jornada 5 · Finalizado</p>
-                <p class="fecha_partido">15 de junio - 2024 - 18:00 - Estadio Metropolitano</p>
-                <a class="accion_enlace" href="#">Ver detalles</a>
-            </div>
+            <%
+                }
+            } else {
+            %>
+            <p>No hay partidos disponibles.</p>
+            <%
+                }
+            %>
         </div>
+
 
         <!-- Modal para nuevo partido -->
         <div class="modal" id="modalNuevoPartido">

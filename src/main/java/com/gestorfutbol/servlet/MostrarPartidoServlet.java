@@ -2,6 +2,7 @@ package com.gestorfutbol.servlet;
 
 import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.entity.Equipo;
+import com.gestorfutbol.entity.Partido;
 import com.gestorfutbol.entity.Torneo;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,15 +19,15 @@ import java.util.List;
 public class MostrarPartidoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Iniciando doGet para mostrar equipos!!!!!!!!!!!!!!!!!!!!!!!!!");
-
         List<Equipo> equipos = null;
         List<Torneo> torneos = null;
+        List<Partido> partidos = null; // <-- NUEVO
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
             equipos = session.createQuery("FROM Equipo", Equipo.class).list();
             torneos = session.createQuery("FROM Torneo", Torneo.class).list();
+            partidos = session.createQuery("FROM Partido", Partido.class).list(); // <-- NUEVO
             tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -34,14 +35,13 @@ public class MostrarPartidoServlet extends HttpServlet {
 
         request.setAttribute("equipos", equipos);
         request.setAttribute("torneos", torneos);
+        request.setAttribute("partidos", partidos); // <-- NUEVO
 
         try {
             request.getRequestDispatcher("/html/partidos.jsp").forward(request, response);
         } catch (Exception ex) {
-            System.out.println("Error en JSP: ");
-            ex.printStackTrace(); // <<<< Aquí verás en consola el error real
+            ex.printStackTrace();
             throw new ServletException(ex);
         }
     }
-
 }
