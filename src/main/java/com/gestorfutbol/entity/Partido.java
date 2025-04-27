@@ -33,6 +33,7 @@ public class Partido {
     @JoinColumn(name = "idEquipoVisita")
     private Equipo equipoVisita;
 
+
     @ManyToOne()
     @JoinColumn(name = "idTorneo")
     private Torneo torneo;

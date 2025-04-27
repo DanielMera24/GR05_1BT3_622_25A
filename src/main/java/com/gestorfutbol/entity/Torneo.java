@@ -30,6 +30,7 @@ public class Torneo {
     @OneToOne(mappedBy = "torneo", cascade = CascadeType.ALL)
     private TablaPosiciones tablaPosiciones;
 
+
     @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL)
     private List<Partido> partidos;
 
