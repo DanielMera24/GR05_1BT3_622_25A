@@ -28,6 +28,10 @@ public class Equipo {
     @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL)
     private List<Jugador> jugadores;
 
+    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL)
+    private List<TablaPosiciones> posiciones;
+
+
     public Equipo() {}
 
     public int getIdEquipo() {

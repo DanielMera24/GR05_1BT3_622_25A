@@ -29,7 +29,7 @@
                 <img class="icono" src="/imagenes/equipo.png"/>
                 <span class="opciones">Equipos</span>
             </a>
-            <a href="/html/tabla.html">
+            <a href="/mostrarTablaPosiciones">
                 <img class="icono" src="/imagenes/tabla.png"/>
                 <span class="opciones">Tabla de Posiciones</span>
             </a>

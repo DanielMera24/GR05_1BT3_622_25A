@@ -27,8 +27,9 @@ public class Torneo {
     private List<Equipo> equipos;
 
 
-    @OneToOne(mappedBy = "torneo", cascade = CascadeType.ALL)
-    private TablaPosiciones tablaPosiciones;
+    @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL)
+    private List<TablaPosiciones> tablaPosiciones;
+
 
 
     @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL)
