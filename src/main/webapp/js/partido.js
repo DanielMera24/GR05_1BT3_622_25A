@@ -26,14 +26,41 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    if (botonesDetalles.length && modalDetalle) {
-        botonesDetalles.forEach(btn => {
-            btn.addEventListener('click', function(event) {
-                event.preventDefault();
-                modalDetalle.style.display = 'block';
-            });
+    botonesDetalles.forEach(btn => {
+        btn.addEventListener('click', function(event) {
+            event.preventDefault();
+            modalDetalle.style.display = 'block';
+
+            // Capturamos los datos del botón
+            const idPartido = btn.getAttribute('data-id');
+            const nombreLocal = btn.getAttribute('data-local');
+            const nombreVisitante = btn.getAttribute('data-visitante');
+            const golesLocal = btn.getAttribute('data-goles-local');
+            const golesVisitante = btn.getAttribute('data-goles-visitante');
+            const nombreTorneo = btn.getAttribute('data-torneo');
+            const jornada = btn.getAttribute('data-jornada');
+            const estado = btn.getAttribute('data-estado');
+
+            // Asignar el idPartido al input hidden
+            document.getElementById('idPartido').value = idPartido;
+
+            // Rellenar el resto de campos
+            document.querySelector('#formDetallePartido p:nth-child(1)').innerHTML = `<strong>${nombreLocal}</strong> vs <strong>${nombreVisitante}</strong>`;
+            document.querySelector('#formDetallePartido p:nth-child(2)').innerText = `${nombreTorneo} · Jornada ${jornada}`;
+
+            const selectGolesLocal = document.querySelector('select[name="golesLocal"]');
+            const selectGolesVisitante = document.querySelector('select[name="golesVisitante"]');
+            const selectEstado = document.getElementById('estadoPartido');
+
+            if (selectGolesLocal && selectGolesVisitante && selectEstado) {
+                selectGolesLocal.value = golesLocal;
+                selectGolesVisitante.value = golesVisitante;
+                selectEstado.value = estado;
+            }
         });
-    }
+    });
+
+
 
     if (cerrarDetalleButton && modalDetalle) {
         cerrarDetalleButton.addEventListener('click', () => {
