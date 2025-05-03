@@ -25,11 +25,11 @@ public class Partido {
 
     private int jornadaActual;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "idEquipoLocal")
     private Equipo equipoLocal;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "idEquipoVisita")
     private Equipo equipoVisita;
 

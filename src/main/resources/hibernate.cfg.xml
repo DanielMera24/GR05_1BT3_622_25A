@@ -6,13 +6,16 @@
     <session-factory>
 
         <!-- Configuración de SQL Server -->
-        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/GestorFutbol2</property>
-        <property name="hibernate.connection.username">postgres</property>
-        <property name="hibernate.connection.password">RockoDB44</property>
+        <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+        <property name="hibernate.connection.url">
+            jdbc:sqlserver://26.30.90.3:1433;databaseName=GestorTorneos;encrypt=false
+        </property>
+        <property name="hibernate.connection.username">sa</property>
+        <property name="hibernate.connection.password">P@ssw0rd</property>
 
         <!-- Dialecto de Hibernate para SQL Server -->
-        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
+
         <!-- Mostrar consultas en consola -->
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
