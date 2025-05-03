@@ -80,7 +80,7 @@
             <div class="equipo_info">
               <img src="/imagenes/<%= imagenActual %>" class="icono_escudo" />
               <div>
-                <strong>e.get</strong><br>
+                <strong><%=e.getSiglas()%></strong><br>
                 <%= e.getNombre() %>
               </div>
             </div>

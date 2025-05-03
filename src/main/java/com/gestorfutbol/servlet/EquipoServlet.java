@@ -77,6 +77,7 @@ public class EquipoServlet extends HttpServlet {
         Equipo equipo = new Equipo();
         equipo.setCiudad(ciudadEquipo);
         equipo.setNombre(nombreEquipo);
+        equipo.setSiglas(inicialesEquipo);
         equipo.setEstadio(estadioEquipo);
         equipo.setTorneo(torneo);
         session.persist(equipo);
