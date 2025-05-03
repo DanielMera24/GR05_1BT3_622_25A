@@ -95,7 +95,7 @@ public class ActualizarPartidoServlet extends HttpServlet {
             session.close();
         }
 
-        response.sendRedirect(request.getContextPath() + "/mostrarOpcionesPartido");
+        response.sendRedirect(request.getContextPath() + "/partidos");
     }
 
     private TablaPosiciones buscarTablaPosiciones(Session session, int idTorneo, int idEquipo) {

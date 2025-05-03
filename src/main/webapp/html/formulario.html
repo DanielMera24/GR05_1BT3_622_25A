@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Partidos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                    }
+                }
+            }
+        }
+
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            event.matches ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark');
+        });
+    </script>
+    <style>
+        /* Estilos base */
+        .aplicacion { display: flex; min-height: 100vh; }
+        .barra_lateral { width: 250px; padding: 1rem; border-right: 1px solid #ddd; }
+        .contenido_principal { flex: 1; padding: 1rem; }
+        .icono { width: 24px; height: 24px; margin-right: 0.5rem; }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .yellow-card { background-color: #fde047; width: 16px; height: 24px; }
+        .red-card { background-color: #ef4444; width: 16px; height: 24px; }
+        .dark .yellow-card { background-color: #ca8a04; }
+        .dark .red-card { background-color: #b91c1c; }
+    </style>
+</head>
+<body class="dark:bg-gray-900 dark:text-white">
+<div class="aplicacion">
+    <aside class="barra_lateral bg-gray-50 dark:bg-gray-800">
+        <h2 class="flex items-center mb-4 font-bold text-lg">
+            <img src="/imagenes/pelota.png" alt="Logo" class="icono" />
+            FútbolManager
+        </h2>
+        <nav class="flex flex-col gap-2">
+            <a href="/html/index.html" class="flex items-center p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+                <img src="/imagenes/trofeo.png" class="icono" />
+                Torneos
+            </a>
+            <a class="flex items-center p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+                <img src="/imagenes/equipo.png" class="icono" />
+                Equipos
+            </a>
+            <a class="flex items-center p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+                <img src="/imagenes/tabla.png" class="icono" />
+                Tabla
+            </a>
+            <a class="flex items-center p-2 rounded bg-primary text-white">
+                <img src="/imagenes/calendario.png" class="icono" />
+                Partidos
+            </a>
+        </nav>
+    </aside>
+
+    <main class="contenido_principal">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-xl font-bold">Partidos</h1>
+            <button class="bg-primary text-white px-3 py-2 rounded" onclick="abrirModalResultados()">+ Nuevo Partido</button>
+        </div>
+
+        <div class="flex gap-2 mb-4 flex-wrap">
+            <select class="p-2 rounded border dark:bg-gray-700 dark:border-gray-600">
+                <option>Todos los torneos</option>
+                <option>Liga Nacional</option>
+            </select>
+            <select class="p-2 rounded border dark:bg-gray-700 dark:border-gray-600">
+                <option>Todos los equipos</option>
+                <option>FC Barcelona</option>
+            </select>
+        </div>
+
+        <div class="space-y-3">
+            <div class="p-3 border rounded bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex items-center justify-between mb-1">
+                    <span>FC Barcelona</span>
+                    <strong>3 - 1</strong>
+                    <span>Atlético Madrid</span>
+                </div>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Liga Nacional · Finalizado</p>
+                <a href="#" class="text-primary text-sm mt-1 block" onclick="abrirModalResultados('FC Barcelona', 'Atlético Madrid', 3, 1)">Ver detalles</a>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal para resultados -->
+<div id="modalResultados" class="modal">
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 w-11/12 max-w-md">
+        <div class="flex justify-between items-center mb-3">
+            <h2 class="text-lg font-bold" id="modalTitulo">Resultados del Partido</h2>
+            <button onclick="cerrarModalResultados()" class="text-gray-500 text-xl">&times;</button>
+        </div>
+
+        <form id="formResultados" class="space-y-3">
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-sm mb-1">Equipo Local</label>
+                    <input type="text" id="equipo1" class="w-full p-2 border rounded text-base dark:bg-gray-700 dark:border-gray-600" readonly>
+                </div>
+                <div>
+                    <label class="block text-sm mb-1">Equipo Visitante</label>
+                    <input type="text" id="equipo2" class="w-full p-2 border rounded text-base dark:bg-gray-700 dark:border-gray-600" readonly>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-sm mb-1">Goles Local</label>
+                    <input type="number" id="golesEquipo1" min="0" class="w-full p-2 border rounded text-base dark:bg-gray-700 dark:border-gray-600">
+                </div>
+                <div>
+                    <label class="block text-sm mb-1">Goles Visitante</label>
+                    <input type="number" id="golesEquipo2" min="0" class="w-full p-2 border rounded text-base dark:bg-gray-700 dark:border-gray-600">
+                </div>
+            </div>
+
+            <!-- Tarjetas Amarillas -->
+            <div class="pt-2">
+                <h3 class="font-medium mb-2">Tarjetas Amarillas</h3>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <div id="amarillasEquipo1" class="space-y-1">
+                            <div class="flex items-center border p-1 rounded">
+                                <div class="yellow-card mr-2"></div>
+                                <select class="flex-1 p-1 text-sm border rounded dark:bg-gray-700 dark:border-gray-600">
+                                    <option value="">Jugador local</option>
+                                    <option>Messi</option>
+                                    <option>Piqué</option>
+                                </select>
+                                <button type="button" class="ml-1 text-red-500" onclick="eliminarTarjeta(this)">×</button>
+                            </div>
+                        </div>
+                        <button type="button" class="text-xs text-primary mt-1" onclick="agregarTarjeta('amarillasEquipo1', true)">+ Añadir</button>
+                    </div>
+
+                    <div>
+                        <div id="amarillasEquipo2" class="space-y-1">
+                            <div class="flex items-center border p-1 rounded">
+                                <div class="yellow-card mr-2"></div>
+                                <select class="flex-1 p-1 text-sm border rounded dark:bg-gray-700 dark:border-gray-600">
+                                    <option value="">Jugador visitante</option>
+                                    <option>Griezmann</option>
+                                    <option>Koke</option>
+                                </select>
+                                <button type="button" class="ml-1 text-red-500" onclick="eliminarTarjeta(this)">×</button>
+                            </div>
+                        </div>
+                        <button type="button" class="text-xs text-primary mt-1" onclick="agregarTarjeta('amarillasEquipo2', true)">+ Añadir</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjetas Rojas -->
+            <div class="pt-2">
+                <h3 class="font-medium mb-2">Tarjetas Rojas</h3>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <div id="rojasEquipo1" class="space-y-1"></div>
+                        <button type="button" class="text-xs text-primary mt-1" onclick="agregarTarjeta('rojasEquipo1', false)">+ Añadir</button>
+                    </div>
+
+                    <div>
+                        <div id="rojasEquipo2" class="space-y-1"></div>
+                        <button type="button" class="text-xs text-primary mt-1" onclick="agregarTarjeta('rojasEquipo2', false)">+ Añadir</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-2 mt-4">
+                <button type="button" onclick="cerrarModalResultados()" class="px-3 py-1 border rounded">
+                    Cancelar
+                </button>
+                <button type="submit" class="px-3 py-1 bg-primary text-white rounded">
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Abrir modal de resultados
+    function abrirModalResultados(equipo1, equipo2, goles1, goles2) {
+        const modal = document.getElementById('modalResultados');
+
+        if (equipo1 && equipo2) {
+            document.getElementById('equipo1').value = equipo1;
+            document.getElementById('equipo2').value = equipo2;
+            document.getElementById('golesEquipo1').value = goles1 || '';
+            document.getElementById('golesEquipo2').value = goles2 || '';
+            document.getElementById('modalTitulo').textContent = goles1 !== undefined ? 'Detalles del Partido' : 'Nuevo Partido';
+        } else {
+            document.getElementById('equipo1').value = '';
+            document.getElementById('equipo2').value = '';
+            document.getElementById('golesEquipo1').value = '';
+            document.getElementById('golesEquipo2').value = '';
+            document.getElementById('modalTitulo').textContent = 'Nuevo Partido';
+        }
+
+        modal.style.display = 'flex';
+    }
+
+    // Cerrar modal
+    function cerrarModalResultados() {
+        document.getElementById('modalResultados').style.display = 'none';
+    }
+
+    // Agregar tarjeta (amarilla o roja)
+    function agregarTarjeta(contenedorId, esAmarilla) {
+        const contenedor = document.getElementById(contenedorId);
+        const nuevaTarjeta = document.createElement('div');
+        nuevaTarjeta.className = 'flex items-center border p-1 rounded';
+
+        const esLocal = contenedorId.includes('Equipo1');
+        const jugadores = esLocal ? ['Messi', 'Piqué', 'Busquets'] : ['Griezmann', 'Koke', 'Oblak'];
+        const placeholder = esLocal ? 'Jugador local' : 'Jugador visitante';
+
+        nuevaTarjeta.innerHTML = `
+        <div class="${esAmarilla ? 'yellow-card' : 'red-card'} mr-2"></div>
+        <select class="flex-1 p-1 text-sm border rounded dark:bg-gray-700 dark:border-gray-600">
+          <option value="">${placeholder}</option>
+          ${jugadores.map(j => `<option>${j}</option>`).join('')}
+        </select>
+        <button type="button" class="ml-1 text-red-500" onclick="eliminarTarjeta(this)">×</button>
+      `;
+
+        contenedor.appendChild(nuevaTarjeta);
+    }
+
+    // Eliminar tarjeta
+    function eliminarTarjeta(boton) {
+        boton.parentNode.remove();
+    }
+
+    // Enviar formulario
+    document.getElementById('formResultados').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const resultado = {
+            equipoLocal: document.getElementById('equipo1').value,
+            equipoVisitante: document.getElementById('equipo2').value,
+            golesLocal: document.getElementById('golesEquipo1').value,
+            golesVisitante: document.getElementById('golesEquipo2').value,
+            tarjetasAmarillasLocal: recopilarTarjetas('amarillasEquipo1'),
+            tarjetasAmarillasVisitante: recopilarTarjetas('amarillasEquipo2'),
+            tarjetasRojasLocal: recopilarTarjetas('rojasEquipo1'),
+            tarjetasRojasVisitante: recopilarTarjetas('rojasEquipo2')
+        };
+
+        console.log('Datos guardados:', JSON.stringify(resultado));
+        alert('Resultado guardado correctamente');
+        cerrarModalResultados();
+    });
+
+    // Recopilar jugadores con tarjetas
+    function recopilarTarjetas(contenedorId) {
+        const contenedor = document.getElementById(contenedorId);
+        return Array.from(contenedor.querySelectorAll('select'))
+            .map(select => select.value)
+            .filter(jugador => jugador);
+    }
+
+    // Cerrar modal al hacer clic fuera
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('modalResultados')) {
+            cerrarModalResultados();
+        }
+    }
+</script>
+</body>
+</html>
