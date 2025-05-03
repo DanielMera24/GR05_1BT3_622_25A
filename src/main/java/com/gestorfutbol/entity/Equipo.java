@@ -11,7 +11,7 @@ public class Equipo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idEquipo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nombre;
 
     @Column(nullable = false)
@@ -19,6 +19,9 @@ public class Equipo {
 
     @Column(nullable = false)
     private String estadio;
+
+    @Column(nullable = false, length = 3)
+    private String siglas;
 
 
     @ManyToOne
@@ -74,4 +77,27 @@ public class Equipo {
         this.torneo = torneo;
     }
 
+    public String getSiglas() {
+        return siglas;
+    }
+
+    public void setSiglas(String siglas) {
+        this.siglas = siglas;
+    }
+
+    public List<Jugador> getJugadores() {
+        return jugadores;
+    }
+
+    public void setJugadores(List<Jugador> jugadores) {
+        this.jugadores = jugadores;
+    }
+
+    public List<TablaPosiciones> getPosiciones() {
+        return posiciones;
+    }
+
+    public void setPosiciones(List<TablaPosiciones> posiciones) {
+        this.posiciones = posiciones;
+    }
 }
