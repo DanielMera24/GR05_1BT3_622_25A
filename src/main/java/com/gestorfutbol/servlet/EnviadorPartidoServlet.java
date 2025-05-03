@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/mostrarOpcionesPartido")
-public class MostrarPartidoServlet extends HttpServlet {
+public class EnviadorPartidoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Equipo> equipos = null;

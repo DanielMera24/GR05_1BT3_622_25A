@@ -3,6 +3,7 @@ package com.gestorfutbol.servlet;
 import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.entity.Equipo;
 import com.gestorfutbol.entity.TablaPosiciones;
+import com.gestorfutbol.service.ValidadorEquipo;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -31,14 +32,20 @@ public class EquipoServlet extends HttpServlet {
 
         com.gestorfutbol.entity.Torneo torneo = session.get(com.gestorfutbol.entity.Torneo.class, idTorneo);
 
+        // Verificar si ya existe un equipo con el mismo nombre
+        ValidadorEquipo validador = new ValidadorEquipo();
+        if (validador.equipoYaExiste(nombreEquipo, session)) {
+            // Si ya existe, devolver un código de estado HTTP 400 (Bad Request)
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
+            response.getWriter().write("Error: Ya existe un equipo con ese nombre.");
+            return; // No continuar con la persistencia
+        }
         Equipo equipo = new Equipo();
         equipo.setCiudad(ciudadEquipo);
         equipo.setNombre(nombreEquipo);
         equipo.setEstadio(estadioEquipo);
         equipo.setTorneo(torneo);
-
         session.persist(equipo);
-
         // Crear automáticamente la fila en TablaPosiciones
         TablaPosiciones tablaPosiciones = new TablaPosiciones();
         tablaPosiciones.setEquipo(equipo);
@@ -52,12 +59,9 @@ public class EquipoServlet extends HttpServlet {
         tablaPosiciones.setGolesEnContra(0);
         tablaPosiciones.setDiferenciaGoles(0);
         tablaPosiciones.setFechaActualizacion(new Date());
-
         session.persist(tablaPosiciones);
-
         tx.commit();
         session.close();
-
         response.sendRedirect(request.getContextPath() + "/mostrarEquipos");
     }
 }
