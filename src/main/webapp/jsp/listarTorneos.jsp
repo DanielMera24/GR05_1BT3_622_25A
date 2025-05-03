@@ -24,7 +24,7 @@
                 <img class="icono" src="/imagenes/trofeo.png"/>
                 <span class="opciones">Torneos</span>
             </a>
-            <a href="/mostrarEquipos">
+            <a href="/equipos">
                 <img class="icono" src="/imagenes/equipo.png"/>
                 <span class="opciones">Equipos</span>
             </a>
@@ -32,7 +32,7 @@
                 <img class="icono" src="/imagenes/tabla.png"/>
                 <span class="opciones">Tabla de Posiciones</span>
             </a>
-            <a href="/mostrarOpcionesPartido">
+            <a href="/partidos">
                 <img class="icono" src="/imagenes/calendario.png"/>
                 <span class="opciones">Partidos</span>
             </a>

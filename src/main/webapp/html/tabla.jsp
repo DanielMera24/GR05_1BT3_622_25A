@@ -22,9 +22,9 @@
     </h2>
     <nav>
       <a href="/listarTorneos"><img src="/imagenes/trofeo.png" class="icono" /><span class="opciones">Torneos</span></a>
-      <a href="/mostrarEquipos"><img src="/imagenes/equipo.png" class="icono" /><span class="opciones">Equipos</span></a>
+      <a href="/equipos"><img src="/imagenes/equipo.png" class="icono" /><span class="opciones">Equipos</span></a>
       <a href="/mostrarTablaPosiciones" class="activo"><img src="/imagenes/tabla.png" class="icono" /><span class="opciones">Tabla de Posiciones</span></a>
-      <a href="/mostrarOpcionesPartido"><img src="/imagenes/calendario.png" class="icono" /><span class="opciones">Partidos</span></a>
+      <a href="/partidos"><img src="/imagenes/calendario.png" class="icono" /><span class="opciones">Partidos</span></a>
     </nav>
   </aside>
 

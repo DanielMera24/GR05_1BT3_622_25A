@@ -14,9 +14,47 @@ import org.hibernate.Transaction;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
-@WebServlet("/crearPartido")
+@WebServlet("/partidos")
 public class PartidoServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Equipo> equipos = null;
+        List<Torneo> torneos = null;
+        List<Partido> partidos = null; // <-- NUEVO
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            equipos = session.createQuery("FROM Equipo", Equipo.class).list();
+            torneos = session.createQuery("FROM Torneo", Torneo.class).list();
+            partidos = session.createQuery("FROM Partido", Partido.class).list(); // <-- NUEVO
+            tx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        request.setAttribute("equipos", equipos);
+        request.setAttribute("torneos", torneos);
+        request.setAttribute("partidos", partidos); // <-- NUEVO
+
+        try {
+            request.getRequestDispatcher("/html/partidos.jsp").forward(request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new ServletException(ex);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("CREANDO PARTIDITO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
@@ -62,6 +100,6 @@ public class PartidoServlet extends HttpServlet {
 
         System.out.println("Partido guardado: " + partido);
 
-        response.sendRedirect(request.getContextPath() + "/mostrarOpcionesPartido");
+        response.sendRedirect(request.getContextPath() + "/partidos");
     }
 }

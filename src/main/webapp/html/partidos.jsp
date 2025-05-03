@@ -25,7 +25,7 @@
                 <img class="icono" src="/imagenes/trofeo.png"/>
                 <span class="opciones">Torneos</span>
             </a>
-            <a href="/mostrarEquipos">
+            <a href="/equipos">
                 <img class="icono" src="/imagenes/equipo.png"/>
                 <span class="opciones">Equipos</span>
             </a>
@@ -33,7 +33,7 @@
                 <img class="icono" src="/imagenes/tabla.png"/>
                 <span class="opciones">Tabla de Posiciones</span>
             </a>
-            <a href="/mostrarOpcionesPartido" class="activo">
+            <a href="/partidos" class="activo">
                 <img class="icono" src="/imagenes/calendario.png"/>
                 <span class="opciones">Partidos</span>
             </a>
@@ -112,7 +112,7 @@
                 <span class="cerrar-modal">&times;</span>
 
                 <h2>Nuevo Partido</h2>
-                <form id="formNuevoPartido" action="/crearPartido" method="post">
+                <form id="formNuevoPartido" action="/partidos" method="post">
                     <div class="form-grupo">
                         <label for="torneo">Torneo</label>
                         <select id="torneo" name="torneo" required>

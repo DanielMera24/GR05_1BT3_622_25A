@@ -25,7 +25,7 @@
         <img src="/imagenes/trofeo.png" class="icono" />
         <span class="opciones">Torneos</span>
       </a>
-      <a href="/mostrarEquipos" class="activo">
+      <a href="/equipos" class="activo">
         <img src="/imagenes/equipo.png" class="icono" />
         <span class="opciones">Equipos</span>
       </a>
@@ -33,7 +33,7 @@
         <img src="/imagenes/tabla.png" class="icono" />
         <span class="opciones">Tabla de Posiciones</span>
       </a>
-      <a href="/mostrarOpcionesPartido">
+      <a href="/partidos">
         <img src="/imagenes/calendario.png" class="icono" />
         <span class="opciones">Partidos</span>
       </a>
@@ -109,7 +109,7 @@
   <div class="modal_contenido">
     <span class="cerrar" id="cerrarNuevoEquipo">&times;</span>
     <h2 id="tituloNuevoEquipo">Nuevo Equipo</h2>
-    <form id="formNuevoEquipo" class="formulario_equipo" action = "/crearEquipo" method="post">
+    <form id="formNuevoEquipo" class="formulario_equipo" action = "/equipos" method="post">
       <div class="campo">
         <label for="nombreNuevoEquipo">Nombre del Equipo</label>
         <input type="text" id="nombreNuevoEquipo" name="nombreNuevoEquipo" required />

@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/mostrarTablaPosiciones")
-public class MostrarTablaPosicionesServlet extends HttpServlet {
+public class TablaPosicionesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
