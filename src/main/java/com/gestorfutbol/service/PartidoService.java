@@ -6,6 +6,7 @@ import com.gestorfutbol.dto.EquipoDTO;
 import com.gestorfutbol.dto.PartidoDTO;
 import com.gestorfutbol.entity.Equipo;
 import com.gestorfutbol.entity.Partido;
+import com.gestorfutbol.entity.TablaPosiciones;
 import com.gestorfutbol.entity.Torneo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -98,5 +99,31 @@ public class PartidoService {
         partido.setFechaPartido(fechaDate);
 
         partidoDAO.guardar(partido);
+    }
+
+
+
+
+    public void actualizarPartido(int idPartido, Partido partido){
+        Partido partidoEncontrado = null;
+        System.out.println("actualizando partido!!!!!!!!!!!");
+        try(Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            partidoEncontrado = (Partido) session.get(Partido.class, idPartido);
+
+            if(partidoEncontrado != null){
+                System.out.println("partido no es nulo");
+                partidoEncontrado.setGolesLocal(partido.getGolesLocal());
+                partidoEncontrado.setGolesVisita(partido.getGolesVisita());
+                partidoEncontrado.setEstado(partido.getEstado());
+                session.update(partidoEncontrado);
+                tx.commit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("usando tabla de posiciones service!!!!");
+        TablaPosicionesService tablaPosicionesService = new TablaPosicionesService();
+        tablaPosicionesService.actualizarEquipoEnTabla(partidoEncontrado);
     }
 }
