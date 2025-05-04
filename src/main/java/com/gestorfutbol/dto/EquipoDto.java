@@ -1,12 +1,18 @@
 package com.gestorfutbol.dto;
 
-public class EquipoDto {
+public class EquipoDTO {
     private int idEquipo;
     private String nombre;
     private String ciudad;
     private String estadio;
+    private String siglas;
 
-    public EquipoDto() {}
+    public EquipoDTO(String nombre, String ciudad, String estadio, String siglas) {
+        this.nombre = nombre;
+        this.ciudad = ciudad;
+        this.estadio = estadio;
+        this.siglas = siglas;
+    }
 
     public int getIdEquipo() {
         return idEquipo;
@@ -38,5 +44,13 @@ public class EquipoDto {
 
     public void setEstadio(String estadio) {
         this.estadio = estadio;
+    }
+
+    public String getSiglas() {
+        return siglas;
+    }
+
+    public void setSiglas(String siglas) {
+        this.siglas = siglas;
     }
 }

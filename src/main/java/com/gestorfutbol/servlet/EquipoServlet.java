@@ -1,9 +1,11 @@
 package com.gestorfutbol.servlet;
 
 import com.gestorfutbol.config.HibernateUtil;
+import com.gestorfutbol.dto.EquipoDTO;
 import com.gestorfutbol.entity.Equipo;
 import com.gestorfutbol.entity.TablaPosiciones;
 import com.gestorfutbol.entity.Torneo;
+import com.gestorfutbol.service.EquipoService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,34 +21,33 @@ import java.util.List;
 @WebServlet("/equipos")
 public class EquipoServlet extends HttpServlet {
 
+    private EquipoService equipoService;
+
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public void init() throws ServletException {
+        equipoService = new EquipoService();
+    }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Iniciando doGet para mostrar equipos!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-        List<Equipo> equipos = null;
         List<Torneo> torneos = null; // 👈 agregamos torneos
+
+        // Consultar equipos y torneos desde la base de datos
+        List<EquipoDTO> equiposDto = equipoService.obtenerEquipos();
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
-            equipos = session.createQuery("FROM Equipo", Equipo.class).list();
             torneos = session.createQuery("FROM Torneo", Torneo.class).list(); // 👈 también consultamos torneos
             tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        request.setAttribute("equipos", equipos);
+        request.setAttribute("equipos", equiposDto);
         request.setAttribute("torneos", torneos); // 👈 enviamos torneos al JSP
         request.getRequestDispatcher("/html/equipos.jsp").forward(request, response);
     }
-
-
-
-
-
-
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -81,7 +82,9 @@ public class EquipoServlet extends HttpServlet {
         equipo.setEstadio(estadioEquipo);
         equipo.setTorneo(torneo);
         session.persist(equipo);
+
         // Crear automáticamente la fila en TablaPosiciones
+
         TablaPosiciones tablaPosiciones = new TablaPosiciones();
         tablaPosiciones.setEquipo(equipo);
         tablaPosiciones.setTorneo(torneo);
@@ -98,5 +101,14 @@ public class EquipoServlet extends HttpServlet {
         tx.commit();
         session.close();
         response.sendRedirect(request.getContextPath() + "/equipos");
+    }
+
+    public Equipo convertirDtoEntity(EquipoDTO equipoDTO){
+        Equipo equipo = new Equipo();
+        equipo.setIdEquipo(equipoDTO.getIdEquipo());
+        equipo.setNombre(equipoDTO.getNombre());
+        equipo.setCiudad(equipoDTO.getCiudad());
+        equipo.setEstadio(equipoDTO.getEstadio());
+        return equipo;
     }
 }

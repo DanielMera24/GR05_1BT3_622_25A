@@ -2,6 +2,7 @@
 <%@ page import="com.gestorfutbol.entity.Equipo" %>
 <%@ page import="com.gestorfutbol.entity.Torneo" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.gestorfutbol.dto.EquipoDTO" %>
 
 
 <!DOCTYPE html>
@@ -41,7 +42,7 @@
   </aside>
 
   <%
-    List<Equipo> equipos = (List<Equipo>) request.getAttribute("equipos");
+    List<EquipoDTO> equipos = (List<EquipoDTO>) request.getAttribute("equipos");
     String test = "";
     if (equipos == null){
       test = "Nulo";
@@ -72,7 +73,7 @@
 
         <%
           String[] imagenes = {"barcelona.png", "madrid.png", "atleti.png"}; // 👈 nombres de las imágenes
-          for (Equipo e : equipos) {
+          for (EquipoDTO e : equipos) {
             String imagenActual = imagenes[contador % imagenes.length]; // 👈 rotar las imágenes
         %>
         <tr>
