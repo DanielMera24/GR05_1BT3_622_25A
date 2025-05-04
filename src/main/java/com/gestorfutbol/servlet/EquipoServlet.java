@@ -2,10 +2,12 @@ package com.gestorfutbol.servlet;
 
 import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.dto.EquipoDTO;
+import com.gestorfutbol.dto.TorneoDTO;
 import com.gestorfutbol.entity.Equipo;
 import com.gestorfutbol.entity.TablaPosiciones;
 import com.gestorfutbol.entity.Torneo;
 import com.gestorfutbol.service.EquipoService;
+import com.gestorfutbol.service.TorneoService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,6 +17,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -22,93 +27,72 @@ import java.util.List;
 public class EquipoServlet extends HttpServlet {
 
     private EquipoService equipoService;
+    private TorneoService torneoService;
 
     @Override
     public void init() throws ServletException {
         equipoService = new EquipoService();
+        torneoService = new TorneoService();
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Iniciando doGet para mostrar equipos!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-        List<Torneo> torneos = null; // 👈 agregamos torneos
-
-        // Consultar equipos y torneos desde la base de datos
         List<EquipoDTO> equiposDto = equipoService.obtenerEquipos();
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
-            torneos = session.createQuery("FROM Torneo", Torneo.class).list(); // 👈 también consultamos torneos
-            tx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        List<TorneoDTO> torneosDto = torneoService.listarTorneos();
 
         request.setAttribute("equipos", equiposDto);
-        request.setAttribute("torneos", torneos); // 👈 enviamos torneos al JSP
+        request.setAttribute("torneos", torneosDto);
         request.getRequestDispatcher("/html/equipos.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Creando Equipo");
 
+        System.out.println("Creando Equipo");
         String nombreEquipo = request.getParameter("nombreNuevoEquipo");
         String inicialesEquipo = request.getParameter("inicialesNuevoEquipo");
         String ciudadEquipo = request.getParameter("ciudadNuevoEquipo");
         String estadioEquipo = request.getParameter("estadioNuevoEquipo");
         int idTorneo = Integer.parseInt(request.getParameter("torneoPerteneciente"));
 
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-
-        com.gestorfutbol.entity.Torneo torneo = session.get(com.gestorfutbol.entity.Torneo.class, idTorneo);
-
-        // Verificar si ya existe un equipo con el mismo nombre
-        /*
-        ValidadorEquipo validador = new ValidadorEquipo();
-        if (validador.equipoYaExiste(nombreEquipo, session)) {
-            // Si ya existe, devolver un código de estado HTTP 400 (Bad Request)
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
-            response.getWriter().write("Error: Ya existe un equipo con ese nombre.");
-            return; // No continuar con la persistencia
+        boolean fueCreadoEquipo = equipoService.guardarEquipo(nombreEquipo, ciudadEquipo, estadioEquipo, inicialesEquipo, idTorneo);
+        if(!fueCreadoEquipo){
+            request.setAttribute("errorMensaje", "Ya existe un equipo con ese nombre o siglas.");
+            doGet(request, response);
+            return;
         }
-        */
+        try {
+            // Recuperar ID del nuevo equipo
+            int idEquipo = equipoService.obtenerIdEquipoPorNombre(nombreEquipo);
 
-        Equipo equipo = new Equipo();
-        equipo.setCiudad(ciudadEquipo);
-        equipo.setNombre(nombreEquipo);
-        equipo.setSiglas(inicialesEquipo);
-        equipo.setEstadio(estadioEquipo);
-        equipo.setTorneo(torneo);
-        session.persist(equipo);
+            String url = request.getScheme() + "://" + request.getServerName() + ":" +
+                    request.getServerPort() + request.getContextPath() + "/tablaPosiciones";
 
-        // Crear automáticamente la fila en TablaPosiciones
+            String parametros = "idEquipo=" + idEquipo + "&idTorneo=" + idTorneo;
 
-        TablaPosiciones tablaPosiciones = new TablaPosiciones();
-        tablaPosiciones.setEquipo(equipo);
-        tablaPosiciones.setTorneo(torneo);
-        tablaPosiciones.setPuntosAcumulados(0);
-        tablaPosiciones.setPartidosJugados(0);
-        tablaPosiciones.setPartidosGanados(0);
-        tablaPosiciones.setPartidosEmpatados(0);
-        tablaPosiciones.setPartidosPerdidos(0);
-        tablaPosiciones.setGolesAFavor(0);
-        tablaPosiciones.setGolesEnContra(0);
-        tablaPosiciones.setDiferenciaGoles(0);
-        tablaPosiciones.setFechaActualizacion(new Date());
-        session.persist(tablaPosiciones);
-        tx.commit();
-        session.close();
+            URL obj;
+            obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("POST");
+            con.setDoOutput(true);
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            try (OutputStream os = con.getOutputStream()) {
+                os.write(parametros.getBytes());
+                os.flush();
+            }
+
+            int responseCode = con.getResponseCode();
+            System.out.println("POST a tablaPosiciones respondió con código: " + responseCode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Opcional: registrar error o mostrar mensaje al usuario
+        }
+
         response.sendRedirect(request.getContextPath() + "/equipos");
+
     }
 
-    public Equipo convertirDtoEntity(EquipoDTO equipoDTO){
-        Equipo equipo = new Equipo();
-        equipo.setIdEquipo(equipoDTO.getIdEquipo());
-        equipo.setNombre(equipoDTO.getNombre());
-        equipo.setCiudad(equipoDTO.getCiudad());
-        equipo.setEstadio(equipoDTO.getEstadio());
-        return equipo;
-    }
 }

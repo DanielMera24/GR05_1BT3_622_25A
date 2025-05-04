@@ -2,24 +2,58 @@ package com.gestorfutbol.service;
 
 import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.dao.EquipoDAO;
+import com.gestorfutbol.dao.TorneoDAO;
 import com.gestorfutbol.dto.EquipoDTO;
 import com.gestorfutbol.entity.Equipo;
+import com.gestorfutbol.entity.Torneo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EquipoService {
     private final EquipoDAO equipoDAO;
+    private final TorneoDAO torneoDAO;
 
     public EquipoService() {
         this.equipoDAO = new EquipoDAO(HibernateUtil.getSessionFactory());
+        this.torneoDAO = new TorneoDAO(HibernateUtil.getSessionFactory());
     }
 
-    public EquipoDTO guardarEquipo(EquipoDTO equipoDTO) {
-        Equipo equipo = convertirDtoAEntity(equipoDTO);
+    public boolean guardarEquipo(String nombre, String ciudad, String estadio, String siglas, int idTorneo) {
+
+        // Verificar si el equipo ya existe
+        List<Equipo> equipos = equipoDAO.obtenerEquipos();
+        for (Equipo equipo : equipos) {
+            if (equipo.getNombre().equalsIgnoreCase(nombre.trim()) || equipo.getSiglas().equalsIgnoreCase(siglas.trim())){
+                return false; // El equipo ya existe, no se crea uno nuevo
+            }
+        }
+        // Crear un nuevo equipo
+        Equipo equipo = new Equipo();
+        equipo.setNombre(nombre.trim());
+        equipo.setCiudad(ciudad.trim());
+        equipo.setCiudad(ciudad.trim());
+        equipo.setEstadio(estadio.trim());
+        equipo.setSiglas(siglas.trim());
+        // Buscar Torneo por ID
+
+        Torneo torneo = extraerTorneo(idTorneo);
+        equipo.setTorneo(torneo); // Asignar el torneo correspondiente si es necesario
+
+        // Guardar el equipo en la base de datos
         equipoDAO.guardarEquipo(equipo);
-        return convertirEntityDto(equipo);
-        // Pendiente si se requiere que se retorne algo al momento de crear partido
+        return true;
+    }
+
+    private Torneo extraerTorneo(int idTorneo) {
+
+        List<Torneo> torneos = torneoDAO.obtenerTodos();
+        for (Torneo torneo : torneos) {
+            if (torneo.getIdTorneo() == idTorneo) {
+                return torneo;
+            }
+        }
+        return null; // Si no se encuentra el torneo, se puede manejar el error según sea necesario
     }
 
     private EquipoDTO convertirEntityDto(Equipo equipo) {
@@ -48,6 +82,17 @@ public class EquipoService {
             equiposDto.add(equipoDTO);
         }
         return equiposDto;
+    }
+
+    public int obtenerIdEquipoPorNombre(String nombre) {
+        List<Equipo> equipos = equipoDAO.obtenerEquipos();
+        for (Equipo e : equipos){
+            if (e.getNombre().equalsIgnoreCase(nombre)){
+                return e.getIdEquipo();
+            }
+        }
+
+        return -1;
     }
 
 }

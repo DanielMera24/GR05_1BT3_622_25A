@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.gestorfutbol.entity.TablaPosiciones" %>
 <%@ page import="com.gestorfutbol.entity.Torneo" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.gestorfutbol.dto.TablaPosicionesDTO" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -68,13 +68,13 @@
         </thead>
         <tbody>
         <%
-          List<TablaPosiciones> posiciones = (List<TablaPosiciones>) request.getAttribute("tablaPosiciones");
+          List<TablaPosicionesDTO> posiciones = (List<TablaPosicionesDTO>) request.getAttribute("tablaPosiciones");
           String[] imagenes = {"barcelona.png", "madrid.png", "atleti.png", "argentina.png", "colombia.png", "ecuador.png"};
           int contador = 0;
 
           if (posiciones != null && !posiciones.isEmpty()) {
             int posicion = 1;
-            for (TablaPosiciones tp : posiciones) {
+            for (TablaPosicionesDTO tp : posiciones) {
               String imagenActual = imagenes[contador % imagenes.length];
         %>
         <tr>
@@ -82,7 +82,7 @@
           <td>
             <div class="equipo_info">
               <img src="/imagenes/<%= imagenActual %>" class="icono_escudo" />
-              <span><%= tp.getEquipo().getNombre() %></span>
+              <span><%= tp.getNombreEquipo() %></span>
             </div>
           </td>
           <td><%= tp.getPuntosAcumulados() %></td>

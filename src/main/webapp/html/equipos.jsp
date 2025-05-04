@@ -132,9 +132,9 @@
         <select id="torneoPerteneciente" name="torneoPerteneciente" required>
           <option value="">Seleccione un torneo</option>
           <%
-            List<com.gestorfutbol.entity.Torneo> torneos = (List<com.gestorfutbol.entity.Torneo>) request.getAttribute("torneos");
+            List<com.gestorfutbol.dto.TorneoDTO> torneos = (List<com.gestorfutbol.dto.TorneoDTO>) request.getAttribute("torneos");
             if (torneos != null) {
-              for (com.gestorfutbol.entity.Torneo torneo : torneos) {
+              for (com.gestorfutbol.dto.TorneoDTO torneo : torneos) {
           %>
           <option value="<%= torneo.getIdTorneo() %>"><%= torneo.getNombre() %></option>
           <%

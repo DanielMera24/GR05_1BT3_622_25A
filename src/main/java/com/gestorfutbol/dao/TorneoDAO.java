@@ -30,5 +30,10 @@ public class TorneoDAO {
     }
 
 
+    public Torneo obtenerTorneoPorId(int idTorneo) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Torneo.class, idTorneo);
+        }
+    }
 }
 

@@ -35,9 +35,9 @@ public class TorneoServlet extends HttpServlet {
         String nombre = request.getParameter("nombreTorneo");
         String fechaInicioStr = request.getParameter("fechaInicio");
 
-        boolean creado = torneoService.crearTorneo(nombre, fechaInicioStr);
+        boolean fueCreadoTorneo = torneoService.crearTorneo(nombre, fechaInicioStr);
 
-        if (!creado) {
+        if (!fueCreadoTorneo) {
             request.setAttribute("errorMensaje", "Ya existe un torneo con ese nombree.");
             doGet(request, response);
             return;
