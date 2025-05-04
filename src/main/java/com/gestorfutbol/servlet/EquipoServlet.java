@@ -1,11 +1,6 @@
 package com.gestorfutbol.servlet;
-
-import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.dto.EquipoDTO;
 import com.gestorfutbol.dto.TorneoDTO;
-import com.gestorfutbol.entity.Equipo;
-import com.gestorfutbol.entity.TablaPosiciones;
-import com.gestorfutbol.entity.Torneo;
 import com.gestorfutbol.service.EquipoService;
 import com.gestorfutbol.service.TorneoService;
 import jakarta.servlet.ServletException;
@@ -13,19 +8,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Date;
 import java.util.List;
 
 @WebServlet("/equipos")
 public class EquipoServlet extends HttpServlet {
-
     private EquipoService equipoService;
     private TorneoService torneoService;
 
