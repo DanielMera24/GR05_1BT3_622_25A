@@ -57,31 +57,13 @@ public class TablaPosicionesServlet extends HttpServlet {
         int idEquipo = Integer.parseInt(request.getParameter("idEquipo"));
         int idTorneo = Integer.parseInt(request.getParameter("idTorneo"));
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
+        tablaPosicionesService.crearRegistro(idEquipo, idTorneo);
 
-            Equipo equipo = session.get(Equipo.class, idEquipo);
-            Torneo torneo = session.get(Torneo.class, idTorneo);
-
-            TablaPosiciones tabla = new TablaPosiciones();
-            tabla.setEquipo(equipo);
-            tabla.setTorneo(torneo);
-            tabla.setPuntosAcumulados(0);
-            tabla.setPartidosJugados(0);
-            tabla.setPartidosGanados(0);
-            tabla.setPartidosEmpatados(0);
-            tabla.setPartidosPerdidos(0);
-            tabla.setGolesAFavor(0);
-            tabla.setGolesEnContra(0);
-            tabla.setDiferenciaGoles(0);
-            tabla.setFechaActualizacion(new Date());
-
-            session.persist(tabla);
-            tx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
+        response.setStatus(HttpServletResponse.SC_CREATED);
     }
+
+
+
+
 
 }

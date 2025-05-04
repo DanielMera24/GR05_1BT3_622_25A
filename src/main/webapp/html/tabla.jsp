@@ -82,7 +82,7 @@
           <td>
             <div class="equipo_info">
               <img src="/imagenes/<%= imagenActual %>" class="icono_escudo" />
-              <span><%= tp.getNombreEquipo() %></span>
+              <span><%= tp.getEquipo().getNombre() %></span>
             </div>
           </td>
           <td><%= tp.getPuntosAcumulados() %></td>

@@ -67,12 +67,12 @@ public class EquipoServlet extends HttpServlet {
             int idEquipo = equipoService.obtenerIdEquipoPorNombre(nombreEquipo);
 
             String url = request.getScheme() + "://" + request.getServerName() + ":" +
-                    request.getServerPort() + request.getContextPath() + "/tablaPosiciones";
+                    request.getServerPort() + request.getContextPath() + "/mostrarTablaPosiciones";
 
             String parametros = "idEquipo=" + idEquipo + "&idTorneo=" + idTorneo;
+            System.out.println(parametros);
 
-            URL obj;
-            obj = new URL(url);
+            URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             con.setRequestMethod("POST");
             con.setDoOutput(true);
