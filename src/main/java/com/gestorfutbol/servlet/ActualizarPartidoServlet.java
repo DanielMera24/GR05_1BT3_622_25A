@@ -23,6 +23,10 @@ public class ActualizarPartidoServlet extends HttpServlet {
         int golesVisitante = Integer.parseInt(request.getParameter("golesVisitante"));
         String estado = request.getParameter("estadoPartido");
 
+        System.out.println("ACTUALIZAR PARTIDO------------------------------------------------------------");
+
+        System.out.println(idPartido + "---" + golesLocal + "---" + golesVisitante + "---" + estado);
+
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
 

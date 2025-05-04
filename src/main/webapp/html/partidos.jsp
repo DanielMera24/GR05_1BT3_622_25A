@@ -87,7 +87,7 @@
                 </div>
                 <p class="detalle_partido"><%=nombreTorneo%> · Jornada <%= p.getJornadaActual() %> · <%= p.getEstado() %></p>
                 <p class="fecha_partido"><%= fechaFormateada %>
-                <a class="accion_enlace" href="#">
+                <a class="accion_enlace" href="#"
                    data-local="<%= nombreLocal%>"
                    data-visitante="<%=nombreVisitante%>"
                    data-goles-local="<%= p.getGolesLocal() %>"
