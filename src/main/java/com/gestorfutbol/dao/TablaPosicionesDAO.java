@@ -4,26 +4,31 @@ import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.entity.TablaPosiciones;
 import com.gestorfutbol.entity.Torneo;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import java.util.List;
 
 public class TablaPosicionesDAO {
+    private final SessionFactory sessionFactory;
+
+    public TablaPosicionesDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
 
     public List<TablaPosiciones> obtenerPorTorneo(int idTorneo) {
-        List<TablaPosiciones> lista = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
-
-            lista = session.createQuery(
+            List<TablaPosiciones> lista = session.createQuery(
                             "FROM TablaPosiciones WHERE torneo.idTorneo = :idTorneo ORDER BY puntosAcumulados DESC",
                             TablaPosiciones.class)
                     .setParameter("idTorneo", idTorneo)
                     .list();
 
             tx.commit();
+            return lista;
         }
-        return lista;
     }
 
     public List<Torneo> listarTorneos() {
@@ -35,4 +40,13 @@ public class TablaPosicionesDAO {
         }
         return torneos;
     }
+
+    public void guardar(TablaPosiciones tablaPosiciones) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            session.persist(tablaPosiciones);
+            tx.commit();
+        }
+    }
+
 }
