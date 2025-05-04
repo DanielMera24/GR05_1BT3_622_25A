@@ -40,6 +40,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const nombreTorneo = btn.getAttribute('data-torneo');
             const jornada = btn.getAttribute('data-jornada');
             const estado = btn.getAttribute('data-estado');
+            const idPartido= btn.getAttribute('data-id');
+
+            document.getElementById('idPartido').value = idPartido;
+            console.log("partido: ", idPartido)
 
             document.querySelector('#formDetallePartido p:nth-child(1)').innerHTML = `<strong>${nombreLocal}</strong> vs <strong>${nombreVisitante}</strong>`;
             document.querySelector('#formDetallePartido p:nth-child(2)').innerText = `${nombreTorneo} · Jornada ${jornada}`;

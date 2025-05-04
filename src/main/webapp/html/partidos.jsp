@@ -88,6 +88,7 @@
                 <p class="detalle_partido"><%=nombreTorneo%> · Jornada <%= p.getJornadaActual() %> · <%= p.getEstado() %></p>
                 <p class="fecha_partido"><%= fechaFormateada %>
                 <a class="accion_enlace" href="#"
+                   data-id="<%=p.getIdPartido()%>"
                    data-local="<%= nombreLocal%>"
                    data-visitante="<%=nombreVisitante%>"
                    data-goles-local="<%= p.getGolesLocal() %>"
@@ -172,7 +173,7 @@
         <form id="formDetallePartido" action="/actualizarPartido" method="post">
             <p><strong>(Nombre Local)</strong> vs <strong>(Nombre Visitante)</strong></p>
             <p>(Nombre Torneo) · Jornada (n)</p>
-            <input type="hidden" id="idPartido" name="idPartido" />
+            <input type="hidden" id="idPartido" name="idPartido" value="">
             <div class="resultado_partido">
                 <div class="equipo_detalle">
                     <img src="/imagenes/barcelona.png" alt="Local" class="icono_detalle" />

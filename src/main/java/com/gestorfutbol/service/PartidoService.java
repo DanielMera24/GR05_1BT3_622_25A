@@ -36,6 +36,7 @@ public class PartidoService {
 
 
             partidosDTO.add(new PartidoDTO(
+                                partido.getIdPartido(),
                                 partido.getGolesLocal(),
                                 partido.getGolesVisita(),
                                 partido.getFechaPartido().toString(),

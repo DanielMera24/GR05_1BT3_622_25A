@@ -18,10 +18,13 @@ import java.io.IOException;
 public class ActualizarPartidoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int idPartido = Integer.parseInt(request.getParameter("idPartido"));
-        int golesLocal = Integer.parseInt(request.getParameter("golesLocal"));
-        int golesVisitante = Integer.parseInt(request.getParameter("golesVisitante"));
         String estado = request.getParameter("estadoPartido");
+        System.out.println(estado);
+        int golesLocal = Integer.parseInt(request.getParameter("golesLocal"));
+        System.out.println(golesLocal);
+        int golesVisitante = Integer.parseInt(request.getParameter("golesVisitante"));
+        System.out.println(golesVisitante);
+        int idPartido = Integer.parseInt(request.getParameter("idPartido"));
 
         System.out.println("ACTUALIZAR PARTIDO------------------------------------------------------------");
 

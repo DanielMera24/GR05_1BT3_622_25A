@@ -9,6 +9,8 @@ import java.util.Date;
 
 public class PartidoDTO {
 
+    private int idPartido;
+
     private int golesLocal;
 
     private int golesVisita;
@@ -25,7 +27,8 @@ public class PartidoDTO {
 
     private String torneo;
 
-    public PartidoDTO(int golesLocal, int golesVisita, String fechaPartido, String estado, int jornadaActual, String equipoLocal, String equipoVisita, String torneo) {
+    public PartidoDTO(int idPartido, int golesLocal, int golesVisita, String fechaPartido, String estado, int jornadaActual, String equipoLocal, String equipoVisita, String torneo) {
+        this.idPartido = idPartido;
         this.golesLocal = golesLocal;
         this.golesVisita = golesVisita;
         this.fechaPartido = fechaPartido;
@@ -37,6 +40,7 @@ public class PartidoDTO {
     }
 
     public PartidoDTO(String fechaPartido, String estado, int jornadaActual, String equipoLocal, String equipoVisita, String torneo){
+        this.idPartido = idPartido;
         this.fechaPartido = fechaPartido;
         this.estado = estado;
         this.jornadaActual = jornadaActual;
@@ -80,5 +84,9 @@ public class PartidoDTO {
 
     public void setFechaPartido(String fechaPartido) {
         this.fechaPartido = fechaPartido;
+    }
+
+    public int getIdPartido() {
+        return idPartido;
     }
 }
