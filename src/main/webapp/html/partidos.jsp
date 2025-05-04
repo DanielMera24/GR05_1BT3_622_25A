@@ -3,6 +3,8 @@
 <%@ page import="com.gestorfutbol.entity.Torneo" %>
 <%@ page import="com.gestorfutbol.entity.Equipo" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.gestorfutbol.dto.EquipoDTO" %>
+<%@ page import="com.gestorfutbol.dto.TorneoDTO" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -85,7 +87,7 @@
                 <p class="detalle_partido"><%= nombreTorneo %> · Jornada <%= p.getJornadaActual() %> · <%= p.getEstado() %></p>
                 <p class="fecha_partido"><%= fechaFormateada %> - <%= p.getEquipoLocal() != null ? p.getEquipoLocal().getEstadio() : "Estadio" %></p>
                 <a class="accion_enlace" href="#"
-                   data-id="<%= p.getIdPartido() %>"
+               <!--    data-id="<%= p.getIdPartido() %>" -->
                    data-local="<%= nombreLocal %>"
                    data-visitante="<%= nombreVisitante %>"
                    data-goles-local="<%= p.getGolesLocal() %>"
@@ -212,8 +214,8 @@
 
 <%-- Leer listas desde el servlet --%>
 <%
-    List<Equipo> equipos = (List<Equipo>) request.getAttribute("equipos");
-    List<Torneo> torneos = (List<Torneo>) request.getAttribute("torneos");
+    List<EquipoDTO> equipos = (List<EquipoDTO>) request.getAttribute("equipos");
+    List<TorneoDTO> torneos = (List<TorneoDTO>) request.getAttribute("torneos");
 
     if (equipos == null) {
         equipos = java.util.Collections.emptyList();
@@ -228,14 +230,14 @@
 <script>
     window.torneos = [
         <% for (int i = 0; i < torneos.size(); i++) {
-             Torneo t = torneos.get(i); %>
+             TorneoDTO t = torneos.get(i); %>
         { id: "<%= t.getIdTorneo() %>", nombre: "<%= t.getNombre() %>" }<%= (i < torneos.size() - 1) ? "," : "" %>
         <% } %>
     ];
     window.equipos = [
         <% for (int i = 0; i < equipos.size(); i++) {
              Equipo e = equipos.get(i);
-             Torneo t = e.getTorneo();
+             TorneoDTO t = e.getTorneo();
         %>
         {
             id: "<%= e.getIdEquipo() %>",
@@ -252,3 +254,6 @@
 
 </body>
 </html>
+
+
+
