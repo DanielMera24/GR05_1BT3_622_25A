@@ -63,4 +63,5 @@ public class EquipoDTO {
         this.idTorneo = idTorneo;
     }
 
+
 }

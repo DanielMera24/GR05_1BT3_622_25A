@@ -5,6 +5,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.gestorfutbol.dto.EquipoDTO" %>
 <%@ page import="com.gestorfutbol.dto.TorneoDTO" %>
+<%@ page import="com.gestorfutbol.dto.PartidoDTO" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -68,31 +69,30 @@
 
         <div class="partidos">
             <%
-                List<Partido> partidos = (List<Partido>) request.getAttribute("partidos");
+                List<PartidoDTO> partidos = (List<PartidoDTO>) request.getAttribute("partidos");
                 if (partidos != null && !partidos.isEmpty()) {
-                    for (Partido p : partidos) {
-                        String nombreLocal = p.getEquipoLocal() != null ? p.getEquipoLocal().getNombre() : "Equipo Local";
-                        String nombreVisitante = p.getEquipoVisita() != null ? p.getEquipoVisita().getNombre() : "Equipo Visitante";
-                        String nombreTorneo = p.getTorneo() != null ? p.getTorneo().getNombre() : "Torneo";
-                        String fechaFormateada = (p.getFechaPartido() != null) ? new java.text.SimpleDateFormat("dd 'de' MMMM 'de' yyyy - HH:mm").format(p.getFechaPartido()) : "Fecha no disponible";
+                    for (PartidoDTO p : partidos) {
+                        String nombreLocal = p.getEquipoLocal();
+                        String nombreVisitante = p.getEquipoVisita();
+                        String nombreTorneo = p.getTorneo();
+                        String fechaFormateada = p.getFechaPartido();
             %>
             <div class="partido">
                 <div class="info_partido">
                     <img class="icono_escudo" src="/imagenes/barcelona.png"/>
-                    <span><%= nombreLocal %></span>
+                    <span><%=nombreLocal%></span>
                     <strong><%= p.getGolesLocal() %> - <%= p.getGolesVisita() %></strong>
-                    <span><%= nombreVisitante %></span>
+                    <span><%= nombreVisitante%></span>
                     <img class="icono_escudo" src="/imagenes/atleti.png"/>
                 </div>
-                <p class="detalle_partido"><%= nombreTorneo %> · Jornada <%= p.getJornadaActual() %> · <%= p.getEstado() %></p>
-                <p class="fecha_partido"><%= fechaFormateada %> - <%= p.getEquipoLocal() != null ? p.getEquipoLocal().getEstadio() : "Estadio" %></p>
-                <a class="accion_enlace" href="#"
-               <!--    data-id="<%= p.getIdPartido() %>" -->
-                   data-local="<%= nombreLocal %>"
-                   data-visitante="<%= nombreVisitante %>"
+                <p class="detalle_partido"><%=nombreTorneo%> · Jornada <%= p.getJornadaActual() %> · <%= p.getEstado() %></p>
+                <p class="fecha_partido"><%= fechaFormateada %>
+                <a class="accion_enlace" href="#">
+                   data-local="<%= nombreLocal%>"
+                   data-visitante="<%=nombreVisitante%>"
                    data-goles-local="<%= p.getGolesLocal() %>"
                    data-goles-visitante="<%= p.getGolesVisita() %>"
-                   data-torneo="<%= nombreTorneo %>"
+                   data-torneo="<%=nombreTorneo%>"
                    data-jornada="<%= p.getJornadaActual() %>"
                    data-estado="<%= p.getEstado() %>">Ver detalles</a>
 
@@ -236,13 +236,12 @@
     ];
     window.equipos = [
         <% for (int i = 0; i < equipos.size(); i++) {
-             Equipo e = equipos.get(i);
-             TorneoDTO t = e.getTorneo();
+             EquipoDTO e = equipos.get(i);
         %>
         {
             id: "<%= e.getIdEquipo() %>",
             nombre: "<%= e.getNombre() %>",
-            torneoId: "<%= (t != null) ? t.getIdTorneo() : "" %>"
+            torneoId: "<%= e.getIdTorneo() %>"
         }<%= (i < equipos.size() - 1) ? "," : "" %>
         <% } %>
     ];

@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -58,27 +59,36 @@ public class PartidoService {
         Equipo equipoLocal = null;
         Torneo torneo = null;
 
-
-        try(Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
-            equipoVisita = session.get(Equipo.class, partidoDTO.getEquipoLocal());
-            equipoLocal = session.get(Equipo.class, partidoDTO.getEquipoVisita());
-            torneo = session.get(Torneo.class, partidoDTO.getTorneo());
+
+            // Buscar por nombre (HQL)
+            equipoVisita = session.createQuery("FROM Equipo WHERE nombre = :nombre", Equipo.class)
+                    .setParameter("nombre", partidoDTO.getEquipoVisita())
+                    .uniqueResult();
+
+            equipoLocal = session.createQuery("FROM Equipo WHERE nombre = :nombre", Equipo.class)
+                    .setParameter("nombre", partidoDTO.getEquipoLocal())
+                    .uniqueResult();
+
+            torneo = session.createQuery("FROM Torneo WHERE nombre = :nombre", Torneo.class)
+                    .setParameter("nombre", partidoDTO.getTorneo())
+                    .uniqueResult();
+
+            tx.commit();  // Asegúrate de confirmar la transacción si haces más cambios en BD
         }
 
+        // Parseo de fecha
         Date fechaDate = null;
-
         try {
-            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-            fechaDate = sdf.parse((partidoDTO.getFechaPartido().toString()));
-            partidoDTO.setFechaPartido(String.valueOf(fechaDate));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            fechaDate = sdf.parse(partidoDTO.getFechaPartido());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        // Crear el objeto partido
         Partido partido = new Partido();
-        //partido.setGolesLocal(partidoDTO.getGolesLocal());
-        //partido.setGolesVisita(partidoDTO.getGolesVisita());
         partido.setEstado(partidoDTO.getEstado());
         partido.setJornadaActual(partidoDTO.getJornadaActual());
         partido.setEquipoVisita(equipoVisita);

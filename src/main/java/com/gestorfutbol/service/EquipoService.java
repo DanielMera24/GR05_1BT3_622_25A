@@ -79,6 +79,7 @@ public class EquipoService {
         for (Equipo equipo : equiposEntidad) {
             EquipoDTO equipoDTO = new EquipoDTO(equipo.getNombre(), equipo.getCiudad(), equipo.getEstadio(), equipo.getSiglas());
             equipoDTO.setIdTorneo(equipo.getTorneo().getIdTorneo());
+            equipoDTO.setIdEquipo(equipo.getIdEquipo());
             equiposDto.add(equipoDTO);
         }
         return equiposDto;
