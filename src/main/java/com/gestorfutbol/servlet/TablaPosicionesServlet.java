@@ -1,29 +1,26 @@
 package com.gestorfutbol.servlet;
 
-import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.dto.TablaPosicionesDTO;
-import com.gestorfutbol.entity.Equipo;
-import com.gestorfutbol.entity.TablaPosiciones;
-import com.gestorfutbol.entity.Torneo;
+import com.gestorfutbol.dto.TorneoDTO;
 import com.gestorfutbol.service.TablaPosicionesService;
+import com.gestorfutbol.service.TorneoService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 @WebServlet("/mostrarTablaPosiciones")
 public class TablaPosicionesServlet extends HttpServlet {
 
     private TablaPosicionesService tablaPosicionesService;
+    private TorneoService torneoService;
 
     @Override
     public void init() throws ServletException {
         tablaPosicionesService = new TablaPosicionesService();
+        torneoService = new TorneoService();
     }
 
     @Override
@@ -33,8 +30,8 @@ public class TablaPosicionesServlet extends HttpServlet {
         String idTorneoStr = request.getParameter("torneoId");
         Integer torneoSeleccionado = null;
 
-        List<Torneo> torneos = tablaPosicionesService.obtenerTorneos();
-        request.setAttribute("torneos", torneos);
+        List<TorneoDTO> torneosDTO = torneoService.listarTorneos();
+        request.setAttribute("torneos", torneosDTO);
 
         if (idTorneoStr != null && !idTorneoStr.isEmpty()) {
             try {
@@ -61,9 +58,4 @@ public class TablaPosicionesServlet extends HttpServlet {
 
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
-
-
-
-
-
 }

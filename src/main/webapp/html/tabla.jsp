@@ -2,6 +2,7 @@
 <%@ page import="com.gestorfutbol.entity.Torneo" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.gestorfutbol.dto.TablaPosicionesDTO" %>
+<%@ page import="com.gestorfutbol.dto.TorneoDTO" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -36,10 +37,10 @@
           <select name="torneoId" onchange="this.form.submit()">
             <option value="">Seleccione un Torneo</option>
             <%
-              List<Torneo> torneos = (List<Torneo>) request.getAttribute("torneos");
+              List<TorneoDTO> torneos = (List<TorneoDTO>) request.getAttribute("torneos");
               Integer torneoSeleccionado = (Integer) request.getAttribute("torneoSeleccionado");
 
-              for (Torneo t : torneos) {
+              for (TorneoDTO t : torneos) {
             %>
             <option value="<%= t.getIdTorneo() %>" <%= (torneoSeleccionado != null && torneoSeleccionado == t.getIdTorneo()) ? "selected" : "" %> >
               <%= t.getNombre() %>
