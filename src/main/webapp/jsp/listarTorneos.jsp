@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.gestorfutbol.entity.Torneo" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.gestorfutbol.dto.TorneoDTO" %>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -45,13 +45,24 @@
             <button class="boton_nuevo">+ Nuevo Torneo</button>
         </div>
 
+        <%
+            String errorMensaje = (String) request.getAttribute("errorMensaje");
+            if (errorMensaje != null) {
+        %>
+        <div class="alerta_error">
+            <p><%= errorMensaje %></p>
+        </div>
+        <%
+            }
+        %>
+
         <div class="tarjetas">
             <%
-                List<Torneo> torneos = (List<Torneo>) request.getAttribute("torneos");
+                List<TorneoDTO> torneos = (List<TorneoDTO>) request.getAttribute("torneos");
                 if (torneos != null && !torneos.isEmpty()) {
                     int index = 0;
-                    for (Torneo torneo : torneos) {
-                        String fondo = "";
+                    for (TorneoDTO torneo : torneos) {
+                        String fondo;
                         if (index % 3 == 0) {
                             fondo = "fondo_azul";
                         } else if (index % 3 == 1) {
@@ -59,17 +70,21 @@
                         } else {
                             fondo = "fondo_rojo";
                         }
+
+                        String fechaTexto = (torneo.getFechaInicio() != null)
+                                ? torneo.getFechaInicio().toString()
+                                : "Sin fecha";
             %>
             <div class="tarjeta">
                 <div class="encabezado_tarjeta <%= fondo %>">
                     <h3><%= torneo.getNombre() %></h3>
-                    <span><%= torneo.getFechaInicio() != null ? torneo.getFechaInicio() : "Sin fecha" %></span>
+                    <span><%= fechaTexto %></span>
                 </div>
                 <div class="cuerpo_tarjeta">
-                    <p>Más información aquí...</p>
+                    <p><strong>Mas información...</strong> <%--torneo.getIdTorneo()--%></p>
                     <div class="acciones_tarjeta">
-                        <a href="#">Detalles</a>
-                        <a href="#">Editar</a>
+                        <a href="#<%-- /detalleTorneo?id= <%=%>torneo.getIdTorneo() --%>">Detalles</a>
+                        <a href="#<%-- /editarTorneo?id= <%=torneo.getIdTorneo() --%>">Editar</a>
                     </div>
                 </div>
             </div>
@@ -83,6 +98,8 @@
                 }
             %>
         </div>
+
+
 
     </main>
 
