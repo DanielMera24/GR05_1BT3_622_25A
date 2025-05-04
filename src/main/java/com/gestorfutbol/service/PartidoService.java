@@ -54,7 +54,7 @@ public class PartidoService {
 
 
     public void crearPartido(PartidoDTO partidoDTO){
-
+        System.out.println("creando partido!!!!!!!!!!");
         Equipo equipoVisita = null;
         Equipo equipoLocal = null;
         Torneo torneo = null;

@@ -17,11 +17,13 @@ public class PartidoDAO {
 
 
     public void guardar(Partido partido) {
+        System.out.println("gurdando partido");
         Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
             session.persist(partido);
             tx.commit();
+            System.out.println("partido correctamente guardado");
         } catch (Exception e) {
             if (tx != null) tx.rollback();
             e.printStackTrace();

@@ -76,7 +76,8 @@ document.addEventListener('DOMContentLoaded', function() {
         torneoSelect.innerHTML = '<option value="">Seleccione un torneo</option>';
         window.torneos.forEach(t => {
             const opt = document.createElement('option');
-            opt.value = t.id;
+            opt.value = t.nombre; // Enviar nombre en el formulario
+            opt.setAttribute('data-id', t.id); // Guardar ID para filtrado
             opt.textContent = t.nombre;
             torneoSelect.appendChild(opt);
         });
@@ -84,17 +85,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function repoblarEquipos() {
         if (!window.equipos) return;
-        const torneoId = torneoSelect.value;
-        const lista = torneoId
-            ? window.equipos.filter(e => e.torneoId === torneoId)
-            : window.equipos;
+        const selectedOption = torneoSelect.selectedOptions[0];
+        const torneoId = selectedOption ? selectedOption.getAttribute('data-id') : null;
+        const lista = torneoId ? window.equipos.filter(e => e.torneoId === torneoId) : window.equipos;
 
         [localSelect, visitanteSelect].forEach(selectEl => {
             selectEl.innerHTML = '<option value="">Seleccione equipo</option>';
             lista.forEach(eq => {
                 const opt = document.createElement('option');
-                opt.value = eq.nombre; // Enviar nombre en el formulario
-                opt.setAttribute('data-id', eq.id); // Guardar ID para validaciones
+                opt.value = eq.nombre; // Enviar nombre
+                opt.setAttribute('data-id', eq.id); // Usado para validación
                 opt.textContent = eq.nombre;
                 selectEl.appendChild(opt);
             });
