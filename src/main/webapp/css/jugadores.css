@@ -175,7 +175,7 @@ body {
 
 .tarjeta_jugador:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px #6366f1;
 }
 
 .cabecera_tarjeta {
