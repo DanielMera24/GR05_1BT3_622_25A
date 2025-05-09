@@ -1,8 +1,7 @@
 package com.gestorfutbol.service;
 
 import com.gestorfutbol.config.HibernateUtil;
-import com.gestorfutbol.dao.TablaPosicionesDAO;
-import com.gestorfutbol.dao.TorneoDAO;
+import com.gestorfutbol.dao.implementation.TablaPosicionesDAO;
 import com.gestorfutbol.dto.TablaPosicionesDTO;
 import com.gestorfutbol.entity.Equipo;
 import com.gestorfutbol.entity.Partido;

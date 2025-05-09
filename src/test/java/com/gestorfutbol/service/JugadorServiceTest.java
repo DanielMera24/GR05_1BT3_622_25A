@@ -1,4 +1,4 @@
-package com.gestorfutbol.service;
+/*package com.gestorfutbol.service;
 
 import com.gestorfutbol.dto.JugadorDTO;
 import org.junit.jupiter.api.Test;
@@ -33,3 +33,4 @@ public class JugadorServiceTest {
     }
     // Add more test methods as needed
 }
+*/

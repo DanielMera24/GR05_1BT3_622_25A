@@ -1,4 +1,4 @@
-package com.gestorfutbol.dao;
+package com.gestorfutbol.dao.implementation;
 
 import com.gestorfutbol.dto.EquipoDTO;
 
