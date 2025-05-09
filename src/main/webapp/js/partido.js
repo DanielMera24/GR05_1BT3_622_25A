@@ -7,9 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const cerrarDetalleButton = document.querySelector('.cerrar-modal-detalle');
 
     const formNuevo = document.getElementById('formNuevoPartido');
+
     const torneoSelect = document.getElementById('torneo');
     const localSelect = document.getElementById('equipoLocal');
     const visitanteSelect = document.getElementById('equipoVisitante');
+
     const jornadaInput = document.getElementById('jornada');
     const fechaInput = document.getElementById('fecha');
     const estadioInput = document.getElementById('estadio');
@@ -31,8 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
             modalDetalle.style.display = 'block';
 
-            // Capturamos los datos del botón
-            const idPartido = btn.getAttribute('data-id');
             const nombreLocal = btn.getAttribute('data-local');
             const nombreVisitante = btn.getAttribute('data-visitante');
             const golesLocal = btn.getAttribute('data-goles-local');
@@ -40,11 +40,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const nombreTorneo = btn.getAttribute('data-torneo');
             const jornada = btn.getAttribute('data-jornada');
             const estado = btn.getAttribute('data-estado');
+            const idPartido= btn.getAttribute('data-id');
 
-            // Asignar el idPartido al input hidden
             document.getElementById('idPartido').value = idPartido;
+            console.log("partido: ", idPartido)
 
-            // Rellenar el resto de campos
             document.querySelector('#formDetallePartido p:nth-child(1)').innerHTML = `<strong>${nombreLocal}</strong> vs <strong>${nombreVisitante}</strong>`;
             document.querySelector('#formDetallePartido p:nth-child(2)').innerText = `${nombreTorneo} · Jornada ${jornada}`;
 
@@ -59,8 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-
 
     if (cerrarDetalleButton && modalDetalle) {
         cerrarDetalleButton.addEventListener('click', () => {
@@ -82,7 +80,8 @@ document.addEventListener('DOMContentLoaded', function() {
         torneoSelect.innerHTML = '<option value="">Seleccione un torneo</option>';
         window.torneos.forEach(t => {
             const opt = document.createElement('option');
-            opt.value = t.id;
+            opt.value = t.nombre; // Enviar nombre en el formulario
+            opt.setAttribute('data-id', t.id); // Guardar ID para filtrado
             opt.textContent = t.nombre;
             torneoSelect.appendChild(opt);
         });
@@ -90,16 +89,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function repoblarEquipos() {
         if (!window.equipos) return;
-        const torneoId = torneoSelect.value;
-        const lista = torneoId
-            ? window.equipos.filter(e => e.torneoId === torneoId)
-            : window.equipos;
+        const selectedOption = torneoSelect.selectedOptions[0];
+        const torneoId = selectedOption ? selectedOption.getAttribute('data-id') : null;
+        const lista = torneoId ? window.equipos.filter(e => e.torneoId === torneoId) : window.equipos;
 
         [localSelect, visitanteSelect].forEach(selectEl => {
             selectEl.innerHTML = '<option value="">Seleccione equipo</option>';
             lista.forEach(eq => {
                 const opt = document.createElement('option');
-                opt.value = eq.id;
+                opt.value = eq.nombre; // Enviar nombre
+                opt.setAttribute('data-id', eq.id); // Usado para validación
                 opt.textContent = eq.nombre;
                 selectEl.appendChild(opt);
             });
@@ -118,7 +117,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Por favor, complete todos los campos.');
                 return;
             }
-            if (localSelect.value === visitanteSelect.value) {
+
+            const idLocal = localSelect.selectedOptions[0].getAttribute('data-id');
+            const idVisitante = visitanteSelect.selectedOptions[0].getAttribute('data-id');
+
+            if (idLocal === idVisitante) {
                 event.preventDefault();
                 alert('Los equipos no pueden ser iguales.');
                 return;

@@ -72,13 +72,14 @@ public class EquipoService {
     public List<EquipoDTO> obtenerEquipos() {
         List<Equipo> equiposEntidad = equipoDAO.obtenerEquipos();
         return convertirListaEntityADto(equiposEntidad);
-
     }
 
     private List<EquipoDTO> convertirListaEntityADto(List<Equipo> equiposEntidad) {
         List<EquipoDTO> equiposDto = new ArrayList<>();
         for (Equipo equipo : equiposEntidad) {
             EquipoDTO equipoDTO = new EquipoDTO(equipo.getNombre(), equipo.getCiudad(), equipo.getEstadio(), equipo.getSiglas());
+            equipoDTO.setIdTorneo(equipo.getTorneo().getIdTorneo());
+            equipoDTO.setIdEquipo(equipo.getIdEquipo());
             equiposDto.add(equipoDTO);
         }
         return equiposDto;

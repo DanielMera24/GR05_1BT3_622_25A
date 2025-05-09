@@ -6,6 +6,7 @@ public class EquipoDTO {
     private String ciudad;
     private String estadio;
     private String siglas;
+    private int idTorneo;
 
     public EquipoDTO(String nombre, String ciudad, String estadio, String siglas) {
         this.nombre = nombre;
@@ -53,4 +54,14 @@ public class EquipoDTO {
     public void setSiglas(String siglas) {
         this.siglas = siglas;
     }
+
+    public int getIdTorneo() {
+        return idTorneo;
+    }
+
+    public void setIdTorneo(int idTorneo) {
+        this.idTorneo = idTorneo;
+    }
+
+
 }

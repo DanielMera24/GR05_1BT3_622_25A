@@ -3,6 +3,9 @@
 <%@ page import="com.gestorfutbol.entity.Torneo" %>
 <%@ page import="com.gestorfutbol.entity.Equipo" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.gestorfutbol.dto.EquipoDTO" %>
+<%@ page import="com.gestorfutbol.dto.TorneoDTO" %>
+<%@ page import="com.gestorfutbol.dto.PartidoDTO" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -71,31 +74,31 @@
 
         <div class="partidos">
             <%
-                List<Partido> partidos = (List<Partido>) request.getAttribute("partidos");
+                List<PartidoDTO> partidos = (List<PartidoDTO>) request.getAttribute("partidos");
                 if (partidos != null && !partidos.isEmpty()) {
-                    for (Partido p : partidos) {
-                        String nombreLocal = p.getEquipoLocal() != null ? p.getEquipoLocal().getNombre() : "Equipo Local";
-                        String nombreVisitante = p.getEquipoVisita() != null ? p.getEquipoVisita().getNombre() : "Equipo Visitante";
-                        String nombreTorneo = p.getTorneo() != null ? p.getTorneo().getNombre() : "Torneo";
-                        String fechaFormateada = (p.getFechaPartido() != null) ? new java.text.SimpleDateFormat("dd 'de' MMMM 'de' yyyy - HH:mm").format(p.getFechaPartido()) : "Fecha no disponible";
+                    for (PartidoDTO p : partidos) {
+                        String nombreLocal = p.getEquipoLocal();
+                        String nombreVisitante = p.getEquipoVisita();
+                        String nombreTorneo = p.getTorneo();
+                        String fechaFormateada = p.getFechaPartido();
             %>
             <div class="partido">
                 <div class="info_partido">
                     <img class="icono_escudo" src="/imagenes/barcelona.png"/>
-                    <span><%= nombreLocal %></span>
+                    <span><%=nombreLocal%></span>
                     <strong><%= p.getGolesLocal() %> - <%= p.getGolesVisita() %></strong>
-                    <span><%= nombreVisitante %></span>
+                    <span><%= nombreVisitante%></span>
                     <img class="icono_escudo" src="/imagenes/atleti.png"/>
                 </div>
-                <p class="detalle_partido"><%= nombreTorneo %> · Jornada <%= p.getJornadaActual() %> · <%= p.getEstado() %></p>
-                <p class="fecha_partido"><%= fechaFormateada %> - <%= p.getEquipoLocal() != null ? p.getEquipoLocal().getEstadio() : "Estadio" %></p>
+                <p class="detalle_partido"><%=nombreTorneo%> · Jornada <%= p.getJornadaActual() %> · <%= p.getEstado() %></p>
+                <p class="fecha_partido"><%= fechaFormateada %>
                 <a class="accion_enlace" href="#"
-                   data-id="<%= p.getIdPartido() %>"
-                   data-local="<%= nombreLocal %>"
-                   data-visitante="<%= nombreVisitante %>"
+                   data-id="<%=p.getIdPartido()%>"
+                   data-local="<%= nombreLocal%>"
+                   data-visitante="<%=nombreVisitante%>"
                    data-goles-local="<%= p.getGolesLocal() %>"
                    data-goles-visitante="<%= p.getGolesVisita() %>"
-                   data-torneo="<%= nombreTorneo %>"
+                   data-torneo="<%=nombreTorneo%>"
                    data-jornada="<%= p.getJornadaActual() %>"
                    data-estado="<%= p.getEstado() %>">Ver detalles</a>
 
@@ -175,7 +178,7 @@
         <form id="formDetallePartido" action="/actualizarPartido" method="post">
             <p><strong>(Nombre Local)</strong> vs <strong>(Nombre Visitante)</strong></p>
             <p>(Nombre Torneo) · Jornada (n)</p>
-            <input type="hidden" id="idPartido" name="idPartido" />
+            <input type="hidden" id="idPartido" name="idPartido" value="">
             <div class="resultado_partido">
                 <div class="equipo_detalle">
                     <img src="/imagenes/barcelona.png" alt="Local" class="icono_detalle" />
@@ -217,8 +220,8 @@
 
 <%-- Leer listas desde el servlet --%>
 <%
-    List<Equipo> equipos = (List<Equipo>) request.getAttribute("equipos");
-    List<Torneo> torneos = (List<Torneo>) request.getAttribute("torneos");
+    List<EquipoDTO> equipos = (List<EquipoDTO>) request.getAttribute("equipos");
+    List<TorneoDTO> torneos = (List<TorneoDTO>) request.getAttribute("torneos");
 
     if (equipos == null) {
         equipos = java.util.Collections.emptyList();
@@ -233,19 +236,18 @@
 <script>
     window.torneos = [
         <% for (int i = 0; i < torneos.size(); i++) {
-             Torneo t = torneos.get(i); %>
+             TorneoDTO t = torneos.get(i); %>
         { id: "<%= t.getIdTorneo() %>", nombre: "<%= t.getNombre() %>" }<%= (i < torneos.size() - 1) ? "," : "" %>
         <% } %>
     ];
     window.equipos = [
         <% for (int i = 0; i < equipos.size(); i++) {
-             Equipo e = equipos.get(i);
-             Torneo t = e.getTorneo();
+             EquipoDTO e = equipos.get(i);
         %>
         {
             id: "<%= e.getIdEquipo() %>",
             nombre: "<%= e.getNombre() %>",
-            torneoId: "<%= (t != null) ? t.getIdTorneo() : "" %>"
+            torneoId: "<%= e.getIdTorneo() %>"
         }<%= (i < equipos.size() - 1) ? "," : "" %>
         <% } %>
     ];
@@ -257,3 +259,6 @@
 
 </body>
 </html>
+
+
+
