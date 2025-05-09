@@ -38,6 +38,11 @@
         <img src="/imagenes/calendario.png" class="icono" />
         <span class="opciones">Partidos</span>
       </a>
+
+      <a href="/html/jugadores.jsp">
+        <img class="icono" src="/imagenes/jugador.png"/>
+        <span class="opciones">Jugadores</span>
+      </a>
     </nav>
   </aside>
 

@@ -26,6 +26,7 @@
       <a href="/equipos"><img src="/imagenes/equipo.png" class="icono" /><span class="opciones">Equipos</span></a>
       <a href="/mostrarTablaPosiciones" class="activo"><img src="/imagenes/tabla.png" class="icono" /><span class="opciones">Tabla de Posiciones</span></a>
       <a href="/partidos"><img src="/imagenes/calendario.png" class="icono" /><span class="opciones">Partidos</span></a>
+      <a href="/html/jugadores.jsp"> <img class="icono" src="/imagenes/jugador.png"/> <span class="opciones">Jugadores</span> </a>
     </nav>
   </aside>
 
