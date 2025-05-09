@@ -15,7 +15,6 @@ public class PartidoDAO {
         this.sessionFactory = sessionFactory;
     }
 
-
     public void guardar(Partido partido) {
         System.out.println("gurdando partido");
         Transaction tx = null;
@@ -36,6 +35,25 @@ public class PartidoDAO {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void actualizar (Partido partido) {
+        Partido partidoEncontrado = null;
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            partidoEncontrado = (Partido) session.get(Partido.class, partido.getIdPartido());
+
+            if(partidoEncontrado != null) {
+                System.out.println("partido no es nulo");
+                partidoEncontrado.setGolesLocal(partido.getGolesLocal());
+                partidoEncontrado.setGolesVisita(partido.getGolesVisita());
+                partidoEncontrado.setEstado(partido.getEstado());
+                session.update(partidoEncontrado);
+                tx.commit();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

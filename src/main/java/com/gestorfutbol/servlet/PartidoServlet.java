@@ -36,20 +36,13 @@ public class PartidoServlet extends HttpServlet {
         List<EquipoDTO> equipos = null;
         List<TorneoDTO> torneos = null;
         List<PartidoDTO> partidos = null;
-
-
         torneos = torneoService.listarTorneos();
         partidos = partidoService.listarPartidos();
-        equipos = equipoService.obtenerEquipos();
-
-        for(EquipoDTO equipo: equipos){
-            System.out.println(equipo.getIdEquipo() + "---" + equipo.getIdTorneo() + "---"+equipo.getNombre());
-        }
+        equipos = equipoService.listarEquipos();
 
         request.setAttribute("equipos", equipos);
         request.setAttribute("torneos", torneos);
         request.setAttribute("partidos", partidos);
-
         try {
             request.getRequestDispatcher("/html/partidos.jsp").forward(request, response);
         } catch (Exception ex) {
@@ -60,24 +53,17 @@ public class PartidoServlet extends HttpServlet {
 
 
 
-
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("CREANDO PARTIDITO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
-
-        String fechaStr = request.getParameter("fecha"); // Ejemplo formato "2024-04-27"
+        String fechaStr = request.getParameter("fecha");
         String estadio = request.getParameter("estadio");
         int jornadaActual = Integer.parseInt(request.getParameter("jornada"));
         String torneo = request.getParameter("torneo");
         String nombreEquipoLocal = request.getParameter("equipoLocal");
         String nombreEquipoVisita = request.getParameter("equipoVisitante");
-
-        System.out.println(nombreEquipoLocal + "     " + nombreEquipoVisita + "    " + torneo);
         PartidoDTO partido = new PartidoDTO(fechaStr, estadio, jornadaActual, nombreEquipoLocal, nombreEquipoVisita, torneo);
 
         partidoService.crearPartido(partido);
-        //System.out.println("Partido guardado: " + partido);
         response.sendRedirect(request.getContextPath() + "/partidos");
     }
 }

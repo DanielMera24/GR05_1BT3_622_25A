@@ -28,7 +28,7 @@ public class EquipoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Iniciando doGet para mostrar equipos!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-        List<EquipoDTO> equiposDto = equipoService.obtenerEquipos();
+        List<EquipoDTO> equiposDto = equipoService.listarEquipos();
         List<TorneoDTO> torneosDto = torneoService.listarTorneos();
 
         request.setAttribute("equipos", equiposDto);
