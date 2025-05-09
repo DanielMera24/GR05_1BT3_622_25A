@@ -1,13 +1,15 @@
 package com.gestorfutbol.dto;
 
+import com.gestorfutbol.entity.Equipo;
+
 public class JugadorDTO {
     private String nombre;
     private int dorsal;
-    private int idEquipo;
-    public JugadorDTO(String nombre, int espaldar, int idEquipo) {
+    private EquipoDTO equipo;
+    public JugadorDTO(String nombre, int espaldar, EquipoDTO equipo) {
         this.nombre = nombre;
         this.dorsal = espaldar;
-        this.idEquipo = idEquipo;
+        this.equipo = equipo;
     }
 
     public String getNombre() {
@@ -23,8 +25,8 @@ public class JugadorDTO {
     public void setDorsal(int dorsal) {
         this.dorsal = dorsal;
     }
-    public int getIdEquipo() {
-        return idEquipo;
+    public EquipoDTO getIdEquipo() {
+        return equipo;
     }
 
 

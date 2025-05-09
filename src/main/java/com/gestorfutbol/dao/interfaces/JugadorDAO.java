@@ -1,5 +1,6 @@
 package com.gestorfutbol.dao.interfaces;
 
+import com.gestorfutbol.dto.JugadorDTO;
 import com.gestorfutbol.entity.Jugador;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface JugadorDAO {
     void eliminarJugador(int idJugador);
     Jugador obtenerPorId(int idJugador);
     List<Jugador> obtenerTodos();
+    List<Jugador> obtenerJugadoresPorEquipo(int idEquipo);
 }
