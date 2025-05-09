@@ -13,10 +13,8 @@ import java.util.List;
 
 @WebServlet("/mostrarTablaPosiciones")
 public class TablaPosicionesServlet extends HttpServlet {
-
     private TablaPosicionesService tablaPosicionesService;
     private TorneoService torneoService;
-
     @Override
     public void init() throws ServletException {
         tablaPosicionesService = new TablaPosicionesService();

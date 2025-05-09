@@ -16,15 +16,6 @@ public class EquipoDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    public void crearEquipo(EquipoDTO equipoDTO){
-        try(Session sesion = this.sessionFactory.openSession()){
-            Transaction tx = sesion.beginTransaction();
-            Equipo equipo = convertirDtoAEntity(equipoDTO);
-            sesion.persist(equipo);
-
-        }
-    }
-
     private Equipo convertirDtoAEntity(EquipoDTO equipoDTO) {
         Equipo equipo = new Equipo();
         equipo.setIdEquipo(equipoDTO.getIdEquipo());
@@ -45,6 +36,12 @@ public class EquipoDAO {
     public List<Equipo> obtenerEquipos() {
         try(Session sesion = this.sessionFactory.openSession()){
             return sesion.createQuery("FROM Equipo", Equipo.class).list();
+        }
+    }
+
+    public Equipo obtenerEquipoPorId(int idEquipo) {
+        try(Session sesion = this.sessionFactory.openSession()){
+            return sesion.get(Equipo.class, idEquipo);
         }
     }
 }

@@ -72,8 +72,6 @@
     </dependency>
 
 
-
-
     <!-- JSTL API -->
     <dependency>
       <groupId>jakarta.servlet.jsp.jstl</groupId>
@@ -87,6 +85,33 @@
       <version>2.0.0</version>
     </dependency>
 
+    <!-- Dependencias para JUnit 5 (Jupiter) -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.10.2</version> <!-- Actualizado para coincidir con vintage -->
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.10.2</version> <!-- Misma versión que la API -->
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Dependencias para Mockito -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.11.0</version> <!-- Versión consistente con mockito-junit-jupiter -->
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>5.11.0</version>
+      <scope>test</scope>
+    </dependency>
 
 
   </dependencies>

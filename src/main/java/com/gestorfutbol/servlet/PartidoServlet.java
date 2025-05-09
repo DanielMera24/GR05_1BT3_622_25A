@@ -1,7 +1,5 @@
 package com.gestorfutbol.servlet;
 
-import com.gestorfutbol.config.HibernateUtil;
-import com.gestorfutbol.dao.PartidoDAO;
 import com.gestorfutbol.dto.EquipoDTO;
 import com.gestorfutbol.dto.PartidoDTO;
 import com.gestorfutbol.dto.TorneoDTO;

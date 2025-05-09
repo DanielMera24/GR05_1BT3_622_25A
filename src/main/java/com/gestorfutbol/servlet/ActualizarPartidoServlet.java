@@ -1,9 +1,7 @@
 package com.gestorfutbol.servlet;
 
-import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.entity.Partido;
 import com.gestorfutbol.entity.TablaPosiciones;
-import com.gestorfutbol.service.EquipoService;
 import com.gestorfutbol.service.PartidoService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,7 +9,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.io.IOException;

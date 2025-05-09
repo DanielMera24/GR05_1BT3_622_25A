@@ -46,7 +46,8 @@ public class EquipoServlet extends HttpServlet {
         String estadioEquipo = request.getParameter("estadioNuevoEquipo");
         int idTorneo = Integer.parseInt(request.getParameter("torneoPerteneciente"));
 
-        boolean fueCreadoEquipo = equipoService.guardarEquipo(nombreEquipo, ciudadEquipo, estadioEquipo, inicialesEquipo, idTorneo);
+        boolean fueCreadoEquipo = equipoService.guardarEquipo(
+                nombreEquipo, ciudadEquipo, estadioEquipo, inicialesEquipo, idTorneo);
         if(!fueCreadoEquipo){
             request.setAttribute("errorMensaje", "Ya existe un equipo con ese nombre o siglas.");
             doGet(request, response);

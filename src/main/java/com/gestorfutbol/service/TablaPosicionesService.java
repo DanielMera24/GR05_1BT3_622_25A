@@ -46,7 +46,6 @@ public class TablaPosicionesService {
             );
             registrosDTO.add(dto);
         }
-
         return registrosDTO;
     }
 
@@ -75,15 +74,6 @@ public class TablaPosicionesService {
     public List<Torneo> obtenerTorneos() {
         return tablaPosicionesDAO.listarTorneos();
     }
-
-
-
-
-
-
-
-
-
 
     public void actualizarEquipoEnTabla(Partido partido){
         try(Session session = HibernateUtil.getSessionFactory().openSession()){

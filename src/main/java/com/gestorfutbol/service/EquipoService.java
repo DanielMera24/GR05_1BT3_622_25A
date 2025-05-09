@@ -95,5 +95,9 @@ public class EquipoService {
 
         return -1;
     }
+    public Equipo obtenerEquipoPorId(int idEquipo) {
+        return equipoDAO.obtenerEquipoPorId(idEquipo);
+    }
+
 
 }

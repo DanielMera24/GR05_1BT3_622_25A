@@ -2,11 +2,9 @@ package com.gestorfutbol.service;
 
 import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.dao.PartidoDAO;
-import com.gestorfutbol.dto.EquipoDTO;
 import com.gestorfutbol.dto.PartidoDTO;
 import com.gestorfutbol.entity.Equipo;
 import com.gestorfutbol.entity.Partido;
-import com.gestorfutbol.entity.TablaPosiciones;
 import com.gestorfutbol.entity.Torneo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
