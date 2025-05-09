@@ -37,8 +37,7 @@ public class ActualizarPartidoServlet extends HttpServlet {
         partido.setEstado(estado);
         partido.setGolesLocal(golesLocal);
         partido.setGolesVisita(golesVisitante);
-        partidoService.actualizarPartido(idPartido, partido);
-
+        partidoService.actualizarPartido(partido);
 
         response.sendRedirect(request.getContextPath() + "/partidos");
     }

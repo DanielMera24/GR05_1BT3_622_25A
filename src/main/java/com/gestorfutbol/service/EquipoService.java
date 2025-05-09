@@ -69,7 +69,7 @@ public class EquipoService {
         return equipo;
     }
 
-    public List<EquipoDTO> obtenerEquipos() {
+    public List<EquipoDTO> listarEquipos() {
         List<Equipo> equiposEntidad = equipoDAO.obtenerEquipos();
         return convertirListaEntityADto(equiposEntidad);
     }

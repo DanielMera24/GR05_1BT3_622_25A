@@ -87,51 +87,36 @@ public class TablaPosicionesService {
 
     public void actualizarEquipoEnTabla(Partido partido){
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
-            System.out.println("entrando en la tabla.....");
             Transaction tx = session.beginTransaction();
             if("Finalizado".equalsIgnoreCase(partido.getEstado())){
-                System.out.println("modo finalizado................");
-                TablaPosiciones localPosicion = buscarTablaPosiciones(session, partido.getTorneo().getIdTorneo(),
-                                                                               partido.getEquipoLocal().getIdEquipo());
-                TablaPosiciones visitantePosicion = buscarTablaPosiciones(session, partido.getTorneo().getIdTorneo(),
-                                                                                   partido.getEquipoVisita().getIdEquipo());
+                TablaPosiciones localPosicion = buscarTablaPosiciones(session, partido.getTorneo().getIdTorneo(), partido.getEquipoLocal().getIdEquipo());
+                TablaPosiciones visitantePosicion = buscarTablaPosiciones(session, partido.getTorneo().getIdTorneo(), partido.getEquipoVisita().getIdEquipo());
                 if (localPosicion != null && visitantePosicion != null) {
-                    // Actualizar partidos jugados
                     localPosicion.setPartidosJugados(localPosicion.getPartidosJugados() + 1);
                     visitantePosicion.setPartidosJugados(visitantePosicion.getPartidosJugados() + 1);
-
                     int golesLocal = partido.getGolesLocal();
                     int golesVisitante = partido.getGolesVisita();
-
-                    // Actualizar goles a favor y en contra
                     localPosicion.setGolesAFavor(localPosicion.getGolesAFavor() + golesLocal);
                     localPosicion.setGolesEnContra(localPosicion.getGolesEnContra() + golesVisitante);
                     visitantePosicion.setGolesAFavor(visitantePosicion.getGolesAFavor() + golesVisitante);
                     visitantePosicion.setGolesEnContra(visitantePosicion.getGolesEnContra() + golesLocal);
-                    // Calcular diferencia de goles
                     localPosicion.setDiferenciaGoles(localPosicion.getGolesAFavor() - localPosicion.getGolesEnContra());
                     visitantePosicion.setDiferenciaGoles(visitantePosicion.getGolesAFavor() - visitantePosicion.getGolesEnContra());
 
-                    // Determinar resultado
                     if (golesLocal > golesVisitante) {
-                        // Gana local
                         localPosicion.setPartidosGanados(localPosicion.getPartidosGanados() + 1);
                         visitantePosicion.setPartidosPerdidos(visitantePosicion.getPartidosPerdidos() + 1);
                         localPosicion.setPuntosAcumulados(localPosicion.getPuntosAcumulados() + 3);
                     } else if (golesVisitante > golesLocal) {
-                        // Gana visitante
                         visitantePosicion.setPartidosGanados(visitantePosicion.getPartidosGanados() + 1);
                         localPosicion.setPartidosPerdidos(localPosicion.getPartidosPerdidos() + 1);
                         visitantePosicion.setPuntosAcumulados(visitantePosicion.getPuntosAcumulados() + 3);
                     } else {
-                        // Empate
                         localPosicion.setPartidosEmpatados(localPosicion.getPartidosEmpatados() + 1);
                         visitantePosicion.setPartidosEmpatados(visitantePosicion.getPartidosEmpatados() + 1);
                         localPosicion.setPuntosAcumulados(localPosicion.getPuntosAcumulados() + 1);
                         visitantePosicion.setPuntosAcumulados(visitantePosicion.getPuntosAcumulados() + 1);
                     }
-
-                    // Guardar cambios
                     session.update(localPosicion);
                     session.update(visitantePosicion);
                     tx.commit();
