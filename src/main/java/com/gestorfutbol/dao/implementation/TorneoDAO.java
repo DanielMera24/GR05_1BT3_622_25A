@@ -1,6 +1,5 @@
-package com.gestorfutbol.dao;
+package com.gestorfutbol.dao.implementation;
 
-import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.entity.Torneo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

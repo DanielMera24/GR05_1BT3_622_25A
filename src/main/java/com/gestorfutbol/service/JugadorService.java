@@ -1,4 +1,4 @@
-package com.gestorfutbol.service;
+/*package com.gestorfutbol.service;
 
 import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.dao.interfaces.JugadorDAO;
@@ -32,3 +32,4 @@ public class JugadorService {
 
 
 }
+*/

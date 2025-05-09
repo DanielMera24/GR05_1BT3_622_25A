@@ -1,4 +1,4 @@
-package com.gestorfutbol.dao;
+package com.gestorfutbol.dao.implementation;
 
 import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.entity.TablaPosiciones;
