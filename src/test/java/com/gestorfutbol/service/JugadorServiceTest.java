@@ -1,45 +1,60 @@
 package com.gestorfutbol.service;
 
-import com.gestorfutbol.dto.EquipoDTO;
-import com.gestorfutbol.dto.JugadorDTO;
-import jakarta.persistence.PersistenceException;
-import org.junit.jupiter.api.BeforeAll;
+import com.gestorfutbol.dao.interfaces.JugadorDAO;
+import com.gestorfutbol.entity.Jugador;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class JugadorServiceTest {
-    private static JugadorService jugadorService;
+
+
 
     @Test
-    public void dados_datosNulos_enCrearJugador_lanzarExcepcion() {
+    public void give_Jugador_when_isRepeated_then_throw_exception() {
+        List<Jugador> jugadores = new ArrayList<>();
+        jugadores.add(new Jugador("Cesar", 2, "Delantero"));
+        jugadores.add(new Jugador("Juan", 10, "Defensa"));
 
-        JugadorDTO jugadorConNombreNulo = new JugadorDTO("0503867723", null, 0, 4);
-        // Ejecución y verificación
+        JugadorService jugadorService = new JugadorService();
+
+        Jugador jugadorAgregar = new Jugador("Juan", 2, "Delantero");
         assertThrows(IllegalArgumentException.class, () -> {
-            jugadorService.crearJugador(jugadorConNombreNulo);
-        }, "Debería lanzar IllegalArgumentException cuando el nombre es nulo");
+            jugadorService.validarJugadorRepetido(jugadores, jugadorAgregar);
+        }, "Debería lanzar IllegalArgumentException cuando el jugador ya existe");
     }
 
-    @BeforeAll
-    public static void setUpClass() {
-        jugadorService = new JugadorService(new EquipoService());
+    @Test
+    public void dado_Jugador_cuando_posicionNoExiste_entonces_esFalso(){
+
+        JugadorService jugadorService = new JugadorService();
+
+        List<String> posicionesValidas = new ArrayList<>();
+        posicionesValidas.add("Portero");
+        posicionesValidas.add("Defensa");
+        posicionesValidas.add("Centrocampista");
+        posicionesValidas.add("Delantero");
+
+        String posicion = "gfhdsjakl";
+        assertFalse(jugadorService.validarPosicion(posicionesValidas,posicion));
     }
 
 
     @Test
-    public void dados_datosValidos_enCrearJugador_verificarNoRepeticion() {
+    public void dado_dorsal_cuando_dorsalExisteEnElEquipo_entonces_esFalso() {
+        JugadorService jugadorService = new JugadorService();
 
-        // Preparar datos
-        JugadorDTO jugador1 = new JugadorDTO("0503867723", "Fernando" , 10, 5);
-        JugadorDTO jugador2 = new JugadorDTO("1111111111",  "Fernando" , 10, 5);
-        // Ejecución
-        jugadorService.crearJugador(jugador1);
-        // Verificación
-        assertThrows(PersistenceException.class, () -> {
-            jugadorService.crearJugador(jugador2);
-        }, "Debería lanzar PersistenceException cuando el jugador ya existe");
+        List<Jugador> jugadores = new ArrayList<>();
+        jugadores.add(new Jugador("Cesar", 2, "Delantero"));
+        jugadores.add(new Jugador("Juan", 10, "Defensa"));
+
+        int dorsal = 2;
+        assertFalse(jugadorService.validarDorsal(jugadores, dorsal));
     }
-
 
 }

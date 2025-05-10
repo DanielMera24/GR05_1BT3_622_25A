@@ -10,11 +10,8 @@ public class Jugador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idJugador;
 
-    @Column(unique = true, length = 10, nullable = false)
-    private String cedula;
 
     private String nombre;
-
 
     private int dorsal;
 
@@ -25,6 +22,12 @@ public class Jugador {
     private Equipo equipo;
 
     public Jugador() {}
+
+    public Jugador(String nombre, int edad, String posicion) {
+        this.nombre = nombre;
+        this.dorsal = edad;
+        this.posicion = posicion;
+    }
 
 
     public int getIdJugador() {
@@ -65,12 +68,5 @@ public class Jugador {
 
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
-    }
-    public String getCedula() {
-        return cedula;
-    }
-
-    public void setCedula(String cedula) {
-        this.cedula = cedula;
     }
 }
