@@ -32,7 +32,7 @@ public class JugadorServiceTest {
 
         // Preparar datos
         JugadorDTO jugador1 = new JugadorDTO("0503867723", "Fernando" , 10, 5);
-        JugadorDTO jugador2 = new JugadorDTO("0503867723",  "Fernando" , 10, 5);
+        JugadorDTO jugador2 = new JugadorDTO("1111111111",  "Fernando" , 10, 5);
         // Ejecución
         jugadorService.crearJugador(jugador1);
         // Verificación
