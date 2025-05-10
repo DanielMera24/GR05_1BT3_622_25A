@@ -1,40 +1,60 @@
 package com.gestorfutbol.service;
 
-import com.gestorfutbol.dto.EquipoDTO;
-import com.gestorfutbol.dto.JugadorDTO;
-import com.gestorfutbol.entity.Equipo;
+import com.gestorfutbol.dao.interfaces.JugadorDAO;
+import com.gestorfutbol.entity.Jugador;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class JugadorServiceTest {
 
 
-    @Test
-    public void dados_datosNulos_enCrearJugador_lanzarExcepcion() {
-        EquipoDTO equipo = new EquipoDTO("Barcelona", "Guayas", "Colonnia", "BAR");
-
-        JugadorService jugadorService = new JugadorService();
-        JugadorDTO jugadorConNombreNulo = new JugadorDTO(null, 10, equipo);
-        // Ejecución y verificación
-        assertThrows(IllegalArgumentException.class, () -> {
-            jugadorService.crearJugador(jugadorConNombreNulo);
-        }, "Debería lanzar IllegalArgumentException cuando el nombre es nulo");
-    }
 
     @Test
-    public void dados_datosValidos_enCrearJugador_verificarNoRepeticion() {
-        EquipoDTO equipo = new EquipoDTO("Barcelona", "Guayas", "Colonnia", "BAR");
-        // Preparar datos
+    public void give_Jugador_when_isRepeated_then_throw_exception() {
+        List<Jugador> jugadores = new ArrayList<>();
+        jugadores.add(new Jugador("Cesar", 2, "Delantero"));
+        jugadores.add(new Jugador("Juan", 10, "Defensa"));
+
         JugadorService jugadorService = new JugadorService();
-        JugadorDTO jugador1 = new JugadorDTO("Juan", 10, equipo);
-        JugadorDTO jugador2 = new JugadorDTO("Juan", 10, equipo);
-        // Ejecución
-        jugadorService.crearJugador(jugador1);
-        // Verificación
+
+        Jugador jugadorAgregar = new Jugador("Juan", 2, "Delantero");
         assertThrows(IllegalArgumentException.class, () -> {
-            jugadorService.crearJugador(jugador2);
+            jugadorService.validarJugadorRepetido(jugadores, jugadorAgregar);
         }, "Debería lanzar IllegalArgumentException cuando el jugador ya existe");
     }
-    // Add more test methods as needed
+
+    @Test
+    public void dado_Jugador_cuando_posicionNoExiste_entonces_esFalso(){
+
+        JugadorService jugadorService = new JugadorService();
+
+        List<String> posicionesValidas = new ArrayList<>();
+        posicionesValidas.add("Portero");
+        posicionesValidas.add("Defensa");
+        posicionesValidas.add("Centrocampista");
+        posicionesValidas.add("Delantero");
+
+        String posicion = "gfhdsjakl";
+        assertFalse(jugadorService.validarPosicion(posicionesValidas,posicion));
+    }
+
+
+    @Test
+    public void dado_dorsal_cuando_dorsalExisteEnElEquipo_entonces_esFalso() {
+        JugadorService jugadorService = new JugadorService();
+
+        List<Jugador> jugadores = new ArrayList<>();
+        jugadores.add(new Jugador("Cesar", 2, "Delantero"));
+        jugadores.add(new Jugador("Juan", 10, "Defensa"));
+
+        int dorsal = 2;
+        assertFalse(jugadorService.validarDorsal(jugadores, dorsal));
+    }
+
 }

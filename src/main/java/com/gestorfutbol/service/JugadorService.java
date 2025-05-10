@@ -13,56 +13,51 @@ import java.util.List;
 
 public class JugadorService {
     private JugadorDAO jugadorDAO;
+
     public JugadorService() {
-        jugadorDAO = new JugadorDAOImp(HibernateUtil.getSessionFactory());
+
     }
 
-    public void crearJugador(JugadorDTO jugadorDTO) {
-        jugadorDAO.guardarJugador(convertirDtoAEntity(jugadorDTO));
-    }
-
-    private Jugador convertirDtoAEntity(JugadorDTO jugadorDTO) {
-
-        EquipoDTO equipoDTO = jugadorDTO.getIdEquipo();
-        Equipo equipo = new Equipo();
-        equipo.setIdEquipo(equipoDTO.getIdEquipo());
-        equipo.setCiudad(equipoDTO.getCiudad());
-        equipo.setEstadio(equipoDTO.getEstadio());
-        equipo.setNombre(equipoDTO.getNombre());
-
-        //Definir la entidad Jugador
-
-        Jugador jugador = new Jugador();
-        jugador.setNombre(jugadorDTO.getNombre());
-        jugador.setDorsal(jugadorDTO.getDorsal());
-        jugador.setEquipo(equipo);
-
-        return jugador;
+    public JugadorService(JugadorDAO mockDAO) {
+        this.jugadorDAO = mockDAO;
     }
 
 
-    public List<JugadorDTO> listarJugadoresPorEquipo(EquipoDTO equipoDTO) {
 
-        List<Jugador> jugadores = jugadorDAO.obtenerJugadoresPorEquipo(equipoDTO.getIdEquipo());
-        List<JugadorDTO> jugadoresDTO = new ArrayList<>();
-        for (Jugador jugador : jugadores) {
-            JugadorDTO jugadorDTO = new JugadorDTO(jugador.getNombre(), jugador.getDorsal(), equipoDTO);
-            jugadoresDTO.add(jugadorDTO);
+
+    public boolean registrarJugador(String nombre, int edad, String posicion) {
+
+        if (nombre == null || nombre.isEmpty() || edad <= 0 || posicion == null || posicion.isEmpty()) {
+            return false;
         }
-    return jugadoresDTO;
+
+        Jugador jugador = new Jugador(nombre, edad, posicion);
+        return jugadorDAO.guardar(jugador);
     }
 
-    public List<JugadorDTO> listarJugadores() {
-        List<Jugador> jugadores = jugadorDAO.obtenerTodos();
-        List<JugadorDTO> jugadoresDTO = new ArrayList<>();
+    public void validarJugadorRepetido(List<Jugador> jugadores, Jugador jugadorAgregar) {
         for (Jugador jugador : jugadores) {
-            // Crear EquipoDTO
-            EquipoDTO equipoDTO = new EquipoDTO(
-            jugador.getEquipo().getNombre(), jugador.getEquipo().getEstadio(), jugador.getEquipo().getCiudad(), jugador.getEquipo().getSiglas());
-            // Crear JugadorDTO
-            JugadorDTO jugadorDTO = new JugadorDTO(jugador.getNombre(), jugador.getDorsal(), equipoDTO);
-            jugadoresDTO.add(jugadorDTO);
+            if (jugador.getNombre().equalsIgnoreCase(jugadorAgregar.getNombre())) {
+                throw new IllegalArgumentException("El jugador ya existe en la lista");
+            }
         }
-        return jugadoresDTO;
+    }
+
+    public boolean validarPosicion(List<String> posicionesValidas, String posicion) {
+        for (String posicionValida : posicionesValidas) {
+            if (posicion.equalsIgnoreCase(posicionValida)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean validarDorsal(List<Jugador> jugadores, int dorsal) {
+        for (Jugador jugador : jugadores) {
+            if (jugador.getDorsal() == dorsal) {
+                return false;
+            }
+        }
+        return true;
     }
 }

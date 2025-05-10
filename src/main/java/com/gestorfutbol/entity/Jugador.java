@@ -10,6 +10,7 @@ public class Jugador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idJugador;
 
+
     private String nombre;
 
     private int dorsal;
@@ -21,6 +22,12 @@ public class Jugador {
     private Equipo equipo;
 
     public Jugador() {}
+
+    public Jugador(String nombre, int edad, String posicion) {
+        this.nombre = nombre;
+        this.dorsal = edad;
+        this.posicion = posicion;
+    }
 
 
     public int getIdJugador() {
