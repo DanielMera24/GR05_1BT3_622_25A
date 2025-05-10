@@ -11,9 +11,12 @@ public class Jugador {
     private int idJugador;
 
 
+    private final String cedula;
     private String nombre;
 
     private int dorsal;
+
+    private int edad;
 
     private String posicion;
 
@@ -21,12 +24,14 @@ public class Jugador {
     @JoinColumn(name = "idEquipo")
     private Equipo equipo;
 
-    public Jugador() {}
 
-    public Jugador(String nombre, int edad, String posicion) {
+    public Jugador(String cedula , String nombre, int edad, String posicion, int dorsal) {
+        this.cedula = cedula;
         this.nombre = nombre;
-        this.dorsal = edad;
+        this.edad = edad;
+        this.dorsal = dorsal;
         this.posicion = posicion;
+        this.equipo = equipo;
     }
 
 
@@ -68,5 +73,17 @@ public class Jugador {
 
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
+    }
+
+    public int getEdad() {
+        return edad;
+    }
+
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
+
+    public String getCedula() {
+        return cedula;
     }
 }

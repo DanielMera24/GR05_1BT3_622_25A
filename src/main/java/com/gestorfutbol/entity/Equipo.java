@@ -37,6 +37,14 @@ public class Equipo {
 
     public Equipo() {}
 
+    public Equipo(int id, String nombre, String ciudad, String estadio, String siglas) {
+        this.idEquipo = id;
+        this.nombre = nombre;
+        this.ciudad = ciudad;
+        this.estadio = estadio;
+        this.siglas = siglas;
+    }
+
     public int getIdEquipo() {
         return idEquipo;
     }
