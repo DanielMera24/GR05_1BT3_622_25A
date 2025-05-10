@@ -1,57 +1,53 @@
 package com.gestorfutbol.service;
 
-import com.gestorfutbol.dao.interfaces.JugadorDAO;
+import com.gestorfutbol.entity.Equipo;
 import com.gestorfutbol.entity.Jugador;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JugadorServiceTest {
-    @Test
-    public void give_Jugador_when_isRepeated_then_throw_exception() {
-        List<Jugador> jugadores = new ArrayList<>();
-        jugadores.add(new Jugador("126086307", "Cesar", 2, "Delantero", 9));
-        jugadores.add(new Jugador("18329323", "Juan", 2, "Delantero", 10));
 
+    @Test
+    public void dado_nombre_cuando_EsNulo_esVerdadero(){
         JugadorService jugadorService = new JugadorService();
 
-        Jugador jugadorAgregar = new Jugador("126086307", "Cesar", 2, "Delantero", 9);
-        assertThrows(IllegalArgumentException.class, () -> {
-            jugadorService.validarJugadorRepetido(jugadores, jugadorAgregar);
-        }, "Debería lanzar IllegalArgumentException cuando el jugador ya existe");
+        Jugador jugador = new Jugador("126086307", null, 2, "Delantero", 10);
+
+        assertTrue(jugadorService.validarNombre(jugador.getNombre()));
     }
 
     @Test
-    public void dado_Jugador_cuando_posicionNoExiste_entonces_esFalso(){
-
+    public void dada_cedulaJugador_cuando_noEstaRepetido_entonces_esFalso() {
         JugadorService jugadorService = new JugadorService();
 
-        String posicion = "gfhdsjakl";
+        Jugador jugador = new Jugador("183293231", "Cesar", 2, "Delantero", 10);
 
-        assertFalse(jugadorService.validarPosicion(posicion));
+        assertFalse(jugadorService.validarCedula(jugador.getCedula()));
+    }
 
+    @Test
+    public void dada_posicion_cuando_noEsValida_entonces_esVerdadero() {
+        JugadorService jugadorService = new JugadorService();
+
+        Jugador jugador = new Jugador("126086307", "Cesar", 2, "EjemploFalso", 10);
+
+        assertTrue(jugadorService.posicionNoEsValida(jugador.getPosicion()));
     }
 
 
-    @Test
-    public void dado_dorsal_cuando_dorsalRepetido_entonces_esFalso() {
-        JugadorService jugadorService = new JugadorService();
 
-        List<Jugador> jugadores = new ArrayList<>();
-        jugadores.add(new Jugador("126086307", "Cesar", 2, "Delantero", 10));
-        jugadores.add(new Jugador("18329323", "Juan", 2, "Delantero", 10));
+
+    @Test
+    public void dado_dorsal_cuando_estaRepetido_entonces_esVerdadero() {
+        JugadorService jugadorService = new JugadorService();
 
         Jugador jugador = new Jugador("123456789", "Pedro", 2, "Delantero", 10);
+        Equipo equipo = new Equipo(1, "Liga de Quito", "Quito", "Rodrig Paz", "LDU");
 
-
-
-
-        assertFalse(jugadorService.validarDorsal(jugadores, jugador.getDorsal()));
+        assertTrue(jugadorService.validarDorsal(jugador.getDorsal(), equipo));
     }
+
+
 
 }

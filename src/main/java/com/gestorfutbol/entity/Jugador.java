@@ -25,12 +25,13 @@ public class Jugador {
     private Equipo equipo;
 
 
-    public Jugador(String cedula ,String nombre, int edad, String posicion, int dorsal) {
+    public Jugador(String cedula , String nombre, int edad, String posicion, int dorsal) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.edad = edad;
         this.dorsal = dorsal;
         this.posicion = posicion;
+        this.equipo = equipo;
     }
 
 
