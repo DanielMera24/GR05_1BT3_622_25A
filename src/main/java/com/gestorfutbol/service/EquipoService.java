@@ -95,10 +95,8 @@ public class EquipoService {
 
         return -1;
     }
-    public EquipoDTO obtenerEquipoPorId(int idEquipo) {
-        Equipo equipo = equipoDAO.obtenerEquipoPorId(idEquipo);
-        EquipoDTO equipoDTO = convertirEntityDto(equipo);
-        return equipoDTO;
+    public Equipo obtenerEquipoPorId(int idEquipo) {
+        return equipoDAO.obtenerEquipoPorId(idEquipo);
     }
 
 

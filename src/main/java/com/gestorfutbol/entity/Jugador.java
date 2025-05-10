@@ -10,7 +10,11 @@ public class Jugador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idJugador;
 
+    @Column(unique = true, length = 10, nullable = false)
+    private String cedula;
+
     private String nombre;
+
 
     private int dorsal;
 
@@ -61,5 +65,12 @@ public class Jugador {
 
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
+    }
+    public String getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
     }
 }
