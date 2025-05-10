@@ -12,18 +12,15 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JugadorServiceTest {
-
-
-
     @Test
     public void give_Jugador_when_isRepeated_then_throw_exception() {
         List<Jugador> jugadores = new ArrayList<>();
-        jugadores.add(new Jugador("Cesar", 2, "Delantero"));
-        jugadores.add(new Jugador("Juan", 10, "Defensa"));
+        jugadores.add(new Jugador("126086307", "Cesar", 2, "Delantero", 9));
+        jugadores.add(new Jugador("18329323", "Juan", 2, "Delantero", 10));
 
         JugadorService jugadorService = new JugadorService();
 
-        Jugador jugadorAgregar = new Jugador("Juan", 2, "Delantero");
+        Jugador jugadorAgregar = new Jugador("126086307", "Cesar", 2, "Delantero", 9);
         assertThrows(IllegalArgumentException.class, () -> {
             jugadorService.validarJugadorRepetido(jugadores, jugadorAgregar);
         }, "Debería lanzar IllegalArgumentException cuando el jugador ya existe");
@@ -34,27 +31,27 @@ public class JugadorServiceTest {
 
         JugadorService jugadorService = new JugadorService();
 
-        List<String> posicionesValidas = new ArrayList<>();
-        posicionesValidas.add("Portero");
-        posicionesValidas.add("Defensa");
-        posicionesValidas.add("Centrocampista");
-        posicionesValidas.add("Delantero");
-
         String posicion = "gfhdsjakl";
-        assertFalse(jugadorService.validarPosicion(posicionesValidas,posicion));
+
+        assertFalse(jugadorService.validarPosicion(posicion));
+
     }
 
 
     @Test
-    public void dado_dorsal_cuando_dorsalExisteEnElEquipo_entonces_esFalso() {
+    public void dado_dorsal_cuando_dorsalRepetido_entonces_esFalso() {
         JugadorService jugadorService = new JugadorService();
 
         List<Jugador> jugadores = new ArrayList<>();
-        jugadores.add(new Jugador("Cesar", 2, "Delantero"));
-        jugadores.add(new Jugador("Juan", 10, "Defensa"));
+        jugadores.add(new Jugador("126086307", "Cesar", 2, "Delantero", 10));
+        jugadores.add(new Jugador("18329323", "Juan", 2, "Delantero", 10));
 
-        int dorsal = 2;
-        assertFalse(jugadorService.validarDorsal(jugadores, dorsal));
+        Jugador jugador = new Jugador("123456789", "Pedro", 2, "Delantero", 10);
+
+
+
+
+        assertFalse(jugadorService.validarDorsal(jugadores, jugador.getDorsal()));
     }
 
 }

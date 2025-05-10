@@ -16,7 +16,7 @@ public class IJugadorDAOTest {
 
         Mockito.when(mockDAO.guardar(any(Jugador.class))).thenReturn(true);
 
-        assertTrue(servicio.registrarJugador("Cesar", 2, "Delantero"));
+        assertTrue(servicio.registrarJugador("1226086307", "Cesar", 25, "Delantero", 10));
 
     }
 
@@ -27,7 +27,8 @@ public class IJugadorDAOTest {
 
         Mockito.when(mockDAO.guardar(any(Jugador.class))).thenReturn(false);
 
-        assertFalse(servicio.registrarJugador("Cesar", -1, "Delantero"));
+        assertFalse(servicio.registrarJugador("1226086307", "Cesar", -1, "Delantero", 10));
+
     }
 
 }

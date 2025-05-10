@@ -1,11 +1,5 @@
 package com.gestorfutbol.service;
-
-import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.dao.interfaces.JugadorDAO;
-import com.gestorfutbol.dao.implementations.JugadorDAOImp;
-import com.gestorfutbol.dto.EquipoDTO;
-import com.gestorfutbol.dto.JugadorDTO;
-import com.gestorfutbol.entity.Equipo;
 import com.gestorfutbol.entity.Jugador;
 
 import java.util.ArrayList;
@@ -22,16 +16,16 @@ public class JugadorService {
         this.jugadorDAO = mockDAO;
     }
 
-
-
-
-    public boolean registrarJugador(String nombre, int edad, String posicion) {
+    public boolean registrarJugador(String cedula, String nombre, int edad, String posicion, int dorsal) {
 
         if (nombre == null || nombre.isEmpty() || edad <= 0 || posicion == null || posicion.isEmpty()) {
             return false;
         }
 
-        Jugador jugador = new Jugador(nombre, edad, posicion);
+        validarPosicion(posicion);
+
+
+        Jugador jugador = new Jugador(cedula, nombre, edad, posicion, dorsal);
         return jugadorDAO.guardar(jugador);
     }
 
@@ -43,7 +37,13 @@ public class JugadorService {
         }
     }
 
-    public boolean validarPosicion(List<String> posicionesValidas, String posicion) {
+    public boolean validarPosicion(String posicion) {
+        List<String> posicionesValidas = new ArrayList<>();
+        posicionesValidas.add("Portero");
+        posicionesValidas.add("Defensa");
+        posicionesValidas.add("Centrocampista");
+        posicionesValidas.add("Delantero");
+
         for (String posicionValida : posicionesValidas) {
             if (posicion.equalsIgnoreCase(posicionValida)) {
                 return true;
