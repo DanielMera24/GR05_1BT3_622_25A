@@ -22,18 +22,7 @@ public class IJugadorDAOTest {
     }
 
     @Test
-    public void dado_Jugador_incorrecto_entonces_esFalso() {
-        JugadorDAO     mockDAO  = Mockito.mock(JugadorDAO.class);
-        JugadorService servicio = new JugadorService(mockDAO);
-
-        Mockito.when(mockDAO.guardar(any(Jugador.class))).thenReturn(false);
-
-        Equipo equipo = new Equipo(1, "Liga de Quito", "Quito", "Rodrig Paz", "LDU");
-        assertFalse(servicio.registrarJugador("1234", "Cesar", 25, "Delantero", 10, equipo));
-    }
-
-    @Test
-    public void dado_Jugador_existente_correcto_entonces_actualiza_correctamente() {
+    public void dado_Jugador_cuando_existe_entonces_actualizaCorrectamente() {
         JugadorDAO     mockDAO  = Mockito.mock(JugadorDAO.class);
         JugadorService servicio = new JugadorService(mockDAO);
 

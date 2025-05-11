@@ -26,6 +26,7 @@ public class JugadorDAOImp implements JugadorDAO {
         return false;
     }
 
+
     @Override
     public Jugador obtenerJugador(String cedula) {
         try(Session session = sessionFactory.openSession()){

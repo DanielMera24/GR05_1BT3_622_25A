@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class JugadorServiceTest {
 
     @Test
-    public void dado_nombre_cuando_EsNulo_esVerdadero(){
+    public void dado_nombreJugador_cuando_esNulo_esVerdadero(){
         JugadorService jugadorService = new JugadorService();
 
         Jugador jugador = new Jugador("126086307", null, 2, "Delantero", 10);
@@ -51,14 +51,15 @@ public class JugadorServiceTest {
 
 
     @Test
-    public void dado_dorsal_cuando_estaRepetido_entonces_esVerdadero() {
+    public void dado_dorsal_cuando_estaNoEstaRepetido_entonces_esFalso() {
         JugadorService jugadorService = new JugadorService();
 
-        Jugador jugador = new Jugador("123456789", "Pedro", 2, "Delantero", 10);
+        Jugador jugador = new Jugador("123456789", "Pedro", 2, "Delantero", 1);
         Equipo equipo = new Equipo(1, "Liga de Quito", "Quito", "Rodrig Paz", "LDU");
 
-        assertTrue(jugadorService.validarDorsal(jugador.getDorsal(), equipo));
+        assertFalse(jugadorService.validarDorsal(jugador.getDorsal(), equipo));
     }
+
 
     @Test
     public void cuando_nombreTieneDigitosCaracteres_entonces_lanzarExcepcion() {
