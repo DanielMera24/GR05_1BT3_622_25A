@@ -4,6 +4,8 @@ import com.gestorfutbol.entity.Equipo;
 import com.gestorfutbol.entity.Jugador;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JugadorServiceTest {
@@ -78,6 +80,7 @@ public class JugadorServiceTest {
             jugadorService.verificarEstructuraNombre(nombre);
         });
     }
+
     @Test
     public void jugador_CedulaInmutable_NoTieneMetodoSetter() throws Exception {
         // 1. Verificar que no existe el método setCedula
@@ -85,17 +88,42 @@ public class JugadorServiceTest {
             Jugador.class.getMethod("setCedula", String.class);
         }, "La clase Jugador no debe tener un método setCedula()");
     }
-    // Prueba de inmutabilidad operacional
     @Test
-    public void jugador_CedulaInmutable_NoCambiaConOperaciones() {
-        // 2. Verificar que el valor de cédula no cambia después de una operación
-        Jugador jugador = new Jugador("0993226443", "Lionel Messi", 35, "Delantero", 10);
-        String cedulaOriginal = jugador.getCedula();
-        // Operación que podría parecer que modifica el objeto (pero no lo hace)
-        String nombreSuplantado = jugador.getNombre() + "(GOAT)";
-        // Jugador no tiene un método para cambiar el nombre, pero si lo tuviera, no debería afectar la cédula
-        jugador.setNombre(nombreSuplantado);
-        // Verificar que el objeto original no ha cambiado
-        assertEquals(cedulaOriginal, jugador.getCedula());
+    // Prueba de excepción para validar la longitud de la cédula
+    public void dado_cedula_cuando_tieneMenosDeDiezDigitos_entonces_retornarFalso() {
+        JugadorService jugadorService = new JugadorService();
+        boolean esperado = false;
+        boolean resultado = jugadorService.validarSintaxisCedula("123456789");
+        assertEquals(esperado, resultado);
     }
+    @Test
+    public void dado_cedula_cuando_tieneMasDeDiezDigitos_entonces_retornarFalso() {
+        JugadorService jugadorService = new JugadorService();
+        boolean esperado = false;
+        boolean resultado = jugadorService.validarSintaxisCedula("171543523411");
+        assertEquals(esperado, resultado);
+    }
+    @Test
+    public void dado_cedula_cuando_tieneDiezDigitos_entonces_retornarVerdadero() {
+        JugadorService jugadorService = new JugadorService();
+        boolean esperado = true;
+        boolean resultado = jugadorService.validarSintaxisCedula("0503867734");
+        assertEquals(esperado, resultado);
+    }
+    @Test
+    public void dado_cedula_cuando_tieneLetras_entonces_retornarFalso() {
+        JugadorService jugadorService = new JugadorService();
+        boolean esperado = false;
+        boolean resultado = jugadorService.validarSintaxisCedula("050hjh0051");
+        assertEquals(esperado, resultado);
+    }
+    @Test
+    public void dado_cedula_cuando_esNulo_retornarFalso() {
+        JugadorService jugadorService = new JugadorService();
+        boolean esperado = false;
+        boolean resultado = jugadorService.validarSintaxisCedula(null);
+        assertEquals(esperado, resultado);
+    }
+
+
 }

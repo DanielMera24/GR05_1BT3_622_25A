@@ -5,6 +5,7 @@ import com.gestorfutbol.entity.Jugador;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class JugadorService {
     private JugadorDAO jugadorDAO;
@@ -145,5 +146,13 @@ public class JugadorService {
             }
         }
         return null;
+    }
+
+    public boolean validarSintaxisCedula(String cedula) {
+        if (cedula == null || cedula.isEmpty()) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^[0-9]{10}$");
+        return pattern.matcher(cedula).matches();
     }
 }
