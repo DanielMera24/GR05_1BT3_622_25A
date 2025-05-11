@@ -143,12 +143,12 @@ public class JugadorService {
     }
 
     public boolean validarDorsal(int dorsal, Equipo equipo) {
-        if (equipo != null && equipo.getJugadores() != null) {
-            for (Jugador jugador : equipo.getJugadores()) {
-                if (jugador.getDorsal() == dorsal) {
-                    System.out.println("El dorsal ya existe");
-                    return true;
-                }
+        List<Jugador> jugadores = jugadorDAO.obtenerPorEquipo(equipo.getIdEquipo());
+
+        for (Jugador jugador : jugadores) {
+            if (jugador.getDorsal() == dorsal) {
+                System.out.println("El dorsal ya existe");
+                return true;
             }
         }
         return false;

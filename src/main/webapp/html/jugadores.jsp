@@ -95,7 +95,6 @@
 
                 if (jugadores != null && !jugadores.isEmpty()) {
                     for (JugadorDTO jugador : jugadores) {
-                        // Rotar las imágenes
                         String imagenEquipo = imagenes[contadorImagen % imagenes.length];
                         contadorImagen++;
             %>
@@ -131,5 +130,68 @@
         </div>
     </main>
 </div>
+
+<!-- Modal para nuevo jugador -->
+<div class="modal" id="modalNuevoJugador">
+    <div class="modal-contenido">
+        <span class="cerrar-modal">&times;</span>
+        <h2>Nuevo Jugador</h2>
+        <form id="formNuevoJugador" action="/jugadores" method="post">
+            <div class="form-grupo">
+                <label for="cedula">Cédula</label>
+                <input id="cedula" name="cedula" type="text">
+            </div>
+
+            <div class="form-grupo">
+                <label for="nombre">Nombre</label>
+                <input id="nombre" name="nombre" type="text">
+            </div>
+
+            <div class="form-grupo">
+                <label for="edad">Edad</label>
+                <input id="edad" name="edad" type="number">
+            </div>
+
+            <div class="form-grupo">
+                <label for="posicion">Posición</label>
+                <select id="posicion" name="posicion">
+                    <option value="">Seleccione una posición</option>
+                    <option value="Portero">Portero</option>
+                    <option value="Defensa">Defensa</option>
+                    <option value="Centrocampista">Centrocampista</option>
+                    <option value="Delantero">Delantero</option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="dorsal">Dorsal</label>
+                <input id="dorsal" name="dorsal" type="number">
+            </div>
+
+            <div class="form-grupo">
+                <label for="equipoId">Equipo</label>
+                <select id="equipoId" name="equipoId">
+                    <option value="">Seleccione un equipo</option>
+                    <%
+                        if (equipos != null) {
+                            for (EquipoDTO equipo : equipos) {
+                    %>
+                    <option value="<%= equipo.getIdEquipo() %>"><%= equipo.getNombre() %></option>
+                    <%
+                            }
+                        }
+                    %>
+                </select>
+            </div>
+
+            <div class="form-grupo acciones">
+                <button class="boton boton-secundario" type="button" id="btnCancelar">Cancelar</button>
+                <button class="boton boton-primario" type="submit">Guardar Jugador</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/jugadores.js"></script>
 </body>
 </html>

@@ -376,4 +376,151 @@ body {
     gap: 6px;
 }
 
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    animation: fadeIn 0.3s ease;
+}
 
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-contenido {
+    background-color: #fefefe;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    border-radius: 12px;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translate(-50%, -60%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+.cerrar-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 20px;
+    margin-top: -10px;
+}
+
+.cerrar-modal:hover,
+.cerrar-modal:focus {
+    color: #6366f1;
+}
+
+.modal-contenido h2 {
+    margin-bottom: 25px;
+    color: #1e40af;
+    font-size: 24px;
+    clear: right;
+}
+
+.form-grupo {
+    margin-bottom: 20px;
+}
+
+.form-grupo label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.form-grupo input,
+.form-grupo select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-grupo input:focus,
+.form-grupo select:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-grupo.acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 0;
+}
+
+.boton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    font-size: 16px;
+    text-align: center;
+    width: 145px;
+}
+
+.boton-primario {
+    background: #6366f1;
+    color: white;
+}
+
+.boton-primario:hover {
+    background: #4f46e5;
+}
+
+.boton-secundario {
+    background: #e5e7eb;
+    color: #333;
+}
+
+.boton-secundario:hover {
+    background: #d1d5db;
+}
+
+@media (max-width: 600px) {
+    .modal-contenido {
+        width: 95%;
+        padding: 20px;
+        max-height: 85vh;
+    }
+
+    .form-grupo.acciones {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .boton {
+        width: 100%;
+    }
+}
