@@ -18,12 +18,12 @@ public class JugadorServiceTest {
     }
 
     @Test
-    public void dada_cedulaJugador_cuando_noEstaRepetido_entonces_esFalso() {
+    public void dada_cedulaJugador_cuando_noEstaRepetido_entonces_esNull() {
         JugadorService jugadorService = new JugadorService();
 
-        Jugador jugador = new Jugador("183293231", "Cesar", 2, "Delantero", 10);
+        Jugador jugador = new Jugador("99999", "Cesar", 2, "Delantero", 10);
 
-        assertFalse(jugadorService.validarCedula(jugador.getCedula()));
+        assertNull(jugadorService.validarCedula(jugador.getCedula()));
     }
 
     @Test
