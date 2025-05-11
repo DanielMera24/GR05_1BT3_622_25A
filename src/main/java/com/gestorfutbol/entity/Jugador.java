@@ -34,6 +34,9 @@ public class Jugador {
         this.equipo = equipo;
     }
 
+    public Jugador(String cedula){
+        this.cedula = cedula;
+    }
 
     public int getIdJugador() {
         return idJugador;
@@ -86,4 +89,5 @@ public class Jugador {
     public String getCedula() {
         return cedula;
     }
+
 }

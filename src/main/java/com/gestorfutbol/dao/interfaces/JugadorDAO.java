@@ -8,5 +8,6 @@ import java.util.List;
 public interface JugadorDAO {
     boolean guardar(Jugador jugador);
     boolean actualizar(Jugador jugador);
+    Jugador obtenerJugador(String cedula);
 
 }

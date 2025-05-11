@@ -36,6 +36,18 @@ public class JugadorServiceTest {
     }
 
 
+    /*
+    @Test
+    public void dado_jugadorExistente_porCedula_entonces_NoRetornarNulo() {
+        JugadorService jugadorService = new JugadorService();
+
+        String cedula = "0503867723";
+
+        Jugador jugador = jugadorService.obtenerJugadorPorCedula(cedula);
+
+        assertNotNull(jugador);
+    }
+*/
 
 
     @Test
@@ -48,6 +60,22 @@ public class JugadorServiceTest {
         assertTrue(jugadorService.validarDorsal(jugador.getDorsal(), equipo));
     }
 
+    @Test
+    public void cuando_nombreTieneDigitosCaracteres_entonces_lanzarExcepcion() {
+        JugadorService jugadorService = new JugadorService();
+        String nombre = "D1niel";
 
+        assertThrows(IllegalArgumentException.class, () -> {
+           jugadorService.verificarEstructuraNombre(nombre);
+        });
+    }
 
+    @Test
+    public void cuando_nombreNoTieneCaracteresEspeciales_entonces_nolanzarExcepcion() {
+        JugadorService jugadorService = new JugadorService();
+        String nombre = "Daniel";
+        assertDoesNotThrow(()->{
+            jugadorService.verificarEstructuraNombre(nombre);
+        });
+    }
 }

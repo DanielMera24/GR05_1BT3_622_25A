@@ -85,4 +85,21 @@ public class JugadorService {
         }
         return false;
     }
+
+
+    public void verificarEstructuraNombre(String nombre) {
+        if (nombre == null || !nombre.matches("[A-Za-z ]+")) {
+            throw new IllegalArgumentException("Nombre inválido: " + nombre);
+        }
+    }
+
+
+    public Jugador buscarJugadorEnEquipoPorCedula(String cedula, Equipo equipo) {
+        for (Jugador jugador : equipo.getJugadores()) {
+            if (jugador.getCedula().equals(cedula)) {
+                return jugador;
+            }
+        }
+        return null;
+    }
 }
