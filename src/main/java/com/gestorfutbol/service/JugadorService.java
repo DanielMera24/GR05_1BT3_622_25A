@@ -19,7 +19,7 @@ public class JugadorService {
 
     public boolean registrarJugador(String cedula, String nombre, int edad, String posicion, int dorsal, Equipo equipo) {
 
-        if (validarNombre(nombre) || validarCedula(cedula) || posicionNoEsValida(posicion) || validarDorsal(dorsal, equipo)) {
+        if (validarNombre(nombre) || validarCedula(cedula) != null || posicionNoEsValida(posicion) || validarDorsal(dorsal, equipo)) {
             System.out.println("Error en los datos");
             return false;
         }
@@ -27,14 +27,58 @@ public class JugadorService {
 
         Jugador jugador = new Jugador(cedula, nombre, edad, posicion, dorsal);
         System.out.println("Todo correcto");
+        jugadorDAO.guardar(jugador);
         return true;
     }
+
+    public boolean actualizarJugador(String cedula, String nombre, int edad, String posicion, int dorsal, Equipo equipo) {
+        if (validarNombre(nombre) || posicionNoEsValida(posicion)) {
+            System.out.println("Error en los datos para actualizar");
+            return false;
+        }
+
+        if (validarCedula(cedula) == null){
+            System.out.println("Error: cedula no existe");
+            return false;
+        }
+
+        if (validarDorsalParaActualizar(dorsal, equipo, cedula)) {
+            System.out.println("Error: dorsal ya existe en otro jugador");
+            return false;
+        }
+
+        Jugador jugador = new Jugador(cedula, nombre, edad, posicion, dorsal);
+
+        jugadorDAO.actualizar(jugador);
+        System.out.println("Todo correcto para actualizar");
+        return true;
+    }
+
+    public boolean validarDorsalParaActualizar(int dorsal, Equipo equipo, String cedulaJugadorActual) {
+        List<Jugador> jugadores = new ArrayList<>();
+        jugadores.add(new Jugador("126086307", "Cesar", 2, "Delantero", 10));
+        jugadores.add(new Jugador("18329323", "Juan", 2, "Portero", 12));
+
+        jugadores.get(0).setEquipo(equipo);
+        jugadores.get(1).setEquipo(equipo);
+
+        equipo.setJugadores(jugadores);
+
+        for (Jugador jugador : equipo.getJugadores()) {
+            // Si el dorsal ya existe y no es del jugador actual, es inválido
+            if (jugador.getDorsal() == dorsal && !jugador.getCedula().equals(cedulaJugadorActual)) {
+                return true; // El dorsal ya existe en otro jugador
+            }
+        }
+        return false; // El dorsal está disponible
+    }
+
 
     public boolean validarNombre(String nombre) {
         return nombre == null || nombre.isEmpty();
     }
 
-    public boolean validarCedula(String cedula) {
+    public Jugador validarCedula(String cedula) {
 
         List<Jugador> jugadores = new ArrayList<>();
         jugadores.add(new Jugador("126086307", "Cesar", 2, "Delantero", 9));
@@ -43,10 +87,10 @@ public class JugadorService {
         for (Jugador jugador : jugadores) {
             if (jugador.getCedula().equals(cedula)) {
                 System.out.println("Cedula ya existe");
-                return true;
+                return jugador;
             }
         }
-        return false;
+        return null;
     }
 
     public boolean posicionNoEsValida(String posicion) {
