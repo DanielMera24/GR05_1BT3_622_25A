@@ -28,8 +28,8 @@ public class IJugadorDAOTest {
 
         Mockito.when(mockDAO.actualizar(any(Jugador.class))).thenReturn(true);
 
-        Equipo equipo = new Equipo(1, "Liga de Quito", "Quito", "Rodrig Paz", "LDU");
-        assertTrue(servicio.actualizarJugador("126086307", "Cesar Actualizado", 26, "Delantero", 9, equipo));
+        Equipo equipo = new Equipo(2, "Liga de Quito", "Quito", "Rodrig Paz", "LDU");
+        assertTrue(servicio.actualizarJugador("1104567890", "Cesar Actualizado", 26, "Delantero", 9, equipo));
     }
 
 

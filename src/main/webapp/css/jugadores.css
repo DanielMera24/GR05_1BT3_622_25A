@@ -362,4 +362,18 @@ body {
     .contenedor_tarjetas {
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     }
+
+
 }
+
+.edad_jugador {
+    color: #6b7280;
+    font-size: 15px;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+
