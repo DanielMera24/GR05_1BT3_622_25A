@@ -78,4 +78,24 @@ public class JugadorServiceTest {
             jugadorService.verificarEstructuraNombre(nombre);
         });
     }
+    @Test
+    public void jugador_CedulaInmutable_NoTieneMetodoSetter() throws Exception {
+        // 1. Verificar que no existe el método setCedula
+        assertThrows(NoSuchMethodException.class, () -> {
+            Jugador.class.getMethod("setCedula", String.class);
+        }, "La clase Jugador no debe tener un método setCedula()");
+    }
+    // Prueba de inmutabilidad operacional
+    @Test
+    public void jugador_CedulaInmutable_NoCambiaConOperaciones() {
+        // 2. Verificar que el valor de cédula no cambia después de una operación
+        Jugador jugador = new Jugador("0993226443", "Lionel Messi", 35, "Delantero", 10);
+        String cedulaOriginal = jugador.getCedula();
+        // Operación que podría parecer que modifica el objeto (pero no lo hace)
+        String nombreSuplantado = jugador.getNombre() + "(GOAT)";
+        // Jugador no tiene un método para cambiar el nombre, pero si lo tuviera, no debería afectar la cédula
+        jugador.setNombre(nombreSuplantado);
+        // Verificar que el objeto original no ha cambiado
+        assertEquals(cedulaOriginal, jugador.getCedula());
+    }
 }
