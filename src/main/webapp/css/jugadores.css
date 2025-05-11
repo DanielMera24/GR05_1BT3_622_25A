@@ -524,3 +524,27 @@ body {
         width: 100%;
     }
 }
+/* Estilos específicos para el modal de edición */
+.cerrar-modal-editar {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 20px;
+    margin-top: -10px;
+}
+
+.cerrar-modal-editar:hover,
+.cerrar-modal-editar:focus {
+    color: #6366f1;
+}
+
+/* Asegurar que el modal de edición esté correctamente oculto */
+#modalEditarJugador[style*="display: none"] {
+    display: none !important;
+}
+
+#modalEditarJugador[style*="display: block"] {
+    display: block !important;
+}

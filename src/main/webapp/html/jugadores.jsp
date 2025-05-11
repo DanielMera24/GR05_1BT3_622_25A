@@ -115,7 +115,16 @@
                     <span class="edad_jugador"><%= jugador.getEdad() %> años</span>
                 </div>
                 <div class="pie_tarjeta">
-                    <button class="accion editar" data-id="<%= jugador.getIdJugador() %>">Editar</button>
+                    <button class="accion editar"
+                            data-id="<%= jugador.getIdJugador() %>"
+                            data-cedula="<%= jugador.getCedula() %>"
+                            data-nombre="<%= jugador.getNombre() %>"
+                            data-edad="<%= jugador.getEdad() %>"
+                            data-posicion="<%= jugador.getPosicion() %>"
+                            data-dorsal="<%= jugador.getDorsal() %>"
+                            data-equipo-nombre="<%= jugador.getNombreEquipo() %>">
+                        Editar
+                    </button>
                     <button class="accion eliminar" data-id="<%= jugador.getIdJugador() %>">Eliminar</button>
                 </div>
             </div>
@@ -187,6 +196,64 @@
             <div class="form-grupo acciones">
                 <button class="boton boton-secundario" type="button" id="btnCancelar">Cancelar</button>
                 <button class="boton boton-primario" type="submit">Guardar Jugador</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para editar jugador -->
+<div class="modal" id="modalEditarJugador">
+    <div class="modal-contenido">
+        <span class="cerrar-modal-editar">&times;</span>
+        <h2>Editar Jugador</h2>
+        <form id="formEditarJugador" action="/actualizarJugador" method="post">
+            <input type="hidden" id="cedulaEditar" name="cedula">
+
+            <div class="form-grupo">
+                <label for="nombreEditar">Nombre</label>
+                <input id="nombreEditar" name="nombre" type="text">
+            </div>
+
+            <div class="form-grupo">
+                <label for="edadEditar">Edad</label>
+                <input id="edadEditar" name="edad" type="number" >
+            </div>
+
+            <div class="form-grupo">
+                <label for="posicionEditar">Posición</label>
+                <select id="posicionEditar" name="posicion" >
+                    <option value="">Seleccione una posición</option>
+                    <option value="Portero">Portero</option>
+                    <option value="Defensa">Defensa</option>
+                    <option value="Centrocampista">Centrocampista</option>
+                    <option value="Delantero">Delantero</option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="dorsalEditar">Dorsal</label>
+                <input id="dorsalEditar" name="dorsal" type="number" min="1" max="99" >
+            </div>
+
+            <div class="form-grupo">
+                <label for="equipoIdEditar">Equipo</label>
+                <select id="equipoIdEditar" name="equipoId" >
+                    <option value="">Seleccione un equipo</option>
+                    <%
+                        if (equipos != null) {
+                            for (EquipoDTO equipo : equipos) {
+                    %>
+                    <option value="<%= equipo.getIdEquipo() %>"><%= equipo.getNombre() %></option>
+                    <%
+                            }
+                        }
+                    %>
+                </select>
+            </div>
+
+            <div class="form-grupo acciones">
+                <button class="boton boton-secundario" type="button" id="btnCancelarEditar">Cancelar</button>
+                <button class="boton boton-primario" type="submit">Actualizar</button>
             </div>
         </form>
     </div>

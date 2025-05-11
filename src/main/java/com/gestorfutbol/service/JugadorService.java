@@ -114,6 +114,11 @@ public class JugadorService {
         Jugador jugador = new Jugador(cedula, nombre, edad, posicion, dorsal);
         jugador.setEquipo(equipo);
 
+        Jugador jugadorExistente = jugadorDAO.obtenerJugador(cedula);
+        if (jugadorExistente != null) {
+            jugador.setIdJugador(jugadorExistente.getIdJugador());
+        }
+
         System.out.println("Todo correcto para actualizar");
         return jugadorDAO.actualizar(jugador);
     }
@@ -155,11 +160,11 @@ public class JugadorService {
     }
 
     public boolean validarDorsalParaActualizar(int dorsal, Equipo equipo, String cedulaJugadorActual) {
-        if (equipo != null && equipo.getJugadores() != null) {
-            for (Jugador jugador : equipo.getJugadores()) {
-                if (jugador.getDorsal() == dorsal && !jugador.getCedula().equals(cedulaJugadorActual)) {
-                    return true;
-                }
+        List<Jugador> jugadores = jugadorDAO.obtenerPorEquipo(equipo.getIdEquipo());
+        for (Jugador jugador : jugadores) {
+            if (jugador.getDorsal() == dorsal && !jugador.getCedula().equals(cedulaJugadorActual)) {
+                System.out.println("El dorsal ya existe en otro jugador");
+                return true;
             }
         }
         return false;
