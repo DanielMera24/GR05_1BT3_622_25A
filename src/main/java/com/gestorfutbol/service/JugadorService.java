@@ -27,34 +27,15 @@ public class JugadorService {
 
     public List<JugadorDTO> listarJugadores() {
         List<Jugador> jugadores = jugadorDAO.obtenerTodos();
-        List<JugadorDTO> jugadoresDTO = new ArrayList<>();
-
-        if (jugadores != null) {
-            for (Jugador jugador : jugadores) {
-                String nombreEquipo = jugador.getEquipo() != null ?
-                        jugador.getEquipo().getNombre() : "Sin equipo";
-                String abreviaturaEquipo = jugador.getEquipo() != null ?
-                        jugador.getEquipo().getSiglas() : "";
-
-                JugadorDTO dto = new JugadorDTO(
-                        jugador.getIdJugador(),
-                        jugador.getCedula(),
-                        jugador.getNombre(),
-                        jugador.getDorsal(),
-                        jugador.getEdad(),
-                        jugador.getPosicion(),
-                        nombreEquipo,
-                        abreviaturaEquipo
-                );
-                jugadoresDTO.add(dto);
-            }
-        }
-
-        return jugadoresDTO;
+        return getJugadoresDTO(jugadores);
     }
 
     public List<JugadorDTO> listarJugadoresPorEquipo(int idEquipo) {
         List<Jugador> jugadores = jugadorDAO.obtenerPorEquipo(idEquipo);
+        return getJugadoresDTO(jugadores);
+    }
+
+    private List<JugadorDTO> getJugadoresDTO(List<Jugador> jugadores) {
         List<JugadorDTO> jugadoresDTO = new ArrayList<>();
 
         if (jugadores != null) {
@@ -62,19 +43,7 @@ public class JugadorService {
                 String nombreEquipo = jugador.getEquipo() != null ?
                         jugador.getEquipo().getNombre() : "Sin equipo";
 
-                String abreviaturaEquipo = jugador.getEquipo() != null ?
-                        jugador.getEquipo().getSiglas() : "";
-
-                JugadorDTO dto = new JugadorDTO(
-                        jugador.getIdJugador(),
-                        jugador.getCedula(),
-                        jugador.getNombre(),
-                        jugador.getDorsal(),
-                        jugador.getEdad(),
-                        jugador.getPosicion(),
-                        nombreEquipo,
-                        abreviaturaEquipo
-                );
+                JugadorDTO dto = getJugadorDTO(jugador, nombreEquipo);
                 jugadoresDTO.add(dto);
             }
         }
@@ -82,6 +51,21 @@ public class JugadorService {
         return jugadoresDTO;
     }
 
+    private static JugadorDTO getJugadorDTO(Jugador jugador, String nombreEquipo) {
+        String abreviaturaEquipo = jugador.getEquipo() != null ?
+                jugador.getEquipo().getSiglas() : "";
+
+        return new JugadorDTO(
+                jugador.getIdJugador(),
+                jugador.getCedula(),
+                jugador.getNombre(),
+                jugador.getDorsal(),
+                jugador.getEdad(),
+                jugador.getPosicion(),
+                nombreEquipo,
+                abreviaturaEquipo
+        );
+    }
 
     public boolean registrarJugador(String cedula, String nombre, int edad, String posicion, int dorsal, Equipo equipo) {
         if (validarNombre(nombre) || validarCedula(cedula) != null || posicionNoEsValida(posicion) || validarDorsal(dorsal, equipo)) {
