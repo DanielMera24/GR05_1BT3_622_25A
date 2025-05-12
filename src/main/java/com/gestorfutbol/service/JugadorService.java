@@ -55,15 +55,6 @@ public class JugadorService {
     }
 
     public boolean validarDorsalParaActualizar(int dorsal, Equipo equipo, String cedulaJugadorActual) {
-        List<Jugador> jugadores = new ArrayList<>();
-        jugadores.add(new Jugador("126086307", "Cesar", 2, "Delantero", 10));
-        jugadores.add(new Jugador("18329323", "Juan", 2, "Portero", 12));
-
-        jugadores.get(0).setEquipo(equipo);
-        jugadores.get(1).setEquipo(equipo);
-
-        equipo.setJugadores(jugadores);
-
         for (Jugador jugador : equipo.getJugadores()) {
             // Si el dorsal ya existe y no es del jugador actual, es inválido
             if (jugador.getDorsal() == dorsal && !jugador.getCedula().equals(cedulaJugadorActual)) {
@@ -132,7 +123,7 @@ public class JugadorService {
 
 
     public void verificarEstructuraNombre(String nombre) {
-        if (nombre == null || !nombre.matches("[A-Za-z ]+")) {
+        if (nombre == null || !nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\\\s]+$")) {
             throw new IllegalArgumentException("Nombre inválido: " + nombre);
         }
     }

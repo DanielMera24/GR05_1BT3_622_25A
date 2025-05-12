@@ -61,7 +61,7 @@ public class JugadorServiceTest {
     }
 
     @Test
-    public void cuando_nombreTieneDigitosCaracteres_entonces_lanzarExcepcion() {
+    public void cuando_nombreTieneDigitos_entonces_lanzarExcepcion() {
         JugadorService jugadorService = new JugadorService();
         String nombre = "D1niel";
 
@@ -71,10 +71,10 @@ public class JugadorServiceTest {
     }
 
     @Test
-    public void cuando_nombreNoTieneCaracteresEspeciales_entonces_nolanzarExcepcion() {
+    public void cuando_nombreTieneCaracteresEspeciales_entonces_lanzarExcepcion() {
         JugadorService jugadorService = new JugadorService();
-        String nombre = "Daniel";
-        assertDoesNotThrow(()->{
+        String nombre = "D@niel";
+        assertThrows(IllegalArgumentException.class, () -> {
             jugadorService.verificarEstructuraNombre(nombre);
         });
     }
