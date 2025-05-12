@@ -1,45 +1,44 @@
 package com.gestorfutbol.dto;
 
-import com.gestorfutbol.entity.Equipo;
-
 public class JugadorDTO {
+    private int idJugador;
+    private String cedula;
     private String nombre;
     private int dorsal;
-    private int idEquipo;
-    private String cedula;
-    public JugadorDTO(String cedula, String nombre, int espaldar, int idEquipo) {
-        this.nombre = nombre;
-        this.dorsal = espaldar;
-        this.idEquipo = idEquipo;
+    private int edad;
+    private String posicion;
+    private String nombreEquipo;
+    private String abreviaturaEquipo;
+
+    public JugadorDTO(int idJugador, String cedula, String nombre, int dorsal,
+                      int edad, String posicion, String nombreEquipo, String abreviaturaEquipo) {
+        this.idJugador = idJugador;
         this.cedula = cedula;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-    public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-    public int getDorsal() {
-        return dorsal;
-    }
-
-    public void setDorsal(int dorsal) {
         this.dorsal = dorsal;
-    }
-    public int getIdEquipo() {
-        return idEquipo;
+        this.edad = edad;
+        this.posicion = posicion;
+        this.nombreEquipo = nombreEquipo;
+        this.abreviaturaEquipo = abreviaturaEquipo;
     }
 
-    public void setIdEquipo(int idEquipo) {
-        this.idEquipo = idEquipo;
-    }
-    public String getCedula() {
-        return cedula;
-    }
-    public void setCedula(String cedula) {
+    public JugadorDTO(String cedula, String nombre, int dorsal, int edad,
+                      String posicion, String nombreEquipo, String abreviaturaEquipo) {
         this.cedula = cedula;
+        this.nombre = nombre;
+        this.dorsal = dorsal;
+        this.edad = edad;
+        this.posicion = posicion;
+        this.nombreEquipo = nombreEquipo;
+        this.abreviaturaEquipo = abreviaturaEquipo;
     }
 
-
+    public int getIdJugador() { return idJugador; }
+    public String getCedula() { return cedula; }
+    public String getNombre() { return nombre; }
+    public int getDorsal() { return dorsal; }
+    public int getEdad() { return edad; }
+    public String getPosicion() { return posicion; }
+    public String getNombreEquipo() { return nombreEquipo; }
+    public String getAbreviaturaEquipo() { return abreviaturaEquipo; }
 }

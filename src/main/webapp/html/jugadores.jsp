@@ -1,8 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.gestorfutbol.entity.Jugador" %>
-<%@ page import="com.gestorfutbol.entity.Equipo" %>
-<%@ page import="java.util.List" %>
+<%@ page import="com.gestorfutbol.dto.JugadorDTO" %>
 <%@ page import="com.gestorfutbol.dto.EquipoDTO" %>
+<%@ page import="java.util.List" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -22,11 +21,21 @@
             FútbolManager
         </h2>
         <nav>
-            <a href="/listarTorneos"><img src="/imagenes/trofeo.png" class="icono" /><span class="opciones">Torneos</span></a>
-            <a href="/equipos"><img src="/imagenes/equipo.png" class="icono" /><span class="opciones">Equipos</span></a>
-            <a href="/mostrarTablaPosiciones"><img src="/imagenes/tabla.png" class="icono" /><span class="opciones">Tabla de Posiciones</span></a>
-            <a href="/partidos"><img src="/imagenes/calendario.png" class="icono" /><span class="opciones">Partidos</span></a>
-            <a href="/html/jugadores.jsp" class="activo"><img src="/imagenes/jugador.png" class="icono" /><span class="opciones">Jugadores</span></a>
+            <a href="/listarTorneos">
+                <img src="/imagenes/trofeo.png" class="icono" /><span class="opciones">Torneos</span>
+            </a>
+            <a href="/equipos">
+                <img src="/imagenes/equipo.png" class="icono" /><span class="opciones">Equipos</span>
+            </a>
+            <a href="/mostrarTablaPosiciones">
+                <img src="/imagenes/tabla.png" class="icono" /><span class="opciones">Tabla de Posiciones</span>
+            </a>
+            <a href="/partidos">
+                <img src="/imagenes/calendario.png" class="icono" /><span class="opciones">Partidos</span>
+            </a>
+            <a href="/jugadores" class="activo">
+                <img src="/imagenes/jugador.png" class="icono" /><span class="opciones">Jugadores</span>
+            </a>
         </nav>
     </aside>
 
@@ -38,11 +47,25 @@
                     <form action="/jugadores" method="get">
                         <select name="equipoId" onchange="this.form.submit()">
                             <option value="">Todos los equipos</option>
-                            <!-- Aquí iría un bucle para mostrar los equipos disponibles -->
+                            <%
+                                List<EquipoDTO> equipos = (List<EquipoDTO>) request.getAttribute("equipos");
+                                String equipoSeleccionado = (String) request.getAttribute("equipoSeleccionado");
+
+                                if (equipos != null) {
+                                    for (EquipoDTO equipo : equipos) {
+                                        String selected = String.valueOf(equipo.getIdEquipo()).equals(equipoSeleccionado) ? "selected" : "";
+                            %>
+                            <option value="<%= equipo.getIdEquipo() %>" <%= selected %>>
+                                <%= equipo.getNombre() %>
+                            </option>
+                            <%
+                                    }
+                                }
+                            %>
                         </select>
                     </form>
                 </div>
-                <button class="boton_nuevo" >
+                <button class="boton_nuevo">
                     + Nuevo Jugador
                 </button>
             </div>
@@ -65,100 +88,177 @@
         </div>
 
         <div class="contenedor_tarjetas">
-            <!-- Aquí irían las tarjetas de jugadores generadas dinámicamente -->
+            <%
+                List<JugadorDTO> jugadores = (List<JugadorDTO>) request.getAttribute("jugadores");
+                String[] imagenes = {"barcelona.png", "madrid.png", "atleti.png", "argentina.png", "colombia.png", "ecuador.png"};
+                int contadorImagen = 0;
 
-            <!-- Ejemplo de tarjeta de jugador -->
+                if (jugadores != null && !jugadores.isEmpty()) {
+                    for (JugadorDTO jugador : jugadores) {
+                        String imagenEquipo = imagenes[contadorImagen % imagenes.length];
+                        contadorImagen++;
+            %>
             <div class="tarjeta_jugador">
                 <div class="cabecera_tarjeta">
-                    <div class="numero_dorsal">10</div>
+                    <div class="numero_dorsal"><%= jugador.getDorsal() %></div>
                     <div class="equipo_badge">
-                        <img src="/imagenes/barcelona.png" class="icono_escudo" />
-                        <span>FC Barcelona</span>
+                        <img src="/imagenes/<%= imagenEquipo %>" class="icono_escudo" />
+                        <span><%= jugador.getNombreEquipo() %></span>
                     </div>
                 </div>
                 <div class="cuerpo_tarjeta">
                     <div class="avatar_jugador">
                         <img src="/imagenes/jugador.png" alt="Avatar del jugador" />
                     </div>
-                    <h3 class="nombre_jugador">Lionel Messi</h3>
-                    <p class="posicion_jugador">Delantero</p>
+                    <h3 class="nombre_jugador"><%= jugador.getNombre() %></h3>
+                    <p class="posicion_jugador"><%= jugador.getPosicion() %></p>
+                    <span class="edad_jugador"><%= jugador.getEdad() %> años</span>
                 </div>
                 <div class="pie_tarjeta">
-                    <button class="accion editar">Editar</button>
-                    <button class="accion eliminar">Eliminar</button>
+                    <button class="accion editar"
+                            data-id="<%= jugador.getIdJugador() %>"
+                            data-cedula="<%= jugador.getCedula() %>"
+                            data-nombre="<%= jugador.getNombre() %>"
+                            data-edad="<%= jugador.getEdad() %>"
+                            data-posicion="<%= jugador.getPosicion() %>"
+                            data-dorsal="<%= jugador.getDorsal() %>"
+                            data-equipo-nombre="<%= jugador.getNombreEquipo() %>">
+                        Editar
+                    </button>
+                    <button class="accion eliminar" data-id="<%= jugador.getIdJugador() %>">Eliminar</button>
                 </div>
             </div>
-
-            <!-- Ejemplo de otra tarjeta de jugador -->
-            <div class="tarjeta_jugador">
-                <div class="cabecera_tarjeta">
-                    <div class="numero_dorsal">4</div>
-                    <div class="equipo_badge">
-                        <img src="/imagenes/madrid.png" class="icono_escudo" />
-                        <span>Real Madrid</span>
-                    </div>
-                </div>
-                <div class="cuerpo_tarjeta">
-                    <div class="avatar_jugador">
-                        <img src="/imagenes/jugador.png" alt="Avatar del jugador" />
-                    </div>
-                    <h3 class="nombre_jugador">Sergio Ramos</h3>
-                    <p class="posicion_jugador">Defensa</p>
-                </div>
-                <div class="pie_tarjeta">
-                    <button class="accion editar">Editar</button>
-                    <button class="accion eliminar">Eliminar</button>
-                </div>
-            </div>
-
-            <!-- Más tarjetas de ejemplo -->
-            <div class="tarjeta_jugador">
-                <div class="cabecera_tarjeta">
-                    <div class="numero_dorsal">1</div>
-                    <div class="equipo_badge">
-                        <img src="/imagenes/atleti.png" class="icono_escudo" />
-                        <span>Atlético Madrid</span>
-                    </div>
-                </div>
-                <div class="cuerpo_tarjeta">
-                    <div class="avatar_jugador">
-                        <img src="/imagenes/jugador.png" alt="Avatar del jugador" />
-                    </div>
-                    <h3 class="nombre_jugador">Jan Oblak</h3>
-                    <p class="posicion_jugador">Portero</p>
-                </div>
-                <div class="pie_tarjeta">
-                    <button class="accion editar">Editar</button>
-                    <button class="accion eliminar">Eliminar</button>
-                </div>
-            </div>
-
-            <div class="tarjeta_jugador">
-                <div class="cabecera_tarjeta">
-                    <div class="numero_dorsal">8</div>
-                    <div class="equipo_badge">
-                        <img src="/imagenes/argentina.png" class="icono_escudo" />
-                        <span>Argentina</span>
-                    </div>
-                </div>
-                <div class="cuerpo_tarjeta">
-                    <div class="avatar_jugador">
-                        <img src="/imagenes/jugador.png" alt="Avatar del jugador" />
-                    </div>
-                    <h3 class="nombre_jugador">Enzo Fernández</h3>
-                    <p class="posicion_jugador">Centrocampista</p>
-                </div>
-                <div class="pie_tarjeta">
-                    <button class="accion editar">Editar</button>
-                    <button class="accion eliminar">Eliminar</button>
-                </div>
-            </div>
-
+            <%
+                }
+            } else {
+            %>
+            <p>No hay jugadores disponibles <%= equipoSeleccionado != null ? "para este equipo" : "" %>.</p>
+            <%
+                }
+            %>
         </div>
-
-
-
     </main>
 </div>
+
+<!-- Modal para nuevo jugador -->
+<div class="modal" id="modalNuevoJugador">
+    <div class="modal-contenido">
+        <span class="cerrar-modal">&times;</span>
+        <h2>Nuevo Jugador</h2>
+        <form id="formNuevoJugador" action="/jugadores" method="post">
+            <div class="form-grupo">
+                <label for="cedula">Cédula</label>
+                <input id="cedula" name="cedula" type="text">
+            </div>
+
+            <div class="form-grupo">
+                <label for="nombre">Nombre</label>
+                <input id="nombre" name="nombre" type="text">
+            </div>
+
+            <div class="form-grupo">
+                <label for="edad">Edad</label>
+                <input id="edad" name="edad" type="number">
+            </div>
+
+            <div class="form-grupo">
+                <label for="posicion">Posición</label>
+                <select id="posicion" name="posicion">
+                    <option value="">Seleccione una posición</option>
+                    <option value="Portero">Portero</option>
+                    <option value="Defensa">Defensa</option>
+                    <option value="Centrocampista">Centrocampista</option>
+                    <option value="Delantero">Delantero</option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="dorsal">Dorsal</label>
+                <input id="dorsal" name="dorsal" type="number">
+            </div>
+
+            <div class="form-grupo">
+                <label for="equipoId">Equipo</label>
+                <select id="equipoId" name="equipoId">
+                    <option value="">Seleccione un equipo</option>
+                    <%
+                        if (equipos != null) {
+                            for (EquipoDTO equipo : equipos) {
+                    %>
+                    <option value="<%= equipo.getIdEquipo() %>"><%= equipo.getNombre() %></option>
+                    <%
+                            }
+                        }
+                    %>
+                </select>
+            </div>
+
+            <div class="form-grupo acciones">
+                <button class="boton boton-secundario" type="button" id="btnCancelar">Cancelar</button>
+                <button class="boton boton-primario" type="submit">Guardar Jugador</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para editar jugador -->
+<div class="modal" id="modalEditarJugador">
+    <div class="modal-contenido">
+        <span class="cerrar-modal-editar">&times;</span>
+        <h2>Editar Jugador</h2>
+        <form id="formEditarJugador" action="/actualizarJugador" method="post">
+            <input type="hidden" id="cedulaEditar" name="cedula">
+
+            <div class="form-grupo">
+                <label for="nombreEditar">Nombre</label>
+                <input id="nombreEditar" name="nombre" type="text">
+            </div>
+
+            <div class="form-grupo">
+                <label for="edadEditar">Edad</label>
+                <input id="edadEditar" name="edad" type="number" >
+            </div>
+
+            <div class="form-grupo">
+                <label for="posicionEditar">Posición</label>
+                <select id="posicionEditar" name="posicion" >
+                    <option value="">Seleccione una posición</option>
+                    <option value="Portero">Portero</option>
+                    <option value="Defensa">Defensa</option>
+                    <option value="Centrocampista">Centrocampista</option>
+                    <option value="Delantero">Delantero</option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="dorsalEditar">Dorsal</label>
+                <input id="dorsalEditar" name="dorsal" type="number" min="1" max="99" >
+            </div>
+
+            <div class="form-grupo">
+                <label for="equipoIdEditar">Equipo</label>
+                <select id="equipoIdEditar" name="equipoId" >
+                    <option value="">Seleccione un equipo</option>
+                    <%
+                        if (equipos != null) {
+                            for (EquipoDTO equipo : equipos) {
+                    %>
+                    <option value="<%= equipo.getIdEquipo() %>"><%= equipo.getNombre() %></option>
+                    <%
+                            }
+                        }
+                    %>
+                </select>
+            </div>
+
+            <div class="form-grupo acciones">
+                <button class="boton boton-secundario" type="button" id="btnCancelarEditar">Cancelar</button>
+                <button class="boton boton-primario" type="submit">Actualizar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/jugadores.js"></script>
 </body>
 </html>

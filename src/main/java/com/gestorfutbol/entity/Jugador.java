@@ -11,7 +11,7 @@ public class Jugador {
     private int idJugador;
 
 
-    private final String cedula;
+    private String cedula;
     private String nombre;
 
     private int dorsal;
@@ -37,6 +37,10 @@ public class Jugador {
         this.equipo = equipo;
     }
 
+
+    public Jugador() {
+
+    }
 
     public int getIdJugador() {
         return idJugador;

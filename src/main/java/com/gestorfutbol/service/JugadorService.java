@@ -1,34 +1,98 @@
 package com.gestorfutbol.service;
+
+import com.gestorfutbol.config.HibernateUtil;
+import com.gestorfutbol.dao.implementation.JugadorDAOImpl;
 import com.gestorfutbol.dao.interfaces.JugadorDAO;
+import com.gestorfutbol.dto.JugadorDTO;
 import com.gestorfutbol.entity.Equipo;
 import com.gestorfutbol.entity.Jugador;
+import org.hibernate.SessionFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class JugadorService {
     private JugadorDAO jugadorDAO;
+    private SessionFactory sessionFactory;
 
     public JugadorService() {
-
+        this.sessionFactory = HibernateUtil.getSessionFactory();
+        this.jugadorDAO = new JugadorDAOImpl(sessionFactory);
     }
 
-    public JugadorService(JugadorDAO mockDAO) {
-        this.jugadorDAO = mockDAO;
+    public JugadorService(JugadorDAO jugadorDAO) {
+        this.jugadorDAO = jugadorDAO;
     }
+
+    public List<JugadorDTO> listarJugadores() {
+        List<Jugador> jugadores = jugadorDAO.obtenerTodos();
+        List<JugadorDTO> jugadoresDTO = new ArrayList<>();
+
+        if (jugadores != null) {
+            for (Jugador jugador : jugadores) {
+                String nombreEquipo = jugador.getEquipo() != null ?
+                        jugador.getEquipo().getNombre() : "Sin equipo";
+                String abreviaturaEquipo = jugador.getEquipo() != null ?
+                        jugador.getEquipo().getSiglas() : "";
+
+                JugadorDTO dto = new JugadorDTO(
+                        jugador.getIdJugador(),
+                        jugador.getCedula(),
+                        jugador.getNombre(),
+                        jugador.getDorsal(),
+                        jugador.getEdad(),
+                        jugador.getPosicion(),
+                        nombreEquipo,
+                        abreviaturaEquipo
+                );
+                jugadoresDTO.add(dto);
+            }
+        }
+
+        return jugadoresDTO;
+    }
+
+    public List<JugadorDTO> listarJugadoresPorEquipo(int idEquipo) {
+        List<Jugador> jugadores = jugadorDAO.obtenerPorEquipo(idEquipo);
+        List<JugadorDTO> jugadoresDTO = new ArrayList<>();
+
+        if (jugadores != null) {
+            for (Jugador jugador : jugadores) {
+                String nombreEquipo = jugador.getEquipo() != null ?
+                        jugador.getEquipo().getNombre() : "Sin equipo";
+
+                String abreviaturaEquipo = jugador.getEquipo() != null ?
+                        jugador.getEquipo().getSiglas() : "";
+
+                JugadorDTO dto = new JugadorDTO(
+                        jugador.getIdJugador(),
+                        jugador.getCedula(),
+                        jugador.getNombre(),
+                        jugador.getDorsal(),
+                        jugador.getEdad(),
+                        jugador.getPosicion(),
+                        nombreEquipo,
+                        abreviaturaEquipo
+                );
+                jugadoresDTO.add(dto);
+            }
+        }
+
+        return jugadoresDTO;
+    }
+
 
     public boolean registrarJugador(String cedula, String nombre, int edad, String posicion, int dorsal, Equipo equipo) {
-
         if (validarNombre(nombre) || validarCedula(cedula) != null || posicionNoEsValida(posicion) || validarDorsal(dorsal, equipo)) {
             System.out.println("Error en los datos");
             return false;
         }
 
-
         Jugador jugador = new Jugador(cedula, nombre, edad, posicion, dorsal);
+        jugador.setEquipo(equipo);
         System.out.println("Todo correcto");
-        jugadorDAO.guardar(jugador);
-        return true;
+        return jugadorDAO.guardar(jugador);
     }
 
     public boolean actualizarJugador(String cedula, String nombre, int edad, String posicion, int dorsal, Equipo equipo) {
@@ -48,40 +112,23 @@ public class JugadorService {
         }
 
         Jugador jugador = new Jugador(cedula, nombre, edad, posicion, dorsal);
+        jugador.setEquipo(equipo);
 
-        jugadorDAO.actualizar(jugador);
-        System.out.println("Todo correcto para actualizar");
-        return true;
-    }
-
-    public boolean validarDorsalParaActualizar(int dorsal, Equipo equipo, String cedulaJugadorActual) {
-        for (Jugador jugador : equipo.getJugadores()) {
-            // Si el dorsal ya existe y no es del jugador actual, es inválido
-            if (jugador.getDorsal() == dorsal && !jugador.getCedula().equals(cedulaJugadorActual)) {
-                return true; // El dorsal ya existe en otro jugador
-            }
+        Jugador jugadorExistente = jugadorDAO.obtenerJugador(cedula);
+        if (jugadorExistente != null) {
+            jugador.setIdJugador(jugadorExistente.getIdJugador());
         }
-        return false; // El dorsal está disponible
-    }
 
+        System.out.println("Todo correcto para actualizar");
+        return jugadorDAO.actualizar(jugador);
+    }
 
     public boolean validarNombre(String nombre) {
         return nombre == null || nombre.isEmpty();
     }
 
     public Jugador validarCedula(String cedula) {
-
-        List<Jugador> jugadores = new ArrayList<>();
-        jugadores.add(new Jugador("126086307", "Cesar", 2, "Delantero", 9));
-        jugadores.add(new Jugador("18329323", "Juan", 2, "Delantero", 10));
-
-        for (Jugador jugador : jugadores) {
-            if (jugador.getCedula().equals(cedula)) {
-                System.out.println("Cedula ya existe");
-                return jugador;
-            }
-        }
-        return null;
+        return jugadorDAO.obtenerJugador(cedula);
     }
 
     public boolean posicionNoEsValida(String posicion) {
@@ -90,7 +137,6 @@ public class JugadorService {
         posicionesValidas.add("Defensa");
         posicionesValidas.add("Centrocampista");
         posicionesValidas.add("Delantero");
-
 
         for (String posicionValida : posicionesValidas) {
             if (posicion.equalsIgnoreCase(posicionValida)) {
@@ -101,18 +147,10 @@ public class JugadorService {
         return true;
     }
 
-
     public boolean validarDorsal(int dorsal, Equipo equipo) {
-        List<Jugador> jugadores = new ArrayList<>();
-        jugadores.add(new Jugador("126086307", "Cesar", 2, "Delantero", 10));
-        jugadores.add(new Jugador("18329323", "Juan", 2, "Portero", 12));
+        List<Jugador> jugadores = jugadorDAO.obtenerPorEquipo(equipo.getIdEquipo());
 
-        jugadores.get(0).setEquipo(equipo);
-        jugadores.get(1).setEquipo(equipo);
-
-        equipo.setJugadores(jugadores);
-
-        for (Jugador jugador : equipo.getJugadores()) {
+        for (Jugador jugador : jugadores) {
             if (jugador.getDorsal() == dorsal) {
                 System.out.println("El dorsal ya existe");
                 return true;
@@ -121,20 +159,43 @@ public class JugadorService {
         return false;
     }
 
+    public boolean validarDorsalParaActualizar(int dorsal, Equipo equipo, String cedulaJugadorActual) {
+        List<Jugador> jugadores = jugadorDAO.obtenerPorEquipo(equipo.getIdEquipo());
+        for (Jugador jugador : jugadores) {
+            if (jugador.getDorsal() == dorsal && !jugador.getCedula().equals(cedulaJugadorActual)) {
+                System.out.println("El dorsal ya existe en otro jugador");
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void verificarEstructuraNombre(String nombre) {
-        if (nombre == null || !nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\\\s]+$")) {
+        if (nombre == null || !nombre.matches("[A-Za-z ]+")) {
             throw new IllegalArgumentException("Nombre inválido: " + nombre);
         }
     }
 
+    public boolean validarSintaxisCedula(String cedula) {
+        if (cedula == null || cedula.isEmpty()) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^[0-9]{10}$");
+        return pattern.matcher(cedula).matches();
+    }
 
     public Jugador buscarJugadorEnEquipoPorCedula(String cedula, Equipo equipo) {
-        for (Jugador jugador : equipo.getJugadores()) {
-            if (jugador.getCedula().equals(cedula)) {
-                return jugador;
+        if (equipo != null && equipo.getJugadores() != null) {
+            for (Jugador jugador : equipo.getJugadores()) {
+                if (jugador.getCedula().equals(cedula)) {
+                    return jugador;
+                }
             }
         }
         return null;
+    }
+
+    public Jugador obtenerJugadorPorCedula(String cedula) {
+        return jugadorDAO.obtenerJugador(cedula);
     }
 }

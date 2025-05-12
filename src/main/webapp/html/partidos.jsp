@@ -41,7 +41,7 @@
                 <span class="opciones">Partidos</span>
             </a>
 
-            <a href="/html/jugadores.jsp">
+            <a href="/jugadores">
                 <img class="icono" src="/imagenes/jugador.png"/>
                 <span class="opciones">Jugadores</span>
             </a>
