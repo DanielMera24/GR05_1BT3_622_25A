@@ -37,21 +37,28 @@ public class PartidoDAO {
         }
     }
 
-    public void actualizar (Partido partido) {
-        Partido partidoEncontrado = null;
-        try (Session session = sessionFactory.openSession()) {
-            Transaction tx = session.beginTransaction();
-            partidoEncontrado = (Partido) session.get(Partido.class, partido.getIdPartido());
 
-            if(partidoEncontrado != null) {
-                System.out.println("partido no es nulo");
-                partidoEncontrado.setGolesLocal(partido.getGolesLocal());
-                partidoEncontrado.setGolesVisita(partido.getGolesVisita());
-                partidoEncontrado.setEstado(partido.getEstado());
-                session.update(partidoEncontrado);
-                tx.commit();
-            }
-        } catch (Exception e){
+
+    public Partido obtenerPartidoPorId(int idPartido) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Partido.class, idPartido);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void actualizar(Partido partido, String estado, int golesLocal, int golesVisitante) {
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
+            partido.setEstado(estado);
+            partido.setGolesLocal(golesLocal);
+            partido.setGolesVisita(golesVisitante);
+            session.update(partido);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
             e.printStackTrace();
         }
     }

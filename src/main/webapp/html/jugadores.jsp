@@ -90,19 +90,14 @@
         <div class="contenedor_tarjetas">
             <%
                 List<JugadorDTO> jugadores = (List<JugadorDTO>) request.getAttribute("jugadores");
-                String[] imagenes = {"barcelona.png", "madrid.png", "atleti.png", "argentina.png", "colombia.png", "ecuador.png"};
-                int contadorImagen = 0;
-
                 if (jugadores != null && !jugadores.isEmpty()) {
                     for (JugadorDTO jugador : jugadores) {
-                        String imagenEquipo = imagenes[contadorImagen % imagenes.length];
-                        contadorImagen++;
             %>
             <div class="tarjeta_jugador">
                 <div class="cabecera_tarjeta">
                     <div class="numero_dorsal"><%= jugador.getDorsal() %></div>
                     <div class="equipo_badge">
-                        <img src="/imagenes/<%= imagenEquipo %>" class="icono_escudo" />
+                        <img src="/imagenes/<%= jugador.getAbreviaturaEquipo()+".png" %>" class="icono_escudo" />
                         <span><%= jugador.getNombreEquipo() %></span>
                     </div>
                 </div>

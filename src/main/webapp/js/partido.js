@@ -40,14 +40,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const nombreTorneo = btn.getAttribute('data-torneo');
             const jornada = btn.getAttribute('data-jornada');
             const estado = btn.getAttribute('data-estado');
-            const idPartido= btn.getAttribute('data-id');
+            const idPartido = btn.getAttribute('data-id');
 
             document.getElementById('idPartido').value = idPartido;
-            console.log("partido: ", idPartido)
 
-            document.querySelector('#formDetallePartido p:nth-child(1)').innerHTML = `<strong>${nombreLocal}</strong> vs <strong>${nombreVisitante}</strong>`;
-            document.querySelector('#formDetallePartido p:nth-child(2)').innerText = `${nombreTorneo} · Jornada ${jornada}`;
+            document.querySelector('#formDetallePartido p:nth-child(1)').innerHTML =
+                `<strong>${nombreLocal}</strong> vs <strong>${nombreVisitante}</strong>`;
+            document.querySelector('#formDetallePartido p:nth-child(2)').innerText =
+                `${nombreTorneo} · Jornada ${jornada}`;
 
+            const siglaLocal = obtenerSiglaEquipo(nombreLocal);
+            const siglaVisitante = obtenerSiglaEquipo(nombreVisitante);
+
+            document.getElementById('foto-local').src = `/imagenes/${siglaLocal}.png`;
+            document.getElementById('foto-visitante').src = `/imagenes/${siglaVisitante}.png`;
+
+
+            // Actualizar selectores
             const selectGolesLocal = document.querySelector('select[name="golesLocal"]');
             const selectGolesVisitante = document.querySelector('select[name="golesVisitante"]');
             const selectEstado = document.getElementById('estadoPartido');
@@ -59,6 +68,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    function obtenerSiglaEquipo(nombreEquipo) {
+        if (!window.equipos || !nombreEquipo) return '';
+
+        const equipo = window.equipos.find(e => e.nombre === nombreEquipo);
+        return equipo ? equipo.siglas : '';
+    }
 
     if (cerrarDetalleButton && modalDetalle) {
         cerrarDetalleButton.addEventListener('click', () => {
