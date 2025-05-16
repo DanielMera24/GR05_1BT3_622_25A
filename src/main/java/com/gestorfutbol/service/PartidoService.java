@@ -5,6 +5,7 @@ import com.gestorfutbol.dao.implementation.PartidoDAO;
 import com.gestorfutbol.dto.PartidoDTO;
 import com.gestorfutbol.entity.Equipo;
 import com.gestorfutbol.entity.Partido;
+import com.gestorfutbol.entity.TablaPosiciones;
 import com.gestorfutbol.entity.Torneo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,15 +31,15 @@ public class PartidoService {
 
         for (Partido partido : partidos) {
             partidosDTO.add(new PartidoDTO(
-                                partido.getIdPartido(),
-                                partido.getGolesLocal(),
-                                partido.getGolesVisita(),
-                                partido.getFechaPartido().toString(),
-                                partido.getEstado(),
-                                partido.getJornadaActual(),
-                                partido.getEquipoLocal().getNombre(),
-                                partido.getEquipoVisita().getNombre(),
-                                partido.getTorneo().getNombre()));
+                    partido.getIdPartido(),
+                    partido.getGolesLocal(),
+                    partido.getGolesVisita(),
+                    partido.getFechaPartido().toString(),
+                    partido.getEstado(),
+                    partido.getJornadaActual(),
+                    partido.getEquipoLocal().getNombre(),
+                    partido.getEquipoVisita().getNombre(),
+                    partido.getTorneo().getNombre()));
         }
         if(partidosDTO.isEmpty()) partidosDTO = null;
         return partidosDTO;
@@ -65,7 +66,7 @@ public class PartidoService {
             fechaDate = sdf.parse(partidoDTO.getFechaPartido());
         } catch (Exception e){
             e.printStackTrace();
-            }
+        }
         Partido partido = new Partido();
         partido.setEstado(partidoDTO.getEstado());
         partido.setJornadaActual(partidoDTO.getJornadaActual());
@@ -76,15 +77,18 @@ public class PartidoService {
         partidoDAO.guardar(partido);
     }
 
-    public void actualizarPartido(Partido partido){
-        Partido partidoEncontrado = null;
+    public void actualizarPartido(Partido partido, String estado, int golesLocal, int golesVisitante){
         System.out.println("actualizando partido!!!!!!!!!!!");
-
-        PartidoDAO partidoDAO1 = new PartidoDAO(sessionFactory);
-        partidoDAO1.actualizar(partido);
+        partidoDAO.actualizar(partido, estado, golesLocal, golesVisitante);
 
         System.out.println("usando tabla de posiciones service!!!!");
         TablaPosicionesService tablaPosicionesService = new TablaPosicionesService();
-        tablaPosicionesService.actualizarEquipoEnTabla(partidoEncontrado);
+        tablaPosicionesService.actualizarEquipoEnTabla(partido);
+
+
+    }
+
+    public Partido obtenerPartidoPorId(int idPartido) {
+        return partidoDAO.obtenerPartidoPorId(idPartido);
     }
 }

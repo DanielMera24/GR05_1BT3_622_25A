@@ -1,199 +1,204 @@
 /* Filtros */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Jaldi';
-  }
-  
-  body {
-    background: #f9f9f9;
-    color: #333;
-  }
-  
-  .aplicacion {
-    display: flex;
-    min-height: 100vh;
-  }
-  
-  .barra_lateral {
-    width: 220px;
-    background: #E7E8ED;
-    padding: 20px;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Jaldi';
+}
+
+body {
+  background: #f9f9f9;
+  color: #333;
+}
+
+.aplicacion {
+  display: flex;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.barra_lateral {
+  width: 220px;
+  background: #E7E8ED;
+  padding: 20px;
+  overflow-y: auto; /* Permite scroll vertical si el contenido es demasiado largo */
+  position: sticky; /* Mantiene la barra lateral en su posición */
+}
 .opciones{
   font-size: 17px;
 }
-  .barra_lateral h2 {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 30px;
-    color: #4f46e5;
-    word-break: break-word;
-    max-width: 100%;
-    font-size: 26px;
-  }
-  
-  .barra_lateral nav a {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px;
-    color: #333;
-    text-decoration: none;
-    border-radius: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .barra_lateral nav a.activo,
-  .barra_lateral nav a:hover {
-    background: #6366f1;
-    color: white;
-  }
-  
-  .contenido_principal {
-    flex: 1;
-    padding: 30px;
-  }
-  
-  .encabezado {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .boton_nuevo {
-    background: #6366f1;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .tabla_contenedor {
-    margin-top: 30px;
-    background: white;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    border-radius: 8px;
-  }
-  
-  .tabla_equipos {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-  }
-  
-  .tabla_equipos th,
-  .tabla_equipos td {
-    padding: 10px 15px;
-    border: 1px solid #d1d5db;
-  }
-  
-  .tabla_equipos th {
-    background-color: #f9fafb;
-  }
-  
-  .accion {
-    margin-right: 5px;
-    padding: 5px 10px;
-    border: 1px solid #333;
-    background: white;
-    cursor: pointer;
-  }
-  
-  .icono {
-    width: 18px;
-    height: 18px;
-  }
-  .equipo_info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .icono_escudo {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-  }
-  
-  .accion_enlace {
-    background: none;
-    border: none;
-    color: #6366f1;
-    font-weight: 500;
-    text-decoration: none;
-    cursor: pointer;
-    margin-right: 10px;
-    padding: 0;
-    font-size: 16px;
-  }
-  
-  .accion_enlace:hover {
-    text-decoration: underline;
-  }
-  
-  
-    
+.barra_lateral h2 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 30px;
+  color: #4f46e5;
+  word-break: break-word;
+  max-width: 100%;
+  font-size: 26px;
+}
+
+.barra_lateral nav a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  color: #333;
+  text-decoration: none;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.barra_lateral nav a.activo,
+.barra_lateral nav a:hover {
+  background: #6366f1;
+  color: white;
+}
+
+.contenido_principal {
+  flex: 1;
+  padding: 30px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.boton_nuevo {
+  background: #6366f1;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.tabla_contenedor {
+  margin-top: 30px;
+  background: white;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+}
+
+.tabla_equipos {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.tabla_equipos th,
+.tabla_equipos td {
+  padding: 10px 15px;
+  border: 1px solid #d1d5db;
+}
+
+.tabla_equipos th {
+  background-color: #f9fafb;
+}
+
+.accion {
+  margin-right: 5px;
+  padding: 5px 10px;
+  border: 1px solid #333;
+  background: white;
+  cursor: pointer;
+}
+
+.icono {
+  width: 18px;
+  height: 18px;
+}
+.equipo_info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icono_escudo {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.accion_enlace {
+  background: none;
+  border: none;
+  color: #6366f1;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  margin-right: 10px;
+  padding: 0;
+  font-size: 16px;
+}
+
+.accion_enlace:hover {
+  text-decoration: underline;
+}
+
+
+
 .filtros {
-    margin: 20px 0;
-    display: flex;
-    gap: 15px;
-  }
-  
-  .filtros select {
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-  }
-  
-  /* Estilo de cada partido */
-  .partidos {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .partido {
-    background-color: #eef2ff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .info_partido {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-  }
-  
-  .info_partido img {
-    width: 30px;
-    height: 30px;
-  }
-  
-  .detalle_partido, .fecha_partido {
-    font-size: 16px;
-    color: #555;
-  }
-  
-  .accion_enlace {
-    color: #6366f1;
-    font-weight: 500;
-    text-decoration: none;
-    font-size: 16px;
-  }
-  
-  .accion_enlace:hover {
-    text-decoration: underline;
-  }
+  margin: 20px 0;
+  display: flex;
+  gap: 15px;
+}
+
+.filtros select {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+/* Estilo de cada partido */
+.partidos {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.partido {
+  background-color: #eef2ff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.info_partido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.info_partido img {
+  width: 30px;
+  height: 30px;
+}
+
+.detalle_partido, .fecha_partido {
+  font-size: 16px;
+  color: #555;
+}
+
+.accion_enlace {
+  color: #6366f1;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.accion_enlace:hover {
+  text-decoration: underline;
+}
 
 /* Estilos para el modal */
 .modal {

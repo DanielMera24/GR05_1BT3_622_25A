@@ -28,13 +28,10 @@ public class ActualizarPartidoServlet extends HttpServlet {
         int golesLocal = Integer.parseInt(request.getParameter("golesLocal"));
         int golesVisitante = Integer.parseInt(request.getParameter("golesVisitante"));
         int idPartido = Integer.parseInt(request.getParameter("idPartido"));
+        System.out.println("Estado: " + estado);
 
-        Partido partido = new Partido();
-        partido.setIdPartido(idPartido);
-        partido.setEstado(estado);
-        partido.setGolesLocal(golesLocal);
-        partido.setGolesVisita(golesVisitante);
-        partidoService.actualizarPartido(partido);
+        Partido partido = partidoService.obtenerPartidoPorId(idPartido);
+        partidoService.actualizarPartido(partido, estado, golesLocal, golesVisitante);
 
         response.sendRedirect(request.getContextPath() + "/partidos");
     }

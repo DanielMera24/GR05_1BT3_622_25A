@@ -83,7 +83,7 @@
           <td><%= posicion %></td>
           <td>
             <div class="equipo_info">
-              <img src="/imagenes/<%= imagenActual %>" class="icono_escudo" />
+              <img src="/imagenes/<%= tp.getEquipo().getSiglas()+ ".png"%>" class="icono_escudo" />
               <span><%= tp.getEquipo().getNombre() %></span>
             </div>
           </td>

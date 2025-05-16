@@ -92,15 +92,15 @@
                 </div>
                 <p class="detalle_partido"><%=nombreTorneo%> · Jornada <%= p.getJornadaActual() %> · <%= p.getEstado() %></p>
                 <p class="fecha_partido"><%= fechaFormateada %>
-                <a class="accion_enlace" href="#"
-                   data-id="<%=p.getIdPartido()%>"
-                   data-local="<%= nombreLocal%>"
-                   data-visitante="<%=nombreVisitante%>"
-                   data-goles-local="<%= p.getGolesLocal() %>"
-                   data-goles-visitante="<%= p.getGolesVisita() %>"
-                   data-torneo="<%=nombreTorneo%>"
-                   data-jornada="<%= p.getJornadaActual() %>"
-                   data-estado="<%= p.getEstado() %>">Ver detalles</a>
+                    <a class="accion_enlace" href="#"
+                       data-id="<%=p.getIdPartido()%>"
+                       data-local="<%= nombreLocal%>"
+                       data-visitante="<%=nombreVisitante%>"
+                       data-goles-local="<%= p.getGolesLocal() %>"
+                       data-goles-visitante="<%= p.getGolesVisita() %>"
+                       data-torneo="<%=nombreTorneo%>"
+                       data-jornada="<%= p.getJornadaActual() %>"
+                       data-estado="<%= p.getEstado() %>">Ver detalles</a>
 
             </div>
             <%
@@ -181,8 +181,7 @@
             <input type="hidden" id="idPartido" name="idPartido" value="">
             <div class="resultado_partido">
                 <div class="equipo_detalle">
-                    <img src="/imagenes/barcelona.png" alt="Local" class="icono_detalle" />
-                    <p>Foto Local</p>
+                    <img src="" id="foto-local" class="icono_detalle" />
                 </div>
 
                 <div class="marcador_detalle">
@@ -196,8 +195,7 @@
                 </div>
 
                 <div class="equipo_detalle">
-                    <img src="/imagenes/atleti.png" alt="Visitante" class="icono_detalle" />
-                    <p>Foto Visitante</p>
+                    <img src="" id="foto-visitante" class="icono_detalle" />
                 </div>
             </div>
 
@@ -247,7 +245,8 @@
         {
             id: "<%= e.getIdEquipo() %>",
             nombre: "<%= e.getNombre() %>",
-            torneoId: "<%= e.getIdTorneo() %>"
+            torneoId: "<%= e.getIdTorneo() %>",
+            siglas: "<%= e.getSiglas() %>"
         }<%= (i < equipos.size() - 1) ? "," : "" %>
         <% } %>
     ];
