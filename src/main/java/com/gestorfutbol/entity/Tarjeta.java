@@ -9,7 +9,6 @@ public class Tarjeta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idTarjeta;
 
-    @Enumerated(EnumType.STRING)
     private String tipoTarjeta;
 
 
