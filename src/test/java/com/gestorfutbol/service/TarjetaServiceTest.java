@@ -113,4 +113,53 @@ public class TarjetaServiceTest {
     }
 
 
+
+    // Prueba 5
+    @Test
+    public void dado_motivoDeTarjeta_cuandoEsNuloOVacio_entonces_retornarVerdadero(){
+        String motivo1 = "";
+        String motivo2 = null;
+        TarjetaService tarjetaService = new TarjetaService();
+        assertTrue(tarjetaService.esNuloOVacio(motivo1));
+        assertTrue(tarjetaService.esNuloOVacio(motivo2));
+    }
+
+    //prueba 8
+    @Test
+    void dado_motivoDeTarjeta_cuandoSuperaLimite_entonces_retornarVerdadero(){
+        //este motivo tiene 205 caracteres -> el máximo de caracteres es de 200
+        String motivo = "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\n" +
+                "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\n" +
+                "12345";
+        TarjetaService tarjetaService = new TarjetaService();
+        assertTrue(tarjetaService.cumpleLimiteCaracteres(motivo));
+    }
+
+
+    //prueba 7
+    @Test
+    void dado_cantidadNegativa_cuandoSeRegistraTarjeta_entonces_retornarVerdadero(){
+        int cantidadTarjetas = -1;
+        TarjetaService tarjetaService = new TarjetaService();
+        assertTrue(tarjetaService.cantidadEsNegativa(cantidadTarjetas));
+    }
+
+    //prueba 6
+    @Test
+    void dado_jugadorInexistente_cuandoRecibeTarjeta_entonces_retornarFalso(){
+        List<Jugador> jugadores = new ArrayList<>();
+        jugadores.add(new Jugador("3234567892", "Daniel", 25, "DEFENSA", 4));
+        jugadores.add(new Jugador("2554567898", "Fernando", 35, "DEFENSA", 7));
+        jugadores.add(new Jugador("9244567891", "Mera", 21, "DELANTERO", 3));
+
+        TarjetaService tarjetaService = new TarjetaService();
+
+        String cedula = "3234567893";
+
+        assertFalse(tarjetaService.jugadorAmonestadoExiste(jugadores, cedula));
+
+    }
+
+
+
 }

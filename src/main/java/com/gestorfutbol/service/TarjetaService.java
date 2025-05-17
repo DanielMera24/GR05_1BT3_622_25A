@@ -65,4 +65,25 @@ public class TarjetaService {
         }
         return false;
     }
+
+    public boolean esNuloOVacio(String motivo) {
+        return !(motivo != null && !motivo.isEmpty());
+    }
+
+    public boolean cumpleLimiteCaracteres(String motivo) {
+        return !(motivo.length() < 200);
+    }
+
+    public boolean cantidadEsNegativa(int cantidadTarjetas) {
+        return cantidadTarjetas < 0;
+    }
+
+    public boolean jugadorAmonestadoExiste(List<Jugador> jugadores, String cedula) {
+        for(Jugador jugador : jugadores) {
+            if (cedula.equals(jugador.getCedula())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
