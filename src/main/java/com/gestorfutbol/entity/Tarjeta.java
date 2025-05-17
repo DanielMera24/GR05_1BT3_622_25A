@@ -9,8 +9,7 @@ public class Tarjeta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idTarjeta;
 
-    @Enumerated(EnumType.STRING)
-    private TipoTarjeta tipoTarjeta;
+    private String tipoTarjeta;
 
 
     private String motivo;
@@ -28,7 +27,7 @@ public class Tarjeta {
     public Tarjeta() {
     }
 
-    public Tarjeta(TipoTarjeta tipoTarjeta, String motivo, Partido partido, Jugador jugador) {
+    public Tarjeta(String tipoTarjeta, String motivo, Partido partido, Jugador jugador) {
         this.tipoTarjeta = tipoTarjeta;
         this.motivo = motivo;
         this.partido = partido;
@@ -43,11 +42,11 @@ public class Tarjeta {
         this.idTarjeta = idTarjeta;
     }
 
-    public TipoTarjeta getTipoTarjeta() {
+    public String getTipoTarjeta() {
         return tipoTarjeta;
     }
 
-    public void setTipoTarjeta(TipoTarjeta tipoTarjeta) {
+    public void setTipoTarjeta(String tipoTarjeta) {
         this.tipoTarjeta = tipoTarjeta;
     }
 
