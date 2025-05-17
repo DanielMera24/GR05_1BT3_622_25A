@@ -27,6 +27,10 @@
       <a href="/mostrarTablaPosiciones" class="activo"><img src="/imagenes/tabla.png" class="icono" /><span class="opciones">Tabla de Posiciones</span></a>
       <a href="/partidos"><img src="/imagenes/calendario.png" class="icono" /><span class="opciones">Partidos</span></a>
       <a href="/jugadores"> <img class="icono" src="/imagenes/jugador.png"/> <span class="opciones">Jugadores</span> </a>
+      <a href="/html/tarjetas.html">
+        <img class="icono" src="/imagenes/tarjetas.png"/>
+        <span class="opciones">Tarjetas</span>
+      </a>
     </nav>
   </aside>
 
