@@ -4,17 +4,25 @@
 
 <hibernate-configuration>
     <session-factory>
-
-        <!-- Configuración de SQL Server -->
+        <!-- Comentamos la configuración de SQL Server para usarla cuando sea necesario -->
+        <!--
         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
         <property name="hibernate.connection.url">
             jdbc:sqlserver://26.30.90.3:1433;databaseName=GestorTorneos;encrypt=false
         </property>
         <property name="hibernate.connection.username">sa</property>
         <property name="hibernate.connection.password">P@ssw0rd</property>
-
-        <!-- Dialecto de Hibernate para SQL Server -->
         <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
+        -->
+
+        <!-- Configuración de SQLite -->
+        <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
+        <property name="hibernate.connection.url">jdbc:sqlite:GestorTorneos.db</property>
+        <property name="hibernate.dialect">org.hibernate.community.dialect.SQLiteDialect</property>
+
+        <!-- Configuraciones específicas para SQLite -->
+        <property name="hibernate.connection.pool_size">1</property>
+        <property name="hibernate.current_session_context_class">thread</property>
 
         <!-- Mostrar consultas en consola -->
         <property name="hibernate.show_sql">true</property>
