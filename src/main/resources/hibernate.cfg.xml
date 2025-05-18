@@ -38,6 +38,7 @@
         <mapping class="com.gestorfutbol.entity.Partido"/>
         <mapping class="com.gestorfutbol.entity.TablaPosiciones"/>
         <mapping class="com.gestorfutbol.entity.Torneo"/>
+        <mapping class="com.gestorfutbol.entity.Tarjeta"/>
 
     </session-factory>
 </hibernate-configuration>

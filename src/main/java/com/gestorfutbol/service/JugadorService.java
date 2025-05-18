@@ -190,7 +190,36 @@ public class JugadorService {
         return null;
     }
 
+    public List<JugadorDTO> obtenerJugadoresPorEquipo(int idEquipo) {
+        List<JugadorDTO> resultado = new ArrayList<>();
+
+        try {
+            List<Jugador> jugadores = jugadorDAO.obtenerPorEquipo(idEquipo);
+
+            for (Jugador j : jugadores) {
+                resultado.add(new JugadorDTO(
+                        j.getIdJugador(),
+                        j.getCedula(),
+                        j.getNombre(),
+                        j.getDorsal(),
+                        j.getEdad(),
+                        j.getPosicion(),
+                        j.getEquipo().getNombre(),
+                        j.getEquipo().getSiglas()
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return resultado;
+    }
+
     public Jugador obtenerJugadorPorCedula(String cedula) {
         return jugadorDAO.obtenerJugador(cedula);
+    }
+
+    public Jugador obtenerJugadorPorId(int id) {
+        return jugadorDAO.obtenerJugadorPorId(id);
     }
 }

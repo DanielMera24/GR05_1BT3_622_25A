@@ -1,15 +1,18 @@
 package com.gestorfutbol.service;
 
+import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.dao.implementation.TarjetaDAOImpl;
 import com.gestorfutbol.dao.interfaces.TarjetaDAO;
 import com.gestorfutbol.entity.Jugador;
 import com.gestorfutbol.entity.Tarjeta;
+import org.hibernate.SessionFactory;
 
 import java.util.List;
 import java.util.Objects;
 
 public class TarjetaService {
     private TarjetaDAO tarjetaDAO;
+    private SessionFactory sessionFactory;
 
     public TarjetaService(TarjetaDAO tarjetaDAO) {
         this.tarjetaDAO = tarjetaDAO;
@@ -17,17 +20,36 @@ public class TarjetaService {
     }
 
     public TarjetaService() {
+        this.sessionFactory = HibernateUtil.getSessionFactory();
+        this.tarjetaDAO = new TarjetaDAOImpl(sessionFactory);
     }
 
-    public boolean guardarTarjeta(String tipoTarjeta, String motivo, int minutos, int idPartido, int idJugador) {
-        if (esMinutoValido(minutos)) {
+    public boolean guardarTarjeta(List<Tarjeta> tarjetas) {
+        // Realizamos validaciones básicas
+        if (tarjetas == null || tarjetas.isEmpty()) {
             return false;
         }
 
+        boolean todosValidos = true;
 
+        for (Tarjeta tarjeta : tarjetas) {
+            // Validaciones específicas por tarjeta
+            if (!validarTipoTarjeta(tarjeta) ||
+                    !esMinutoValido(tarjeta.getMinuto()) ||
+                    esNuloOVacio(tarjeta.getMotivo())) {
+                todosValidos = false;
+                break;
+            }
+        }
 
-        TarjetaDAOImpl tarjetaDAO = new TarjetaDAOImpl();
-        tarjetaDAO.guardarTarjeta();
+        if (!todosValidos) {
+            return false;
+        }
+
+        for (Tarjeta tarjeta : tarjetas) {
+            tarjetaDAO.guardarTarjeta(tarjeta);
+        }
+
         return true;
     }
 

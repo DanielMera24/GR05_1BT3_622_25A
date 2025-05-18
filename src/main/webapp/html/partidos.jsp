@@ -6,6 +6,7 @@
 <%@ page import="com.gestorfutbol.dto.EquipoDTO" %>
 <%@ page import="com.gestorfutbol.dto.TorneoDTO" %>
 <%@ page import="com.gestorfutbol.dto.PartidoDTO" %>
+<%@ page import="com.gestorfutbol.dto.JugadorDTO" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -203,6 +204,57 @@
                 </div>
             </div>
 
+            <div class="seccion-tarjetas">
+                <h3>Tarjetas del Partido</h3>
+
+                <!-- Contenedor para tarjetas añadidas -->
+                <div class="contenedor-tarjetas-partido" id="contenedorTarjetas">
+                    <!-- Las tarjetas se añadirán aquí dinámicamente -->
+                </div>
+
+                <button type="button" class="boton-nueva-tarjeta" id="agregarTarjeta">+ Nueva Tarjeta</button>
+            </div>
+
+            <!-- Modal para nueva tarjeta (aparece dentro del modal de detalles) -->
+            <div class="modal-tarjeta" id="modalNuevaTarjeta" style="display: none;">
+                <div class="form-tarjeta">
+                    <h4>Nueva Tarjeta</h4>
+                    <div class="form-grupo">
+                        <label for="tipoTarjeta">Tipo de Tarjeta</label>
+                        <select id="tipoTarjeta" name="tipoTarjeta" >
+                            <option value="">Seleccione un tipo</option>
+                            <option value="AMARILLA">Amarilla</option>
+                            <option value="ROJA">Roja</option>
+                        </select>
+                    </div>
+
+                    <div class="form-grupo">
+                        <label for="jugadorTarjeta">Jugador</label>
+                        <select id="jugadorTarjeta" name="jugadorTarjeta" >
+                            <option value="">Seleccione un jugador</option>
+                            <!-- Los jugadores se cargarán dinámicamente -->
+                        </select>
+                    </div>
+
+                    <div class="form-grupo">
+                        <label for="minutoTarjeta">Minuto</label>
+                        <input id="minutoTarjeta" name="minutoTarjeta" type="number">
+                    </div>
+
+                    <div class="form-grupo">
+                        <label for="motivoTarjeta">Motivo</label>
+                        <textarea id="motivoTarjeta" name="motivoTarjeta" rows="3" ></textarea>
+                    </div>
+
+                    <div class="form-grupo acciones-tarjeta">
+                        <button type="button" class="boton boton-secundario" id="cancelarTarjeta">Cancelar</button>
+                        <button type="button" class="boton boton-primario" id="guardarTarjeta">Añadir Tarjeta</button>
+                    </div>
+                </div>
+            </div>
+
+
+
             <div class="form-grupo">
                 <label for="estadoPartido">Estado del partido</label>
                 <select id="estadoPartido" name="estadoPartido">
@@ -235,6 +287,7 @@
 
 
 <%-- Variables para torneos y equipos para JS --%>
+<%-- Después de las variables para torneos y equipos para JS --%>
 <script>
     window.torneos = [
         <% for (int i = 0; i < torneos.size(); i++) {
@@ -254,7 +307,30 @@
         }<%= (i < equipos.size() - 1) ? "," : "" %>
         <% } %>
     ];
+
+    // Datos de jugadores por equipo para uso en modales
+    window.jugadoresPorEquipo = {
+        <% for (EquipoDTO e : equipos) {
+            List<JugadorDTO> jugadoresEquipo = (List<JugadorDTO>) request.getAttribute("jugadores_" + e.getIdEquipo());
+            if (jugadoresEquipo != null && !jugadoresEquipo.isEmpty()) {
+        %>
+        "<%= e.getIdEquipo() %>": [
+            <% for (int j = 0; j < jugadoresEquipo.size(); j++) {
+                JugadorDTO jugador = jugadoresEquipo.get(j);
+            %>
+            {
+                id: "<%= jugador.getIdJugador() %>",
+                nombre: "<%= jugador.getNombre() %>",
+                dorsal: <%= jugador.getDorsal() %>,
+                posicion: "<%= jugador.getPosicion() %>",
+                equipo: "<%= e.getNombre() %>"
+            }<%= (j < jugadoresEquipo.size() - 1) ? "," : "" %>
+            <% } %>
+        ],
+        <% } } %>
+    };
 </script>
+
 
 
 <%-- Tu JavaScript final --%>
@@ -262,6 +338,3 @@
 
 </body>
 </html>
-
-
-

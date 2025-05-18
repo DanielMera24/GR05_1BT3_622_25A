@@ -9,4 +9,6 @@ public interface JugadorDAO {
     Jugador obtenerJugador(String cedula);
     List<Jugador> obtenerTodos();
     List<Jugador> obtenerPorEquipo(int idEquipo);
+
+    Jugador obtenerJugadorPorId(int id);
 }

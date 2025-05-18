@@ -1,9 +1,11 @@
 package com.gestorfutbol.servlet;
 
 import com.gestorfutbol.dto.EquipoDTO;
+import com.gestorfutbol.dto.JugadorDTO;
 import com.gestorfutbol.dto.PartidoDTO;
 import com.gestorfutbol.dto.TorneoDTO;
 import com.gestorfutbol.service.EquipoService;
+import com.gestorfutbol.service.JugadorService;
 import com.gestorfutbol.service.PartidoService;
 import com.gestorfutbol.service.TorneoService;
 import jakarta.servlet.ServletException;
@@ -22,12 +24,15 @@ public class PartidoServlet extends HttpServlet {
 
     private TorneoService torneoService;
 
+    private JugadorService jugadorService;
+
 
     @Override
     public void init() throws ServletException {
         equipoService = new EquipoService();
         torneoService = new TorneoService();
         partidoService = new PartidoService();
+        jugadorService = new JugadorService();
     }
 
 
@@ -36,9 +41,18 @@ public class PartidoServlet extends HttpServlet {
         List<EquipoDTO> equipos = null;
         List<TorneoDTO> torneos = null;
         List<PartidoDTO> partidos = null;
+
         torneos = torneoService.listarTorneos();
         partidos = partidoService.listarPartidos();
         equipos = equipoService.listarEquipos();
+
+        if (equipos != null) {
+            for (EquipoDTO equipo : equipos) {
+                // List<JugadorDTO> jugadoresEquipo = jugadorService.obtenerJugadoresPorEquipo(equipo.getIdEquipo());
+                List<JugadorDTO> jugadoresEquipoT = jugadorService.obtenerJugadoresPorEquipo(equipo.getIdEquipo());
+                request.setAttribute("jugadores_" + equipo.getIdEquipo(), jugadoresEquipoT);
+            }
+        }
 
         request.setAttribute("equipos", equipos);
         request.setAttribute("torneos", torneos);

@@ -16,6 +16,8 @@ public class TorneoServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         torneoService = new TorneoService();
+        System.out.println("Ruta exacta de la BD: " + new java.io.File("GestorTorneos.db").getAbsolutePath());
+
     }
 
 
