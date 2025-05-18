@@ -2,6 +2,8 @@ package com.gestorfutbol.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 
 @Entity
 public class Jugador {
@@ -92,6 +94,21 @@ public class Jugador {
 
     public String getCedula() {
         return cedula;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Jugador jugador = (Jugador) o;
+        // Comparar por ID (o cédula, si es único)
+        return Objects.equals(idJugador, jugador.idJugador);
+    }
+
+    @Override
+    public int hashCode() {
+        // Coherencia con equals()
+        return Objects.hash(idJugador);
     }
 
 }
