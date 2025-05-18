@@ -1,0 +1,13 @@
+version: '3'
+services:
+  gestor-futbol:
+    build: .
+    container_name: gestor-futbol
+    ports:
+      - "8080:8080"
+    volumes:
+      - gestor_futbol_data:/usr/local/tomcat/data
+    restart: unless-stopped
+
+volumes:
+  gestor_futbol_data:

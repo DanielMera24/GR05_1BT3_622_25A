@@ -2,7 +2,6 @@ package com.gestorfutbol.service;
 
 import com.gestorfutbol.dao.implementation.TarjetaDAOImpl;
 import com.gestorfutbol.dao.interfaces.TarjetaDAO;
-import com.gestorfutbol.entity.Jugador;
 import com.gestorfutbol.entity.Tarjeta;
 
 import java.util.List;
@@ -24,8 +23,6 @@ public class TarjetaService {
             return false;
         }
 
-
-
         TarjetaDAOImpl tarjetaDAO = new TarjetaDAOImpl();
         tarjetaDAO.guardarTarjeta();
         return true;
@@ -36,7 +33,7 @@ public class TarjetaService {
     }
 
 
-    public boolean tieneMasDosTarjetasAmarillas(List<Tarjeta> tarjetasDeUnJugador) {
+    public boolean esValidoCantidadTarjetasAmarillasAJugador(List<Tarjeta> tarjetasDeUnJugador) {
         int contadorTarjetasAmarillas = 0;
         for (Tarjeta tarjeta : tarjetasDeUnJugador) {
             if (Objects.equals(tarjeta.getTipoTarjeta(), "AMARILLA"))  {
@@ -46,7 +43,7 @@ public class TarjetaService {
         return contadorTarjetasAmarillas <= 2;
     }
 
-    public boolean tieneMasUnaTarjetaRoja(List<Tarjeta> tarjetas)
+    public boolean esValidoCantidadRojasAJugador(List<Tarjeta> tarjetas)
     {
         int contadorTarjetasRojas = 0;
         for (Tarjeta tarjeta : tarjetas) {

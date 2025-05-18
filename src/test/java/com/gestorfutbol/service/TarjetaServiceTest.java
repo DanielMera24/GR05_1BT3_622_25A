@@ -81,7 +81,7 @@ public class TarjetaServiceTest {
         tarjetas.add(new Tarjeta("AMARILLA", "Falta leve", partido, jugador));
         tarjetas.add(new Tarjeta("AMARILLA", "Falta media grave", partido, jugador));
         // Act
-        boolean resultado = tarjetaService.tieneMasDosTarjetasAmarillas(tarjetas);
+        boolean resultado = tarjetaService.esValidoCantidadTarjetasAmarillasAJugador(tarjetas);
         // Assert
         assertFalse(resultado, "Debería rechazar más de 2 tarjetas amarillas al mismo jugador por partido");
     }
@@ -96,7 +96,7 @@ public class TarjetaServiceTest {
         tarjetas.add(new Tarjeta("ROJA", "Falta leve", partido, jugador));
         tarjetas.add(new Tarjeta("ROJA", "Falta media grave", partido, jugador));
         // Act
-        boolean resultado = tarjetaService.tieneMasUnaTarjetaRoja(tarjetas);
+        boolean resultado = tarjetaService.esValidoCantidadRojasAJugador(tarjetas);
         // Assert
         assertFalse(resultado, "Debería rechazar más de 1 tarjeta roja al mismo jugador por partido");
     }
@@ -111,6 +111,4 @@ public class TarjetaServiceTest {
         assertFalse(resultado, "Debería rechazar tarjetas de tipo inválido");
 
     }
-
-
 }
