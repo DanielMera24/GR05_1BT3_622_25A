@@ -79,33 +79,44 @@ public class JugadorService {
         return jugadorDAO.guardar(jugador);
     }
 
+
     public boolean actualizarJugador(String cedula, String nombre, int edad, String posicion, int dorsal, Equipo equipo) {
-        if (validarNombre(nombre) || posicionNoEsValida(posicion)) {
-            System.out.println("Error en los datos para actualizar");
+        if (!datosValidosParaActualizar(cedula, nombre, posicion, dorsal, equipo)) {
             return false;
         }
-
-        if (validarCedula(cedula) == null){
-            System.out.println("Error: cedula no existe");
-            return false;
-        }
-
-        if (validarDorsalParaActualizar(dorsal, equipo, cedula)) {
-            System.out.println("Error: dorsal ya existe en otro jugador");
-            return false;
-        }
-
         Jugador jugador = new Jugador(cedula, nombre, edad, posicion, dorsal);
         jugador.setEquipo(equipo);
 
-        Jugador jugadorExistente = jugadorDAO.obtenerJugador(cedula);
-        if (jugadorExistente != null) {
-            jugador.setIdJugador(jugadorExistente.getIdJugador());
+        Jugador existente = jugadorDAO.obtenerJugador(cedula);
+        if (existente != null) {
+            jugador.setIdJugador(existente.getIdJugador());
         }
 
         System.out.println("Todo correcto para actualizar");
         return jugadorDAO.actualizar(jugador);
     }
+
+    private boolean datosValidosParaActualizar(String cedula, String nombre,
+                                               String posicion, int dorsal, Equipo equipo) {
+        if (validarNombre(nombre) || posicionNoEsValida(posicion)) {
+            System.out.println("Error en los datos para actualizar");
+            return false;
+        }
+        if (validarCedula(cedula) == null) {
+            System.out.println("Error: cédula no existe");
+            return false;
+        }
+        if (validarDorsalParaActualizar(dorsal, equipo, cedula)) {
+            System.out.println("Error: dorsal ya existe en otro jugador");
+            return false;
+        }
+        return true;
+    }
+
+
+
+
+
 
     public boolean validarNombre(String nombre) {
         return nombre == null || nombre.isEmpty();
@@ -179,7 +190,36 @@ public class JugadorService {
         return null;
     }
 
+    public List<JugadorDTO> obtenerJugadoresPorEquipo(int idEquipo) {
+        List<JugadorDTO> resultado = new ArrayList<>();
+
+        try {
+            List<Jugador> jugadores = jugadorDAO.obtenerPorEquipo(idEquipo);
+
+            for (Jugador j : jugadores) {
+                resultado.add(new JugadorDTO(
+                        j.getIdJugador(),
+                        j.getCedula(),
+                        j.getNombre(),
+                        j.getDorsal(),
+                        j.getEdad(),
+                        j.getPosicion(),
+                        j.getEquipo().getNombre(),
+                        j.getEquipo().getSiglas()
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return resultado;
+    }
+
     public Jugador obtenerJugadorPorCedula(String cedula) {
         return jugadorDAO.obtenerJugador(cedula);
+    }
+
+    public Jugador obtenerJugadorPorId(int id) {
+        return jugadorDAO.obtenerJugadorPorId(id);
     }
 }

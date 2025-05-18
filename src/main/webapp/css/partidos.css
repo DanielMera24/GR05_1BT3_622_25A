@@ -375,3 +375,142 @@ body {
   font-weight: bold;
   color: #333;
 }
+/* Estilos para la sección de tarjetas */
+.seccion-tarjetas {
+  margin-top: 25px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 25px;
+}
+
+.seccion-tarjetas h3 {
+  margin-bottom: 15px;
+  color: #4f46e5;
+  font-size: 20px;
+}
+
+.contenedor-tarjetas-partido {
+  margin-bottom: 15px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.boton-nueva-tarjeta {
+  background: #6366f1;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 15px;
+  transition: background-color 0.2s;
+}
+
+.boton-nueva-tarjeta:hover {
+  background: #4f46e5;
+}
+
+/* Estilos para el modal de tarjeta dentro del modal de detalles */
+.modal-tarjeta {
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.form-tarjeta {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.form-tarjeta h4 {
+  margin-bottom: 15px;
+  color: #4b5563;
+  font-size: 18px;
+}
+
+.acciones-tarjeta {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+  margin-bottom: 0;
+}
+
+.form-grupo textarea {
+  resize: vertical;
+  min-height: 80px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 16px;
+}
+/* Estilos para las tarjetas añadidas */
+.tarjeta-partido {
+  display: flex;
+  align-items: center;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.tarjeta-partido.amarilla {
+  border-left: 4px solid #fbbf24;
+}
+
+.tarjeta-partido.roja {
+  border-left: 4px solid #ef4444;
+}
+
+.indicador-tarjeta {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.indicador-tarjeta.amarilla {
+  background: #fbbf24;
+}
+
+.indicador-tarjeta.roja {
+  background: #ef4444;
+}
+
+.info-tarjeta {
+  flex: 1;
+}
+
+.nombre-jugador {
+  font-weight: 600;
+  margin-bottom: 2px;
+  color: #1e3a8a;
+}
+
+.equipo-jugador {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.detalle-tarjeta {
+  font-size: 14px;
+  color: #374151;
+  margin-top: 5px;
+}
+
+.eliminar-tarjeta {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  line-height: 1;
+}
+

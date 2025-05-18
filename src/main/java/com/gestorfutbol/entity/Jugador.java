@@ -24,6 +24,9 @@ public class Jugador {
     @JoinColumn(name = "idEquipo")
     private Equipo equipo;
 
+    public Jugador(String cedula){
+        this.cedula = cedula;
+    }
 
     public Jugador(String cedula , String nombre, int edad, String posicion, int dorsal) {
         this.cedula = cedula;
@@ -34,9 +37,6 @@ public class Jugador {
         this.equipo = equipo;
     }
 
-    public Jugador(String cedula){
-        this.cedula = cedula;
-    }
 
     public Jugador() {
 

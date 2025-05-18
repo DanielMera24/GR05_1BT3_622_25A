@@ -76,4 +76,14 @@ public class JugadorDAOImpl implements JugadorDAO {
         }
     }
 
+    @Override
+    public Jugador obtenerJugadorPorId(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Jugador.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

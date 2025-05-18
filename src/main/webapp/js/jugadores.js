@@ -121,4 +121,85 @@ document.addEventListener('DOMContentLoaded', function() {
             formEditar.reset();
         }
     }
+
+    // Elementos para el filtrado
+    const inputBuscar = document.getElementById('buscarJugador');
+    const selectPosicion = document.getElementById('filtroPosicion');
+    const tarjetasJugadores = document.querySelectorAll('.tarjeta_jugador');
+
+    // Variables para almacenar los criterios de filtrado actuales
+    let filtroPosicionActual = '';
+    let filtroNombreActual = '';
+
+    // Agregar evento para filtrar por nombre (lo que ya implementamos)
+    if (inputBuscar) {
+        inputBuscar.addEventListener('input', function() {
+            filtroNombreActual = inputBuscar.value.toLowerCase().trim();
+            aplicarFiltros();
+        });
+    }
+
+    // Agregar evento para filtrar por posición
+    if (selectPosicion) {
+        selectPosicion.addEventListener('change', function() {
+            filtroPosicionActual = selectPosicion.value;
+            aplicarFiltros();
+        });
+    }
+
+    // Función para aplicar ambos filtros simultáneamente
+    function aplicarFiltros() {
+        let contadorVisibles = 0;
+
+        tarjetasJugadores.forEach(function(tarjeta) {
+            const nombreJugador = tarjeta.querySelector('.nombre_jugador').textContent.toLowerCase();
+            const posicionJugador = tarjeta.querySelector('.posicion_jugador').textContent;
+
+            // Comprobar si cumple con ambos filtros
+            const cumpleFiltroNombre = nombreJugador.includes(filtroNombreActual);
+            const cumpleFiltroPosicion = filtroPosicionActual === '' || posicionJugador === filtroPosicionActual;
+
+            // Mostrar u ocultar según los filtros
+            if (cumpleFiltroNombre && cumpleFiltroPosicion) {
+                tarjeta.style.display = 'block';
+                contadorVisibles++;
+            } else {
+                tarjeta.style.display = 'none';
+            }
+        });
+
+        // Mostrar mensaje cuando no hay resultados
+        mostrarMensajeNoResultados(contadorVisibles);
+    }
+
+    // Función actualizada para mostrar mensaje cuando no hay resultados
+    function mostrarMensajeNoResultados(contadorVisibles) {
+        // Eliminar mensaje existente si hay uno
+        const mensajeExistente = document.querySelector('.mensaje-no-resultados');
+        if (mensajeExistente) {
+            mensajeExistente.remove();
+        }
+
+        // Si no hay resultados y hay algún filtro activo, mostrar mensaje
+        if (contadorVisibles === 0 && (filtroNombreActual || filtroPosicionActual)) {
+            const contenedorTarjetas = document.querySelector('.contenedor_tarjetas');
+            const mensaje = document.createElement('p');
+            mensaje.className = 'mensaje-no-resultados';
+            mensaje.style.width = '100%';
+            mensaje.style.textAlign = 'center';
+            mensaje.style.padding = '20px';
+
+            // Personalizar el mensaje según los filtros aplicados
+            if (filtroNombreActual && filtroPosicionActual) {
+                mensaje.textContent = `No se encontraron jugadores con el nombre "${filtroNombreActual}" y posición "${filtroPosicionActual}"`;
+            } else if (filtroNombreActual) {
+                mensaje.textContent = `No se encontraron jugadores con el nombre "${filtroNombreActual}"`;
+            } else if (filtroPosicionActual) {
+                mensaje.textContent = `No se encontraron jugadores con la posición "${filtroPosicionActual}"`;
+            }
+
+            contenedorTarjetas.appendChild(mensaje);
+        }
+    }
+
 });

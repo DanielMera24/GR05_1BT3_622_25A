@@ -43,6 +43,10 @@
         <img class="icono" src="/imagenes/jugador.png"/>
         <span class="opciones">Jugadores</span>
       </a>
+      <a href="/tarjetas">
+        <img class="icono" src="/imagenes/tarjetas.png"/>
+        <span class="opciones">Tarjetas</span>
+      </a>
     </nav>
   </aside>
 

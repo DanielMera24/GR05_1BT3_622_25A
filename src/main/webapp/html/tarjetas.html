@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tarjetas</title>
+    <link rel="stylesheet" href="/css/tarjetas.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Jaldi:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<div class="aplicacion">
+    <aside class="barra_lateral">
+        <h2>
+            <img src="/imagenes/pelota.png" class="icono" />
+            FútbolManager
+        </h2>
+        <nav>
+            <a href="/listarTorneos">
+                <img src="/imagenes/trofeo.png" class="icono" /><span class="opciones">Torneos</span>
+            </a>
+            <a href="/equipos">
+                <img src="/imagenes/equipo.png" class="icono" /><span class="opciones">Equipos</span>
+            </a>
+            <a href="/mostrarTablaPosiciones">
+                <img src="/imagenes/tabla.png" class="icono" /><span class="opciones">Tabla de Posiciones</span>
+            </a>
+            <a href="/partidos">
+                <img src="/imagenes/calendario.png" class="icono" /><span class="opciones">Partidos</span>
+            </a>
+            <a href="/jugadores">
+                <img src="/imagenes/jugador.png" class="icono" /><span class="opciones">Jugadores</span>
+            </a>
+            <a href="/tarjetas" class="activo">
+                <img src="/imagenes/tarjetas.png" class="icono" /><span class="opciones">Tarjetas</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="contenido_principal">
+        <div class="encabezado">
+            <h1>Tarjetas</h1>
+            <div class="acciones_tarjetas">
+                <div class="selector_partido">
+                    <form action="/tarjetas" method="get">
+                        <select name="partidoId" id="partidoSelector">
+                            <option value="">Todos los partidos</option>
+                            <!-- Aquí se cargarían dinámicamente los partidos -->
+                            <option value="1">Barcelona vs Emelec - 12/05/2025</option>
+                            <option value="2">Liga de Quito vs Aucas - 15/05/2025</option>
+                            <option value="3">Dep. Cuenca vs Independiente - 18/05/2025</option>
+                        </select>
+                    </form>
+                </div>
+                <button class="boton_nueva">
+                    + Nueva Tarjeta
+                </button>
+            </div>
+        </div>
+
+        <div class="filtros_tarjetas">
+            <div class="buscador">
+                <input type="text" placeholder="Buscar tarjeta..." id="buscarTarjeta">
+                <img src="/imagenes/buscar.png" class="icono_buscar" />
+            </div>
+            <div class="filtro_tipo">
+                <select id="filtroTipo">
+                    <option value="">Todos los tipos</option>
+                    <option value="AMARILLA">Amarilla</option>
+                    <option value="ROJA">Roja</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="contenedor_tarjetas">
+            <!-- Tarjeta Amarilla -->
+            <div class="tarjeta_sancion amarilla">
+                <div class="cabecera_tarjeta">
+                    <div class="tipo_tarjeta">Amarilla</div>
+                    <div class="partido_badge">
+                        <img src="/imagenes/LDU.png" class="icono_escudo" />
+                        <span class="vs">vs</span>
+                        <img src="/imagenes/BSC.png" class="icono_escudo" />
+                    </div>
+                </div>
+                <div class="cuerpo_tarjeta">
+                    <div class="avatar_jugador">
+                        <img src="/imagenes/jugador.png" alt="Avatar del jugador" />
+                    </div>
+                    <h3 class="nombre_jugador">Carlos Gruezo</h3>
+                    <div class="info_jugador">
+                        <span class="equipo_jugador">Barcelona</span>
+                        <span class="dorsal_jugador">#8</span>
+                    </div>
+                    <div class="detalle_tarjeta">
+                        <div class="minuto_tarjeta">Minuto: 35'</div>
+                        <div class="motivo_tarjeta">Motivo: Falta táctica</div>
+                    </div>
+                </div>
+                <div class="pie_tarjeta">
+                    <button class="accion editar"
+                            data-id="1"
+                            data-tipo="AMARILLA"
+                            data-jugador="Carlos Gruezo"
+                            data-equipo="Barcelona"
+                            data-minuto="35"
+                            data-motivo="Falta táctica"
+                            data-partido="1">
+                        Editar
+                    </button>
+                    <button class="accion eliminar" data-id="1">Eliminar</button>
+                </div>
+            </div>
+
+            <!-- Tarjeta Roja -->
+            <div class="tarjeta_sancion roja">
+                <div class="cabecera_tarjeta">
+                    <div class="tipo_tarjeta">Roja</div>
+                    <div class="partido_badge">
+                        <img src="/imagenes/RM.png" class="icono_escudo" />
+                        <span class="vs">vs</span>
+                        <img src="/imagenes/BSC.png" class="icono_escudo" />
+                    </div>
+                </div>
+                <div class="cuerpo_tarjeta">
+                    <div class="avatar_jugador">
+                        <img src="/imagenes/jugador.png" alt="Avatar del jugador" />
+                    </div>
+                    <h3 class="nombre_jugador">Michael Estrada</h3>
+                    <div class="info_jugador">
+                        <span class="equipo_jugador">Liga de Quito</span>
+                        <span class="dorsal_jugador">#9</span>
+                    </div>
+                    <div class="detalle_tarjeta">
+                        <div class="minuto_tarjeta">Minuto: 78'</div>
+                        <div class="motivo_tarjeta">Motivo: Entrada temeraria</div>
+                    </div>
+                </div>
+                <div class="pie_tarjeta">
+                    <button class="accion editar"
+                            data-id="2"
+                            data-tipo="ROJA"
+                            data-jugador="Michael Estrada"
+                            data-equipo="Liga de Quito"
+                            data-minuto="78"
+                            data-motivo="Entrada temeraria"
+                            data-partido="2">
+                        Editar
+                    </button>
+                    <button class="accion eliminar" data-id="2">Eliminar</button>
+                </div>
+            </div>
+
+            <!-- Tarjeta Amarilla 2 -->
+            <div class="tarjeta_sancion amarilla">
+                <div class="cabecera_tarjeta">
+                    <div class="tipo_tarjeta">Amarilla</div>
+                    <div class="partido_badge">
+                        <img src="/imagenes/RM.png" class="icono_escudo" />
+                        <span class="vs">vs</span>
+                        <img src="/imagenes/LDU.png" class="icono_escudo" />
+                    </div>
+                </div>
+                <div class="cuerpo_tarjeta">
+                    <div class="avatar_jugador">
+                        <img src="/imagenes/jugador.png" alt="Avatar del jugador" />
+                    </div>
+                    <h3 class="nombre_jugador">Cristian Martínez</h3>
+                    <div class="info_jugador">
+                        <span class="equipo_jugador">Aucas</span>
+                        <span class="dorsal_jugador">#7</span>
+                    </div>
+                    <div class="detalle_tarjeta">
+                        <div class="minuto_tarjeta">Minuto: 42'</div>
+                        <div class="motivo_tarjeta">Motivo: Simulación</div>
+                    </div>
+                </div>
+                <div class="pie_tarjeta">
+                    <button class="accion editar"
+                            data-id="3"
+                            data-tipo="AMARILLA"
+                            data-jugador="Cristian Martínez"
+                            data-equipo="Aucas"
+                            data-minuto="42"
+                            data-motivo="Simulación"
+                            data-partido="3">
+                        Editar
+                    </button>
+                    <button class="accion eliminar" data-id="3">Eliminar</button>
+                </div>
+            </div>
+
+            <!-- Más tarjetas se añadirían dinámicamente -->
+        </div>
+    </main>
+</div>
+
+<!-- Modal para nueva tarjeta -->
+<div class="modal" id="modalNuevaTarjeta">
+    <div class="modal-contenido">
+        <span class="cerrar-modal">&times;</span>
+        <h2>Nueva Tarjeta</h2>
+        <form id="formNuevaTarjeta" action="/tarjetas" method="post">
+            <div class="form-grupo">
+                <label for="tipoTarjeta">Tipo de Tarjeta</label>
+                <select id="tipoTarjeta" name="tipoTarjeta" required>
+                    <option value="">Seleccione un tipo</option>
+                    <option value="AMARILLA">Amarilla</option>
+                    <option value="ROJA">Roja</option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="partidoId">Partido</label>
+                <select id="partidoId" name="partidoId" required>
+                    <option value="">Seleccione un partido</option>
+                    <!-- Aquí se cargarían dinámicamente los partidos -->
+                    <option value="1">Barcelona vs Emelec (10/05/2025)</option>
+                    <option value="2">Liga de Quito vs Aucas (12/05/2025)</option>
+                    <option value="3">Dep. Cuenca vs Independiente (15/05/2025)</option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="jugadorId">Jugador</label>
+                <select id="jugadorId" name="jugadorId" required>
+                    <option value="">Seleccione un jugador</option>
+                    <!-- Se cargarían dinámicamente según el equipo seleccionado -->
+                    <option value="1">Carlos Gruezo (Barcelona) - #8</option>
+                    <option value="2">Joao Rojas (Emelec) - #10</option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="minuto">Minuto</label>
+                <input id="minuto" name="minuto" type="number" min="1" max="120" required>
+            </div>
+
+            <div class="form-grupo">
+                <label for="motivo">Motivo</label>
+                <textarea id="motivo" name="motivo" rows="3" required></textarea>
+            </div>
+
+            <div class="form-grupo acciones">
+                <button class="boton boton-secundario" type="button" id="btnCancelar">Cancelar</button>
+                <button class="boton boton-primario" type="submit">Guardar Tarjeta</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para editar tarjeta -->
+<div class="modal" id="modalEditarTarjeta">
+    <div class="modal-contenido">
+        <span class="cerrar-modal-editar">&times;</span>
+        <h2>Editar Tarjeta</h2>
+        <form id="formEditarTarjeta" action="/actualizarTarjeta" method="post">
+            <input type="hidden" id="idTarjetaEditar" name="idTarjeta">
+
+            <div class="form-grupo">
+                <label for="tipoTarjetaEditar">Tipo de Tarjeta</label>
+                <select id="tipoTarjetaEditar" name="tipoTarjeta" required>
+                    <option value="">Seleccione un tipo</option>
+                    <option value="AMARILLA">Amarilla</option>
+                    <option value="ROJA">Roja</option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="partidoIdEditar">Partido</label>
+                <select id="partidoIdEditar" name="partidoId" required>
+                    <option value="">Seleccione un partido</option>
+                    <option value="1">Barcelona vs Emelec (10/05/2025)</option>
+                    <option value="2">Liga de Quito vs Aucas (12/05/2025)</option>
+                    <option value="3">Dep. Cuenca vs Independiente (15/05/2025)</option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="jugadorIdEditar">Jugador</label>
+                <select id="jugadorIdEditar" name="jugadorId" required>
+                    <option value="">Seleccione un jugador</option>
+                    <option value="1">Carlos Gruezo (Barcelona) - #8</option>
+                    <option value="2">Joao Rojas (Emelec) - #10</option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="minutoEditar">Minuto</label>
+                <input id="minutoEditar" name="minuto" type="number" min="1" max="120" required>
+            </div>
+
+            <div class="form-grupo">
+                <label for="motivoEditar">Motivo</label>
+                <textarea id="motivoEditar" name="motivo" rows="3" required></textarea>
+            </div>
+
+            <div class="form-grupo acciones">
+                <button class="boton boton-secundario" type="button" id="btnCancelarEditar">Cancelar</button>
+                <button class="boton boton-primario" type="submit">Actualizar Tarjeta</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/tarjetas.js"></script>
+</body>
+</html>
