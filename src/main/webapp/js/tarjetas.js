@@ -1,201 +1,143 @@
-// Funcionalidad actualizada para la vista de tarjetas con escudos
 document.addEventListener('DOMContentLoaded', function() {
-    // Variables para los modales
-    const modalNuevaTarjeta = document.getElementById('modalNuevaTarjeta');
+    // Variables para el modal
     const modalEditarTarjeta = document.getElementById('modalEditarTarjeta');
-    const botonNuevo = document.querySelector('.boton_nueva');
-    const cerrarModalNuevo = document.querySelector('.cerrar-modal');
     const cerrarModalEditar = document.querySelector('.cerrar-modal-editar');
-    const btnCancelar = document.getElementById('btnCancelar');
     const btnCancelarEditar = document.getElementById('btnCancelarEditar');
 
     // Selectores para filtrado
     const filtroTipo = document.getElementById('filtroTipo');
     const buscarTarjeta = document.getElementById('buscarTarjeta');
-    const partidoSelector = document.getElementById('partidoSelector');
 
-    // Formularios
-    const formNuevaTarjeta = document.getElementById('formNuevaTarjeta');
-    const formEditarTarjeta = document.getElementById('formEditarTarjeta');
+    // Eventos para modal de editar
+    if (cerrarModalEditar) {
+        cerrarModalEditar.addEventListener('click', function() {
+            cerrarModalEditarTarjeta();
+        });
+    }
 
-    // Eventos para abrir y cerrar modales
-    botonNuevo.addEventListener('click', function() {
-        modalNuevaTarjeta.style.display = 'block';
-    });
+    if (btnCancelarEditar) {
+        btnCancelarEditar.addEventListener('click', function() {
+            cerrarModalEditarTarjeta();
+        });
+    }
 
-    cerrarModalNuevo.addEventListener('click', function() {
-        modalNuevaTarjeta.style.display = 'none';
-    });
-
-    cerrarModalEditar.addEventListener('click', function() {
-        modalEditarTarjeta.style.display = 'none';
-    });
-
-    btnCancelar.addEventListener('click', function() {
-        modalNuevaTarjeta.style.display = 'none';
-    });
-
-    btnCancelarEditar.addEventListener('click', function() {
-        modalEditarTarjeta.style.display = 'none';
-    });
-
-    // Cerrar modales al hacer clic fuera de ellos
+    // Cerrar modal al hacer clic fuera
     window.addEventListener('click', function(event) {
-        if (event.target === modalNuevaTarjeta) {
-            modalNuevaTarjeta.style.display = 'none';
-        }
         if (event.target === modalEditarTarjeta) {
-            modalEditarTarjeta.style.display = 'none';
+            cerrarModalEditarTarjeta();
         }
     });
 
-    // Manejo de los botones de editar
-    const botonesEditar = document.querySelectorAll('.editar');
-    botonesEditar.forEach(boton => {
-        boton.addEventListener('click', function() {
-            // Obtener los datos del botón
-            const id = this.getAttribute('data-id');
-            const tipo = this.getAttribute('data-tipo');
-            const jugador = this.getAttribute('data-jugador');
-            const equipo = this.getAttribute('data-equipo');
-            const minuto = this.getAttribute('data-minuto');
-            const motivo = this.getAttribute('data-motivo');
-            const partido = this.getAttribute('data-partido');
+    function cerrarModalEditarTarjeta() {
+        if (modalEditarTarjeta) {
+            modalEditarTarjeta.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        if (document.getElementById('formEditarTarjeta')) {
+            document.getElementById('formEditarTarjeta').reset();
+        }
+    }
 
-            // Rellenar el formulario de edición
-            document.getElementById('idTarjetaEditar').value = id;
-            document.getElementById('tipoTarjetaEditar').value = tipo;
-            document.getElementById('minutoEditar').value = minuto;
-            document.getElementById('motivoEditar').value = motivo;
-            document.getElementById('partidoIdEditar').value = partido;
-
-            // Para el jugador, habría que cargar las opciones según el partido seleccionado
-            // y luego seleccionar el jugador correcto
-            cargarJugadores(document.getElementById('partidoIdEditar'), document.getElementById('jugadorIdEditar'));
-
-            // Mostrar el modal
-            modalEditarTarjeta.style.display = 'block';
-        });
+    // Manejadores de botones editar
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('editar')) {
+            event.preventDefault();
+            event.stopPropagation();
+            abrirModalEditar(event.target);
+        }
     });
 
-    // Manejo de los botones de eliminar
-    const botonesEliminar = document.querySelectorAll('.eliminar');
-    botonesEliminar.forEach(boton => {
-        boton.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            if (confirm('¿Estás seguro de que deseas eliminar esta tarjeta?')) {
-                // Aquí iría el código para eliminar la tarjeta
-                // En una implementación real, esto sería una petición AJAX
-                console.log('Eliminando tarjeta con ID:', id);
+    function abrirModalEditar(boton) {
+        const tarjetaData = {
+            id: boton.getAttribute('data-id'),
+            tipo: boton.getAttribute('data-tipo'),
+            jugador: boton.getAttribute('data-jugador'),
+            equipo: boton.getAttribute('data-equipo'),
+            minuto: boton.getAttribute('data-minuto'),
+            motivo: boton.getAttribute('data-motivo'),
+            partido: boton.getAttribute('data-partido')
+        };
 
-                // Simulación de eliminación exitosa
-                alert('Tarjeta eliminada correctamente');
-                // Recargar la página o eliminar el elemento del DOM
-                this.closest('.tarjeta_sancion').remove();
-            }
-        });
-    });
+        document.getElementById('idTarjetaEditar').value = tarjetaData.id || '';
+        document.getElementById('tipoTarjetaEditar').value = tarjetaData.tipo || '';
+        document.getElementById('minutoEditar').value = tarjetaData.minuto || '';
+        document.getElementById('motivoEditar').value = tarjetaData.motivo || '';
+        document.getElementById('partidoIdEditar').value = tarjetaData.partido || '';
+
+        // Mostrar el modal
+        modalEditarTarjeta.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
 
     // Filtrado por tipo de tarjeta
-    filtroTipo.addEventListener('change', function() {
-        const tipo = this.value.toLowerCase();
-        const tarjetas = document.querySelectorAll('.tarjeta_sancion');
-
-        tarjetas.forEach(tarjeta => {
-            if (tipo === '' || tarjeta.classList.contains(tipo.toLowerCase())) {
-                tarjeta.style.display = 'block';
-            } else {
-                tarjeta.style.display = 'none';
-            }
+    if (filtroTipo) {
+        filtroTipo.addEventListener('change', function() {
+            aplicarFiltros();
         });
-    });
+    }
 
     // Búsqueda de tarjetas por texto
-    buscarTarjeta.addEventListener('input', function() {
-        const termino = this.value.toLowerCase();
+    if (buscarTarjeta) {
+        buscarTarjeta.addEventListener('input', function() {
+            aplicarFiltros();
+        });
+    }
+
+    // Función para aplicar todos los filtros combinados
+    function aplicarFiltros() {
+        const terminoBusqueda = buscarTarjeta ? buscarTarjeta.value.toLowerCase().trim() : '';
+        const tipoSeleccionado = filtroTipo ? filtroTipo.value.toLowerCase() : '';
         const tarjetas = document.querySelectorAll('.tarjeta_sancion');
+
+        // Eliminar mensajes previos si existen
+        const mensajeExistente = document.querySelector('.mensaje-no-resultados');
+        if (mensajeExistente) {
+            mensajeExistente.remove();
+        }
+
+        let contadorVisibles = 0;
 
         tarjetas.forEach(tarjeta => {
             const nombreJugador = tarjeta.querySelector('.nombre_jugador').textContent.toLowerCase();
             const equipoJugador = tarjeta.querySelector('.equipo_jugador').textContent.toLowerCase();
             const motivoTarjeta = tarjeta.querySelector('.motivo_tarjeta').textContent.toLowerCase();
 
-            if (nombreJugador.includes(termino) ||
-                equipoJugador.includes(termino) ||
-                motivoTarjeta.includes(termino)) {
+            const cumpleTipo = tipoSeleccionado === '' || tarjeta.classList.contains(tipoSeleccionado);
+            const cumpleBusqueda = terminoBusqueda === '' ||
+                nombreJugador.includes(terminoBusqueda) ||
+                equipoJugador.includes(terminoBusqueda) ||
+                motivoTarjeta.includes(terminoBusqueda);
+
+            if (cumpleBusqueda && cumpleTipo) {
                 tarjeta.style.display = 'block';
+                contadorVisibles++;
             } else {
                 tarjeta.style.display = 'none';
             }
         });
-    });
 
-    // Cambio de partido en el selector
-    partidoSelector.addEventListener('change', function() {
-        this.form.submit();
-    });
-
-    // Cambio dinámico de jugadores cuando se selecciona un partido
-    const partidoId = document.getElementById('partidoId');
-    const jugadorId = document.getElementById('jugadorId');
-    const partidoIdEditar = document.getElementById('partidoIdEditar');
-    const jugadorIdEditar = document.getElementById('jugadorIdEditar');
-
-    // Función para cargar jugadores según el partido
-    function cargarJugadores(partidoSelect, jugadorSelect) {
-        const idPartido = partidoSelect.value;
-
-        if (idPartido) {
-            // En una implementación real, esto sería una petición AJAX
-            // Aquí simplemente simulamos algunos jugadores
-            jugadorSelect.innerHTML = '<option value="">Seleccione un jugador</option>';
-
-            if (idPartido === '1') {
-                // Jugadores para Barcelona vs Emelec
-                agregarOpcion(jugadorSelect, '1', 'Carlos Gruezo (Barcelona) - #8');
-                agregarOpcion(jugadorSelect, '2', 'Janner Corozo (Barcelona) - #11');
-                agregarOpcion(jugadorSelect, '3', 'Aníbal Chalá (Emelec) - #5');
-                agregarOpcion(jugadorSelect, '4', 'Joao Rojas (Emelec) - #10');
-            } else if (idPartido === '2') {
-                // Jugadores para Liga vs Aucas
-                agregarOpcion(jugadorSelect, '5', 'Adrián Gabbarini (Liga de Quito) - #1');
-                agregarOpcion(jugadorSelect, '6', 'Alexander Alvarado (Liga de Quito) - #7');
-                agregarOpcion(jugadorSelect, '7', 'Roberto Ordóñez (Aucas) - #9');
-                agregarOpcion(jugadorSelect, '8', 'Jhonny Quiñónez (Aucas) - #8');
-            } else if (idPartido === '3') {
-                // Jugadores para Dep. Cuenca vs Independiente
-                agregarOpcion(jugadorSelect, '9', 'Lucas Mancinelli (Dep. Cuenca) - #10');
-                agregarOpcion(jugadorSelect, '10', 'Sebastián Rodríguez (Dep. Cuenca) - #8');
-                agregarOpcion(jugadorSelect, '11', 'Jonathan Bauman (Independiente) - #19');
-                agregarOpcion(jugadorSelect, '12', 'Fernando Gaibor (Independiente) - #10');
-            }
-        } else {
-            jugadorSelect.innerHTML = '<option value="">Seleccione un partido primero</option>';
+        // Mostrar mensaje cuando no hay resultados
+        if (contadorVisibles === 0 && (terminoBusqueda || tipoSeleccionado)) {
+            mostrarMensajeNoResultados(terminoBusqueda, tipoSeleccionado);
         }
     }
 
-    function agregarOpcion(select, valor, texto) {
-        const opcion = document.createElement('option');
-        opcion.value = valor;
-        opcion.textContent = texto;
-        select.appendChild(opcion);
-    }
+    // Función para mostrar mensaje cuando no hay resultados
+    function mostrarMensajeNoResultados(terminoBusqueda, tipoSeleccionado) {
+        const contenedorTarjetas = document.querySelector('.contenedor_tarjetas');
+        const mensaje = document.createElement('p');
+        mensaje.className = 'mensaje-no-resultados';
+        mensaje.style.width = '100%';
+        mensaje.style.textAlign = 'center';
+        mensaje.style.padding = '20px';
 
-    // Eventos para cargar jugadores
-    partidoId.addEventListener('change', function() {
-        cargarJugadores(partidoId, jugadorId);
-    });
-
-    partidoIdEditar.addEventListener('change', function() {
-        cargarJugadores(partidoIdEditar, jugadorIdEditar);
-    });
-
-    // Inicializar los selectores de jugadores si ya hay un partido seleccionado
-    if (partidoId.value) {
-        cargarJugadores(partidoId, jugadorId);
-    }
-
-    if (partidoIdEditar.value) {
-        cargarJugadores(partidoIdEditar, jugadorIdEditar);
+        if (terminoBusqueda && tipoSeleccionado) {
+            mensaje.textContent = `No se encontraron tarjetas que coincidan con "${terminoBusqueda}" y sean de tipo "${tipoSeleccionado}"`;
+        } else if (terminoBusqueda) {
+            mensaje.textContent = `No se encontraron tarjetas que coincidan con "${terminoBusqueda}"`;
+        } else if (tipoSeleccionado) {
+            mensaje.textContent = `No hay tarjetas de tipo "${tipoSeleccionado}"`;
+        }
+        contenedorTarjetas.appendChild(mensaje);
     }
 });

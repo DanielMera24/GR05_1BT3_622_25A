@@ -63,6 +63,8 @@ public class Tarjeta {
     }
 
     public void setPartido(Partido partido) {
+        if(partido == null) throw new IllegalArgumentException("Partido no puede ser nulo");
+
         this.partido = partido;
     }
 
@@ -71,6 +73,7 @@ public class Tarjeta {
     }
 
     public void setJugador(Jugador jugador) {
+        if(jugador == null) throw new IllegalArgumentException("Jugador no puede ser nulo");
         this.jugador = jugador;
     }
 

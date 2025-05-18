@@ -3,10 +3,12 @@ package com.gestorfutbol.service;
 import com.gestorfutbol.config.HibernateUtil;
 import com.gestorfutbol.dao.implementation.TarjetaDAOImpl;
 import com.gestorfutbol.dao.interfaces.TarjetaDAO;
+import com.gestorfutbol.dto.TarjetaDTO;
 import com.gestorfutbol.entity.Jugador;
 import com.gestorfutbol.entity.Tarjeta;
 import org.hibernate.SessionFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,7 +56,7 @@ public class TarjetaService {
     }
 
     public boolean esMinutoValido(int minutos) {
-       return minutos <= 90 && minutos >= 0;
+        return minutos <= 90 && minutos >= 0;
     }
 
 
@@ -107,5 +109,44 @@ public class TarjetaService {
             }
         }
         return false;
+    }
+
+    public List<TarjetaDTO> listarTarjetas() {
+        List<Tarjeta> tarjetas = tarjetaDAO.obtenerTodas();
+        return convertirADTOs(tarjetas);
+    }
+
+    public List<TarjetaDTO> listarTarjetasPorPartido(int idPartido) {
+        List<Tarjeta> tarjetas = tarjetaDAO.obtenerPorPartido(idPartido);
+        return convertirADTOs(tarjetas);
+    }
+
+    private List<TarjetaDTO> convertirADTOs(List<Tarjeta> tarjetas) {
+        List<TarjetaDTO> tarjetasDTO = new ArrayList<>();
+
+        if (tarjetas != null) {
+            for (Tarjeta tarjeta : tarjetas) {
+                TarjetaDTO dto = crearTarjetaDTO(tarjeta);
+                tarjetasDTO.add(dto);
+            }
+        }
+
+        return tarjetasDTO;
+    }
+
+    private TarjetaDTO crearTarjetaDTO(Tarjeta tarjeta) {
+        return new TarjetaDTO(
+                tarjeta.getIdTarjeta(),
+                tarjeta.getTipoTarjeta(),
+                tarjeta.getMinuto(),
+                tarjeta.getMotivo(),
+                tarjeta.getJugador().getIdJugador(),
+                tarjeta.getJugador().getNombre(),
+                tarjeta.getJugador().getEquipo().getNombre(),
+                tarjeta.getJugador().getDorsal(),
+                tarjeta.getPartido().getIdPartido(),
+                tarjeta.getPartido().getEquipoLocal().getSiglas(),
+                tarjeta.getPartido().getEquipoVisita().getSiglas()
+        );
     }
 }
