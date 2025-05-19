@@ -1,6 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.gestorfutbol.entity.Equipo" %>
-<%@ page import="com.gestorfutbol.entity.Torneo" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.gestorfutbol.dto.EquipoDTO" %>
 
@@ -58,7 +56,7 @@
     } else {
       test = "";
     }
-    int contador = 0; // 👈 contador para rotar imágenes
+    int contador = 0;
   %>
   <h1><%= test %></h1>
 
@@ -81,9 +79,9 @@
         <tbody>
 
         <%
-          String[] imagenes = {"barcelona.png", "madrid.png", "atleti.png"}; // 👈 nombres de las imágenes
+          String[] imagenes = {"barcelona.png", "madrid.png", "atleti.png"};
           for (EquipoDTO e : equipos) {
-            String imagenActual = imagenes[contador % imagenes.length]; // 👈 rotar las imágenes
+            String imagenActual = imagenes[contador % imagenes.length];
         %>
         <tr>
           <td>
@@ -160,14 +158,12 @@
 </div>
 
 
-<!-- Modal Editar Jugadores -->
 <div id="modalEditarJugadores" class="modal">
   <div class="modal_contenido">
     <span id="cerrarEditarJugadores" class="cerrar">&times;</span>
     <h2>Editar Jugadores</h2>
     <form id="formJugadores">
       <div id="contenedorJugadores">
-        <!-- Aquí se agregarán dinámicamente los jugadores -->
       </div>
       <div class="form_agregar">
         <input type="text" id="nombreJugador" placeholder="Nombre del jugador" name="nombreJugador" required>

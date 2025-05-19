@@ -37,14 +37,19 @@ public class TorneoServlet extends HttpServlet {
         String nombre = request.getParameter("nombreTorneo");
         String fechaInicioStr = request.getParameter("fechaInicio");
 
-        boolean fueCreadoTorneo = torneoService.crearTorneo(nombre, fechaInicioStr);
-
-        if (!fueCreadoTorneo) {
-            request.setAttribute("errorMensaje", "Ya existe un torneo con ese nombree.");
+        if (fechaInicioStr == null || fechaInicioStr.trim().isEmpty()) {
+            request.setAttribute("errorMensaje", "Por favor, ingrese una fecha de inicio para el torneo.");
             doGet(request, response);
             return;
         }
 
+        boolean fueCreadoTorneo = torneoService.crearTorneo(nombre, fechaInicioStr);
+
+        if (!fueCreadoTorneo) {
+            request.setAttribute("errorMensaje", "Ya existe un torneo con ese nombre.");
+            doGet(request, response);
+            return;
+        }
 
         response.sendRedirect(request.getContextPath() + "/listarTorneos");
     }

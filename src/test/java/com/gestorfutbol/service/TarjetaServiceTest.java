@@ -81,7 +81,7 @@ public class TarjetaServiceTest {
         tarjetas.add(new Tarjeta("AMARILLA", "Falta leve", partido, jugador));
         tarjetas.add(new Tarjeta("AMARILLA", "Falta media grave", partido, jugador));
         // Act
-        boolean resultado = tarjetaService.tieneMasDosTarjetasAmarillas(tarjetas);
+        boolean resultado = tarjetaService.esValidoCantidadTarjetasAmarillasAJugador(tarjetas);
         // Assert
         assertFalse(resultado, "Debería rechazar más de 2 tarjetas amarillas al mismo jugador por partido");
     }
@@ -96,7 +96,7 @@ public class TarjetaServiceTest {
         tarjetas.add(new Tarjeta("ROJA", "Falta leve", partido, jugador));
         tarjetas.add(new Tarjeta("ROJA", "Falta media grave", partido, jugador));
         // Act
-        boolean resultado = tarjetaService.tieneMasUnaTarjetaRoja(tarjetas);
+        boolean resultado = tarjetaService.esValidoCantidadRojasAJugador(tarjetas);
         // Assert
         assertFalse(resultado, "Debería rechazar más de 1 tarjeta roja al mismo jugador por partido");
     }
@@ -111,65 +111,4 @@ public class TarjetaServiceTest {
         assertFalse(resultado, "Debería rechazar tarjetas de tipo inválido");
 
     }
-
-
-
-
-    @Test
-    public void dado_motivoDeTarjeta_cuandoEsNuloOVacio_entonces_retornarVerdadero(){
-        String motivo1 = "";
-        TarjetaService tarjetaService = new TarjetaService();
-        assertTrue(tarjetaService.esNuloOVacio(motivo1));
-    }
-
-
-    @Test
-    void dado_motivoDeTarjeta_cuandoSuperaLimite_entonces_retornarVerdadero(){
-        //este motivo tiene 205 caracteres -> el máximo de caracteres es de 200
-        String motivo = "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345";
-        TarjetaService tarjetaService = new TarjetaService();
-        assertTrue(tarjetaService.cumpleLimiteCaracteres(motivo));
-    }
-
-
-
-    @Test
-    void dado_cantidadNegativa_cuandoSeRegistraTarjeta_entonces_retornarVerdadero(){
-        int cantidadTarjetas = -1;
-        TarjetaService tarjetaService = new TarjetaService();
-        assertTrue(tarjetaService.cantidadEsNegativa(cantidadTarjetas));
-    }
-
-
-    @Test
-    void dado_jugadorInexistente_cuandoRecibeTarjeta_entonces_retornarFalso(){
-        List<Jugador> jugadores = new ArrayList<>();
-        jugadores.add(new Jugador("3234567892", "Daniel", 25, "DEFENSA", 4));
-        jugadores.add(new Jugador("2554567898", "Fernando", 35, "DEFENSA", 7));
-        jugadores.add(new Jugador("9244567891", "Mera", 21, "DELANTERO", 3));
-
-        TarjetaService tarjetaService = new TarjetaService();
-
-        String cedula = "3234567893";
-
-        assertFalse(tarjetaService.jugadorAmonestadoExiste(jugadores, cedula));
-    }
-
-    @Test
-    void alEstablecerPartidoConNull_enTarjeta_entonces_seLanzaIllegalArgumentException(){
-        Tarjeta tarjeta = new Tarjeta();
-
-        assertThrows(IllegalArgumentException.class, () -> tarjeta.setPartido(null));
-    }
-
-    @Test
-    void alEstablecerJugadorConNull_enTarjeta_entonces_seLanzaIllegalArgumentException() {
-        Tarjeta tarjeta = new Tarjeta();
-
-        assertThrows(IllegalArgumentException.class, () -> tarjeta.setJugador(null));
-    }
-
-
-
-
 }

@@ -115,19 +115,6 @@
                         <div class="motivo_tarjeta">Motivo: <%= tarjeta.getMotivo() %></div>
                     </div>
                 </div>
-                <div class="pie_tarjeta">
-                    <button class="accion editar"
-                            data-id="<%= tarjeta.getIdTarjeta() %>"
-                            data-tipo="<%= tarjeta.getTipoTarjeta() %>"
-                            data-jugador="<%= tarjeta.getNombreJugador() %>"
-                            data-equipo="<%= tarjeta.getEquipoJugador() %>"
-                            data-minuto="<%= tarjeta.getMinuto() %>"
-                            data-motivo="<%= tarjeta.getMotivo() %>"
-                            data-partido="<%= tarjeta.getIdPartido() %>">
-                        Editar
-                    </button>
-                    <button class="accion eliminar" data-id="<%= tarjeta.getIdTarjeta() %>">Eliminar</button>
-                </div>
             </div>
             <%
                 }
@@ -139,66 +126,6 @@
             %>
         </div>
     </main>
-</div>
-
-<!-- Modal para editar tarjeta -->
-<div class="modal" id="modalEditarTarjeta">
-    <div class="modal-contenido">
-        <span class="cerrar-modal-editar">&times;</span>
-        <h2>Editar Tarjeta</h2>
-        <form id="formEditarTarjeta" action="/actualizarTarjeta" method="post">
-            <input type="hidden" id="idTarjetaEditar" name="idTarjeta">
-
-            <div class="form-grupo">
-                <label for="tipoTarjetaEditar">Tipo de Tarjeta</label>
-                <select id="tipoTarjetaEditar" name="tipoTarjeta">
-                    <option value="">Seleccione un tipo</option>
-                    <option value="AMARILLA">Amarilla</option>
-                    <option value="ROJA">Roja</option>
-                </select>
-            </div>
-
-            <div class="form-grupo">
-                <label for="partidoIdEditar">Partido</label>
-                <select id="partidoIdEditar" name="partidoId">
-                    <option value="">Seleccione un partido</option>
-                    <%
-                        if (partidos != null) {
-                            for (PartidoDTO partido : partidos) {
-                    %>
-                    <option value="<%= partido.getIdPartido() %>">
-                        <%= partido.getEquipoLocal() %> vs <%= partido.getEquipoVisita() %> (<%= partido.getFechaPartido() %>)
-                    </option>
-                    <%
-                            }
-                        }
-                    %>
-                </select>
-            </div>
-
-            <div class="form-grupo">
-                <label for="jugadorIdEditar">Jugador</label>
-                <select id="jugadorIdEditar" name="jugadorId">
-                    <option value="">Seleccione un partido primero</option>
-                </select>
-            </div>
-
-            <div class="form-grupo">
-                <label for="minutoEditar">Minuto</label>
-                <input id="minutoEditar" name="minuto" type="number" >
-            </div>
-
-            <div class="form-grupo">
-                <label for="motivoEditar">Motivo</label>
-                <textarea id="motivoEditar" name="motivo" rows="3"></textarea>
-            </div>
-
-            <div class="form-grupo acciones">
-                <button class="boton boton-secundario" type="button" id="btnCancelarEditar">Cancelar</button>
-                <button class="boton boton-primario" type="submit">Actualizar</button>
-            </div>
-        </form>
-    </div>
 </div>
 
 <script src="/js/tarjetas.js"></script>

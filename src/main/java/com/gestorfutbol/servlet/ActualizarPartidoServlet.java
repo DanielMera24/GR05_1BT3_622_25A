@@ -73,7 +73,6 @@ public class ActualizarPartidoServlet extends HttpServlet {
 
             // Guardar las tarjetas
             if (!tarjetas.isEmpty()) {
-                TarjetaService tarjetaService = new TarjetaService();
                 tarjetaService.guardarTarjeta(tarjetas);
             }
         }

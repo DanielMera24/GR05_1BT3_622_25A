@@ -2,6 +2,7 @@ package com.gestorfutbol.servlet;
 import com.gestorfutbol.dto.EquipoDTO;
 import com.gestorfutbol.dto.TorneoDTO;
 import com.gestorfutbol.service.EquipoService;
+import com.gestorfutbol.service.TablaPosicionesService;
 import com.gestorfutbol.service.TorneoService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,11 +19,13 @@ import java.util.List;
 public class EquipoServlet extends HttpServlet {
     private EquipoService equipoService;
     private TorneoService torneoService;
+    private TablaPosicionesService tablaPosicionesService;
 
     @Override
     public void init() throws ServletException {
         equipoService = new EquipoService();
         torneoService = new TorneoService();
+        tablaPosicionesService = new TablaPosicionesService();
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -54,36 +57,18 @@ public class EquipoServlet extends HttpServlet {
             return;
         }
         try {
-            // Recuperar ID del nuevo equipo
             int idEquipo = equipoService.obtenerIdEquipoPorNombre(nombreEquipo);
 
-            String url = request.getScheme() + "://" + request.getServerName() + ":" +
-                    request.getServerPort() + request.getContextPath() + "/mostrarTablaPosiciones";
-
-            String parametros = "idEquipo=" + idEquipo + "&idTorneo=" + idTorneo;
-            System.out.println(parametros);
-
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod("POST");
-            con.setDoOutput(true);
-            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-            try (OutputStream os = con.getOutputStream()) {
-                os.write(parametros.getBytes());
-                os.flush();
-            }
-
-            int responseCode = con.getResponseCode();
-            System.out.println("POST a tablaPosiciones respondió con código: " + responseCode);
+            // Si necesitas actualizar la tabla de posiciones:
+            tablaPosicionesService.crearRegistro(idEquipo, idTorneo); // <-- Método directo
 
         } catch (Exception e) {
             e.printStackTrace();
-            // Opcional: registrar error o mostrar mensaje al usuario
+            // Manejar error
         }
 
         response.sendRedirect(request.getContextPath() + "/equipos");
-
     }
+
 
 }
