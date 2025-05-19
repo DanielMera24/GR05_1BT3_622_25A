@@ -17,10 +17,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const fechaInput = document.getElementById('fecha');
     const estadioInput = document.getElementById('estadio');
 
-    const botonesDetalles = document.querySelectorAll('.accion_enlace');
+    // Obtener botones de editar y ver detalles
+    const botonesEditar = document.querySelectorAll('.accion_enlace');
+    const botonesVer = document.querySelectorAll('.boton_ver');
 
     // Almacena las tarjetas por partido durante la sesión
     let tarjetasPorPartido = {};
+
+    // Variable para controlar si el modal está en modo "solo lectura"
+    let modoSoloLectura = false;
 
     if (btnAbrirNuevo && modalNuevo) {
         btnAbrirNuevo.addEventListener('click', () => modalNuevo.style.display = 'block');
@@ -32,118 +37,173 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    botonesDetalles.forEach(btn => {
-        btn.addEventListener('click', function(event) {
-            event.preventDefault();
-            modalDetalle.style.display = 'block';
+    // Función para abrir el modal de detalle
+    function abrirModalDetalle(event, soloLectura) {
+        event.preventDefault();
+        modoSoloLectura = soloLectura;
+        modalDetalle.style.display = 'block';
 
-            const nombreLocal = btn.getAttribute('data-local');
-            const nombreVisitante = btn.getAttribute('data-visitante');
-            const golesLocal = btn.getAttribute('data-goles-local');
-            const golesVisitante = btn.getAttribute('data-goles-visitante');
-            const nombreTorneo = btn.getAttribute('data-torneo');
-            const jornada = btn.getAttribute('data-jornada');
-            const estado = btn.getAttribute('data-estado');
-            const idPartido = btn.getAttribute('data-id');
+        const btn = event.currentTarget;
+        const nombreLocal = btn.getAttribute('data-local');
+        const nombreVisitante = btn.getAttribute('data-visitante');
+        const golesLocal = btn.getAttribute('data-goles-local');
+        const golesVisitante = btn.getAttribute('data-goles-visitante');
+        const nombreTorneo = btn.getAttribute('data-torneo');
+        const jornada = btn.getAttribute('data-jornada');
+        const estado = btn.getAttribute('data-estado');
+        const idPartido = btn.getAttribute('data-id');
 
-            document.getElementById('idPartido').value = idPartido;
+        document.getElementById('idPartido').value = idPartido;
 
-            document.querySelector('#formDetallePartido p:nth-child(1)').innerHTML =
-                `<strong>${nombreLocal}</strong> vs <strong>${nombreVisitante}</strong>`;
-            document.querySelector('#formDetallePartido p:nth-child(2)').innerText =
-                `${nombreTorneo} · Jornada ${jornada}`;
+        document.querySelector('#formDetallePartido p:nth-child(1)').innerHTML =
+            `<strong>${nombreLocal}</strong> vs <strong>${nombreVisitante}</strong>`;
+        document.querySelector('#formDetallePartido p:nth-child(2)').innerText =
+            `${nombreTorneo} · Jornada ${jornada}`;
 
-            const siglaLocal = obtenerSiglaEquipo(nombreLocal);
-            const siglaVisitante = obtenerSiglaEquipo(nombreVisitante);
+        const siglaLocal = obtenerSiglaEquipo(nombreLocal);
+        const siglaVisitante = obtenerSiglaEquipo(nombreVisitante);
 
-            document.getElementById('foto-local').src = `/imagenes/${siglaLocal}.png`;
-            document.getElementById('foto-visitante').src = `/imagenes/${siglaVisitante}.png`;
+        document.getElementById('foto-local').src = `/imagenes/${siglaLocal}.png`;
+        document.getElementById('foto-visitante').src = `/imagenes/${siglaVisitante}.png`;
 
+        // Actualizar selectores
+        const selectGolesLocal = document.querySelector('select[name="golesLocal"]');
+        const selectGolesVisitante = document.querySelector('select[name="golesVisitante"]');
+        const selectEstado = document.getElementById('estadoPartido');
 
-            // Actualizar selectores
-            const selectGolesLocal = document.querySelector('select[name="golesLocal"]');
-            const selectGolesVisitante = document.querySelector('select[name="golesVisitante"]');
-            const selectEstado = document.getElementById('estadoPartido');
+        if (selectGolesLocal && selectGolesVisitante && selectEstado) {
+            selectGolesLocal.value = golesLocal;
+            selectGolesVisitante.value = golesVisitante;
+            selectEstado.value = estado;
 
-            if (selectGolesLocal && selectGolesVisitante && selectEstado) {
-                selectGolesLocal.value = golesLocal;
-                selectGolesVisitante.value = golesVisitante;
-                selectEstado.value = estado;
+            // Deshabilitar controles en modo solo lectura
+            // Deshabilitar controles en modo solo lectura
+            if (soloLectura) {
+                selectGolesLocal.disabled = true;
+                selectGolesVisitante.disabled = true;
+                selectEstado.disabled = true;
+
+                // Ocultar botón de añadir tarjeta y el div de acciones completo
+                const btnAgregarTarjeta = document.getElementById('agregarTarjeta');
+                const divAcciones = document.querySelector('#formDetallePartido .acciones');
+
+                if (btnAgregarTarjeta) btnAgregarTarjeta.style.display = 'none';
+                if (divAcciones) divAcciones.style.display = 'none';
+
+                // Cambiar el título del modal
+                const tituloModal = document.querySelector('.modal-contenido-detalle h2');
+                if (tituloModal) tituloModal.textContent = 'Información del Partido';
+            } else {
+                selectGolesLocal.disabled = false;
+                selectGolesVisitante.disabled = false;
+                selectEstado.disabled = false;
+
+                // Mostrar botón de añadir tarjeta y el div de acciones
+                const btnAgregarTarjeta = document.getElementById('agregarTarjeta');
+                const divAcciones = document.querySelector('#formDetallePartido .acciones');
+
+                if (btnAgregarTarjeta) btnAgregarTarjeta.style.display = 'block';
+                if (divAcciones) divAcciones.style.display = 'flex';
+
+                // Restaurar el título original
+                const tituloModal = document.querySelector('.modal-contenido-detalle h2');
+                if (tituloModal) tituloModal.textContent = 'Detalles de encuentro';
             }
+        }
 
-            // Inicializar las referencias para tarjetas
-            btnAgregarTarjeta = document.getElementById('agregarTarjeta');
-            modalNuevaTarjeta = document.getElementById('modalNuevaTarjeta');
-            btnCancelarTarjeta = document.getElementById('cancelarTarjeta');
-            btnGuardarTarjeta = document.getElementById('guardarTarjeta');
-            contenedorTarjetas = document.getElementById('contenedorTarjetas');
+        // Inicializar las referencias para tarjetas
+        btnAgregarTarjeta = document.getElementById('agregarTarjeta');
+        modalNuevaTarjeta = document.getElementById('modalNuevaTarjeta');
+        btnCancelarTarjeta = document.getElementById('cancelarTarjeta');
+        btnGuardarTarjeta = document.getElementById('guardarTarjeta');
+        contenedorTarjetas = document.getElementById('contenedorTarjetas');
 
-            // Asegurarse de que el modal de tarjetas esté cerrado inicialmente
-            if (modalNuevaTarjeta) {
+        // Asegurarse de que el modal de tarjetas esté cerrado inicialmente
+        if (modalNuevaTarjeta) {
+            modalNuevaTarjeta.style.display = 'none';
+        }
+
+        // Configurar el botón de agregar tarjeta
+        if (btnAgregarTarjeta && !soloLectura) {
+            btnAgregarTarjeta.onclick = function() {
+                modalNuevaTarjeta.style.display = 'block';
+                cargarJugadoresDePartido();
+            };
+        }
+
+        // Configurar el botón de cancelar
+        if (btnCancelarTarjeta) {
+            btnCancelarTarjeta.onclick = function() {
                 modalNuevaTarjeta.style.display = 'none';
-            }
+                limpiarFormularioTarjeta();
+            };
+        }
 
-            // Configurar el botón de agregar tarjeta
-            if (btnAgregarTarjeta) {
-                btnAgregarTarjeta.onclick = function() {
-                    modalNuevaTarjeta.style.display = 'block';
-                    cargarJugadoresDePartido();
-                };
-            }
+        // Configurar el botón de guardar tarjeta
+        if (btnGuardarTarjeta) {
+            btnGuardarTarjeta.onclick = function() {
+                guardarTarjeta();
+            };
+        }
 
-            // Configurar el botón de cancelar
-            if (btnCancelarTarjeta) {
-                btnCancelarTarjeta.onclick = function() {
-                    modalNuevaTarjeta.style.display = 'none';
-                    limpiarFormularioTarjeta();
-                };
-            }
+        // Cargar tarjetas previas si existen para este partido
+        if (contenedorTarjetas) {
+            // Limpiar contenedor primero
+            contenedorTarjetas.innerHTML = '';
 
-            // Configurar el botón de guardar tarjeta
-            if (btnGuardarTarjeta) {
-                btnGuardarTarjeta.onclick = function() {
-                    guardarTarjeta();
-                };
-            }
+            // Recrear cada tarjeta visual si hay tarjetas guardadas para este partido
+            if (tarjetasPorPartido[idPartido]) {
+                tarjetasPorPartido[idPartido].forEach(tarjeta => {
+                    const tarjetaDiv = document.createElement('div');
+                    tarjetaDiv.className = `tarjeta-partido ${tarjeta.tipo.toLowerCase()}`;
+                    tarjetaDiv.id = `tarjeta-${tarjeta.idVisual}`;
 
-            // Cargar tarjetas previas si existen para este partido
-            if (contenedorTarjetas) {
-                // Limpiar contenedor primero
-                contenedorTarjetas.innerHTML = '';
+                    // En modo solo lectura, no mostrar botón de eliminar
+                    let btnEliminarHTML = soloLectura ? '' : `<button type="button" class="eliminar-tarjeta" data-id="${tarjeta.idVisual}">×</button>`;
 
-                // Recrear cada tarjeta visual si hay tarjetas guardadas para este partido
-                if (tarjetasPorPartido[idPartido]) {
-                    tarjetasPorPartido[idPartido].forEach(tarjeta => {
-                        const tarjetaDiv = document.createElement('div');
-                        tarjetaDiv.className = `tarjeta-partido ${tarjeta.tipo.toLowerCase()}`;
-                        tarjetaDiv.id = `tarjeta-${tarjeta.idVisual}`;
+                    tarjetaDiv.innerHTML = `
+                        <div class="indicador-tarjeta ${tarjeta.tipo.toLowerCase()}"></div>
+                        <div class="info-tarjeta">
+                            <div class="nombre-jugador">${tarjeta.nombreJugador} #${tarjeta.dorsalJugador}</div>
+                            <div class="equipo-jugador">${tarjeta.equipoJugador}</div>
+                            <div class="detalle-tarjeta">Min: ${tarjeta.minuto}' - ${tarjeta.motivo}</div>
+                        </div>
+                        ${btnEliminarHTML}
+                    `;
 
-                        tarjetaDiv.innerHTML = `
-                            <div class="indicador-tarjeta ${tarjeta.tipo.toLowerCase()}"></div>
-                            <div class="info-tarjeta">
-                                <div class="nombre-jugador">${tarjeta.nombreJugador} #${tarjeta.dorsalJugador}</div>
-                                <div class="equipo-jugador">${tarjeta.equipoJugador}</div>
-                                <div class="detalle-tarjeta">Min: ${tarjeta.minuto}' - ${tarjeta.motivo}</div>
-                            </div>
-                            <button type="button" class="eliminar-tarjeta" data-id="${tarjeta.idVisual}">×</button>
-                        `;
+                    contenedorTarjetas.appendChild(tarjetaDiv);
 
-                        contenedorTarjetas.appendChild(tarjetaDiv);
-
-                        // Agregar evento al botón de eliminar
+                    // Agregar evento al botón de eliminar (solo si no estamos en modo solo lectura)
+                    if (!soloLectura) {
                         const btnEliminar = tarjetaDiv.querySelector('.eliminar-tarjeta');
-                        btnEliminar.addEventListener('click', function() {
-                            const idTarjeta = this.getAttribute('data-id');
-                            if (confirm('¿Estás seguro de que deseas eliminar esta tarjeta?')) {
-                                document.getElementById(`tarjeta-${idTarjeta}`).remove();
+                        if (btnEliminar) {
+                            btnEliminar.addEventListener('click', function() {
+                                const idTarjeta = this.getAttribute('data-id');
+                                if (confirm('¿Estás seguro de que deseas eliminar esta tarjeta?')) {
+                                    document.getElementById(`tarjeta-${idTarjeta}`).remove();
 
-                                // También eliminar de nuestro objeto
-                                tarjetasPorPartido[idPartido] = tarjetasPorPartido[idPartido].filter(t => t.idVisual != idTarjeta);
-                            }
-                        });
-                    });
-                }
+                                    // También eliminar de nuestro objeto
+                                    tarjetasPorPartido[idPartido] = tarjetasPorPartido[idPartido].filter(t => t.idVisual != idTarjeta);
+                                }
+                            });
+                        }
+                    }
+                });
             }
+        }
+    }
+
+    // Asignar evento de click a los botones de editar
+    botonesEditar.forEach(btn => {
+        btn.addEventListener('click', function(event) {
+            abrirModalDetalle(event, false); // Modo edición
+        });
+    });
+
+    // Asignar evento de click a los botones de ver detalles
+    botonesVer.forEach(btn => {
+        btn.addEventListener('click', function(event) {
+            abrirModalDetalle(event, true); // Modo solo lectura
         });
     });
 
@@ -226,6 +286,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Añadir listener al formulario de detalles para incluir las tarjetas al enviar
     if (formDetalle) {
         formDetalle.addEventListener('submit', function(event) {
+            // Si estamos en modo solo lectura, evitar el envío del formulario
+            if (modoSoloLectura) {
+                event.preventDefault();
+                return;
+            }
+
             // Obtener ID del partido
             const idPartido = document.getElementById('idPartido').value;
 
@@ -285,7 +351,9 @@ document.addEventListener('DOMContentLoaded', function() {
         jugadorSelect.innerHTML = '<option value="">Seleccione un jugador</option>';
 
         // Obtener datos del partido
-        const btnDetalleActivo = document.querySelector('a.accion_enlace[data-id="' + document.getElementById('idPartido').value + '"]');
+        const idPartido = document.getElementById('idPartido').value;
+        // Buscar el botón que tenga el mismo data-id
+        const btnDetalleActivo = document.querySelector(`a[data-id="${idPartido}"]`);
         if (!btnDetalleActivo) return;
 
         const nombreLocal = btnDetalleActivo.getAttribute('data-local');

@@ -1,7 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.gestorfutbol.entity.Partido" %>
-<%@ page import="com.gestorfutbol.entity.Torneo" %>
-<%@ page import="com.gestorfutbol.entity.Equipo" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.gestorfutbol.dto.EquipoDTO" %>
 <%@ page import="com.gestorfutbol.dto.TorneoDTO" %>
@@ -70,25 +67,61 @@
                         String fechaFormateada = p.getFechaPartido();
             %>
             <div class="partido">
-                <div class="info_partido">
-                    <img class="icono_escudo" src="/imagenes/barcelona.png"/>
-                    <span><%=nombreLocal%></span>
-                    <strong><%= p.getGolesLocal() %> - <%= p.getGolesVisita() %></strong>
-                    <span><%= nombreVisitante%></span>
-                    <img class="icono_escudo" src="/imagenes/atleti.png"/>
+                <div class="partido_cabecera">
+                    <span class="torneo_badge"><%=nombreTorneo%></span>
+                    <span class="estado_partido <%= p.getEstado().toLowerCase().replace(" ", "_") %>"><%= p.getEstado() %></span>
                 </div>
-                <p class="detalle_partido"><%=nombreTorneo%> · Jornada <%= p.getJornadaActual() %> · <%= p.getEstado() %></p>
-                <p class="fecha_partido"><%= fechaFormateada %>
-                    <a class="accion_enlace" href="#"
-                       data-id="<%=p.getIdPartido()%>"
-                       data-local="<%= nombreLocal%>"
-                       data-visitante="<%=nombreVisitante%>"
-                       data-goles-local="<%= p.getGolesLocal() %>"
-                       data-goles-visitante="<%= p.getGolesVisita() %>"
-                       data-torneo="<%=nombreTorneo%>"
-                       data-jornada="<%= p.getJornadaActual() %>"
-                       data-estado="<%= p.getEstado() %>">Ver detalles</a>
 
+                <div class="info_partido">
+                    <div class="equipo equipo_local">
+                        <img class="icono_escudo" src="/imagenes/barcelona.png"/>
+                        <span class="nombre_equipo"><%=nombreLocal%></span>
+                    </div>
+
+                    <div class="marcador">
+                        <span class="gol"><%= p.getGolesLocal() %></span>
+                        <span class="separador">-</span>
+                        <span class="gol"><%= p.getGolesVisita() %></span>
+                    </div>
+
+                    <div class="equipo equipo_visitante">
+                        <span class="nombre_equipo"><%= nombreVisitante%></span>
+                        <img class="icono_escudo" src="/imagenes/atleti.png"/>
+                    </div>
+                </div>
+
+                <div class="partido_footer">
+                    <div class="partido_detalles">
+                        <span class="jornada">Jornada <%= p.getJornadaActual() %></span>
+                        <span class="fecha_partido"><%= fechaFormateada %></span>
+                    </div>
+                    <div class="partido_acciones">
+                        <a class="boton_ver" href="#"
+                           data-id="<%=p.getIdPartido()%>"
+                           data-local="<%= nombreLocal%>"
+                           data-visitante="<%=nombreVisitante%>"
+                           data-goles-local="<%= p.getGolesLocal() %>"
+                           data-goles-visitante="<%= p.getGolesVisita() %>"
+                           data-torneo="<%=nombreTorneo%>"
+                           data-jornada="<%= p.getJornadaActual() %>"
+                           data-estado="<%= p.getEstado() %>">
+                            Ver detalles
+                        </a>
+                        <a class="accion_enlace <%= p.getEstado().equals("Finalizado") ? "disabled" : "" %>"
+                           href="#"
+                                <%= p.getEstado().equals("Finalizado") ? "disabled" : "" %>
+                           data-id="<%=p.getIdPartido()%>"
+                           data-local="<%= nombreLocal%>"
+                           data-visitante="<%=nombreVisitante%>"
+                           data-goles-local="<%= p.getGolesLocal() %>"
+                           data-goles-visitante="<%= p.getGolesVisita() %>"
+                           data-torneo="<%=nombreTorneo%>"
+                           data-jornada="<%= p.getJornadaActual() %>"
+                           data-estado="<%= p.getEstado() %>">
+                            Editar
+                        </a>
+                    </div>
+                </div>
             </div>
             <%
                 }
