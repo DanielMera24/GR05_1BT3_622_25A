@@ -114,7 +114,7 @@ public class TarjetaServiceTest {
 
 
 
-    // Prueba 5
+
     @Test
     public void dado_motivoDeTarjeta_cuandoEsNuloOVacio_entonces_retornarVerdadero(){
         String motivo1 = "";
@@ -122,7 +122,7 @@ public class TarjetaServiceTest {
         assertTrue(tarjetaService.esNuloOVacio(motivo1));
     }
 
-    //prueba 8
+
     @Test
     void dado_motivoDeTarjeta_cuandoSuperaLimite_entonces_retornarVerdadero(){
         //este motivo tiene 205 caracteres -> el máximo de caracteres es de 200
@@ -132,7 +132,7 @@ public class TarjetaServiceTest {
     }
 
 
-    //prueba 7
+
     @Test
     void dado_cantidadNegativa_cuandoSeRegistraTarjeta_entonces_retornarVerdadero(){
         int cantidadTarjetas = -1;
@@ -140,7 +140,7 @@ public class TarjetaServiceTest {
         assertTrue(tarjetaService.cantidadEsNegativa(cantidadTarjetas));
     }
 
-    //prueba 6
+
     @Test
     void dado_jugadorInexistente_cuandoRecibeTarjeta_entonces_retornarFalso(){
         List<Jugador> jugadores = new ArrayList<>();

@@ -28,6 +28,9 @@ public class Tarjeta {
     }
 
     public Tarjeta(String tipoTarjeta, String motivo, Partido partido, Jugador jugador) {
+        if(tipoTarjeta == null || motivo == null || partido == null || jugador == null) {
+            throw new IllegalArgumentException("no se pueden poner valores nulos");
+        }
         this.tipoTarjeta = tipoTarjeta;
         this.motivo = motivo;
         this.partido = partido;
