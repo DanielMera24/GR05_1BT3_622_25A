@@ -233,4 +233,9 @@ public class TarjetaService {
                 tarjeta.getPartido().getEquipoVisita().getSiglas()
         );
     }
+
+    public List<Tarjeta> obtenerPorPartido(int idPartido) {
+        List<Tarjeta> tarjetas = tarjetaDAO.obtenerPorPartido(idPartido);
+        return tarjetas != null ? tarjetas : new ArrayList<>();
+    }
 }

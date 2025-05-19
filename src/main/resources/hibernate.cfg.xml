@@ -17,7 +17,7 @@
 
         <!-- Configuración de SQLite -->
         <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
-        <property name="hibernate.connection.url">jdbc:sqlite:${DB_PATH}</property>
+        <property name="hibernate.connection.url">jdbc:sqlite:GestorTorneos.db</property>
 
         <property name="hibernate.dialect">org.hibernate.community.dialect.SQLiteDialect</property>
 

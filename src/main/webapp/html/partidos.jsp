@@ -59,24 +59,6 @@
             <button class="boton_nuevo" id="abrirModal">+ Nuevo Partido</button>
         </div>
 
-        <div class="filtros">
-            <select>
-                <option>Todos los torneos</option>
-                <option>Liga Nacional</option>
-                <option>Copa del Rey</option>
-            </select>
-            <select>
-                <option>Todos los equipos</option>
-                <option>FC Barcelona</option>
-                <option>Atlético de Madrid</option>
-            </select>
-            <select>
-                <option>Estado: Todos</option>
-                <option>Finalizado</option>
-                <option>En curso</option>
-            </select>
-        </div>
-
         <div class="partidos">
             <%
                 List<PartidoDTO> partidos = (List<PartidoDTO>) request.getAttribute("partidos");
