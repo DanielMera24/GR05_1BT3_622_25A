@@ -4,6 +4,7 @@ import com.gestorfutbol.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -129,6 +130,78 @@ public class DetallePartidoServiceTest {
 
         boolean resultado = detallePartidoService.poseeJugadoresDuplicados(detallesPartido);
         assertTrue(resultado, "Debería retornar verdadero cuando se repitan jugadores en el registro");
+    }
+
+
+
+
+
+    @Test
+    public void dado_registraMinutoDelGol_cuandoMinutoEsInvalido_entonces_retornarFalso(){
+        Gol gol = new Gol();
+        gol.setMinuto(110);
+
+        assertFalse(detallePartidoService.validarMinutoGol(gol.getMinuto()));
+    }
+
+
+    @Test
+    public void dado_jugadorMarcaGol_cuandoMarcaEnElMismoMinuto_entonces_retornarVerdadero(){
+        DetallePartido detallePartido = new DetallePartido();
+        detallePartido.setJugador(new Jugador("1234567890", "Daniel", 20, "Defensa", 15));
+        detallePartido.setGoles(new ArrayList<>());
+        detallePartido.getGoles().add(new Gol(10, detallePartido));
+        detallePartido.getGoles().add(new Gol(11, detallePartido));
+        detallePartido.getGoles().add(new Gol(12, detallePartido));
+        detallePartido.getGoles().add(new Gol(11, detallePartido));
+
+
+        assertTrue(detallePartidoService.marcoJugadorMismoMinuto(detallePartido));
+
+    }
+
+
+    @Test
+    public void dado_seRegistranJugadores_cuandoJugadorSeRegistraDosVeces_entonces_retornarVerdadero(){
+        List<DetallePartido> detallePartidos = new ArrayList<>();
+
+        DetallePartido detallePartido1 = new DetallePartido();
+        detallePartido1.setJugador(new Jugador("1234567890", "Daniel", 20, "Defensa", 15));
+        DetallePartido detallePartido2 = new DetallePartido();
+        detallePartido2.setJugador(new Jugador("3333333339", "Jose", 24, "Delantero", 19));
+        DetallePartido detallePartido3 = new DetallePartido();
+        detallePartido3.setJugador(new Jugador("1234567890", "Daniel", 20, "Defensa", 15));
+
+        detallePartidos.add(detallePartido1);
+        detallePartidos.add(detallePartido2);
+        detallePartidos.add(detallePartido3);
+
+        assertTrue(detallePartidoService.jugadorYaHaSidoRegistrado(detallePartidos));
+    }
+
+
+    @Test
+    public void dado_seRegistraDetallePartido_cuandoElPartidoYaFinalizo_entonces_retornarFalso(){
+        List<DetallePartido> detallePartidos = new ArrayList<>();
+
+        DetallePartido detallePartido1 = new DetallePartido();
+        Partido partido1 = new Partido();
+        partido1.setEstado("En curso");
+        detallePartido1.setPartido(partido1);
+        DetallePartido detallePartido2 = new DetallePartido();
+        Partido partido2 = new Partido();
+        partido2.setEstado("En curso");
+        detallePartido2.setPartido(partido2);
+        DetallePartido detallePartido3 = new DetallePartido();
+        Partido partido3 = new Partido();
+        partido3.setEstado("Finalizado");
+        detallePartido3.setPartido(partido3);
+
+        detallePartidos.add(detallePartido1);
+        detallePartidos.add(detallePartido2);
+        detallePartidos.add(detallePartido3);
+
+        assertFalse(detallePartidoService.partidoNoFinalizado(detallePartidos));
     }
 
 }

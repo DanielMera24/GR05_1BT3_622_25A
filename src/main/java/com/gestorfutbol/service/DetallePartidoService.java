@@ -3,6 +3,7 @@ package com.gestorfutbol.service;
 import com.gestorfutbol.entity.DetallePartido;
 import com.gestorfutbol.entity.Equipo;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -85,6 +86,51 @@ public class DetallePartidoService {
         return conteoPorEquipoYCedula.values().stream()
                 .anyMatch(cedulaMap -> cedulaMap.values().stream()
                         .anyMatch(count -> count > 1));
+    }
+
+
+
+
+    public boolean validarMinutoGol(int minuto) {
+        if (minuto <= 0){
+            return false;
+        }
+        if (minuto > 90){
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean marcoJugadorMismoMinuto(DetallePartido detallePartido) {
+        Set<Integer> minutosRegistrados = new HashSet<>();
+
+        for (int i = 0; i < detallePartido.getGoles().size(); i++) {
+            if (!minutosRegistrados.add(detallePartido.getGoles().get(i).getMinuto())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean jugadorYaHaSidoRegistrado(List<DetallePartido> detallePartidos) {
+        Set<String> cedulaJugadoresRegistrado = new HashSet<>();
+
+        for (int i = 0; i < detallePartidos.size(); i++) {
+            if (!cedulaJugadoresRegistrado.add(detallePartidos.get(i).getJugador().getCedula())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean partidoNoFinalizado(List<DetallePartido> detallePartidos) {
+        for (int i = 0; i < detallePartidos.size(); i++) {
+            if ("Finalizado".equals(detallePartidos.get(i).getPartido().getEstado())) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
