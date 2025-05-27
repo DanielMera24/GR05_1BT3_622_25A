@@ -1,12 +1,7 @@
 package com.gestorfutbol.servlet;
 
-import com.gestorfutbol.entity.Jugador;
-import com.gestorfutbol.entity.Partido;
-import com.gestorfutbol.entity.TablaPosiciones;
-import com.gestorfutbol.entity.Tarjeta;
-import com.gestorfutbol.service.JugadorService;
-import com.gestorfutbol.service.PartidoService;
-import com.gestorfutbol.service.TarjetaService;
+import com.gestorfutbol.entity.*;
+import com.gestorfutbol.service.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,12 +20,16 @@ public class ActualizarPartidoServlet extends HttpServlet {
     PartidoService partidoService;
     TarjetaService tarjetaService;
     JugadorService jugadorService;
+    DetallePartidoService detallePartidoService;
+    EquipoService equipoService;
 
     @Override
     public void init() throws ServletException {
         partidoService = new PartidoService();
         tarjetaService = new TarjetaService();
         jugadorService = new JugadorService();
+        detallePartidoService = new DetallePartidoService();
+        equipoService = new EquipoService();
     }
 
     @Override
@@ -40,9 +39,80 @@ public class ActualizarPartidoServlet extends HttpServlet {
         int golesVisitante = Integer.parseInt(request.getParameter("golesVisitante"));
         int idPartido = Integer.parseInt(request.getParameter("idPartido"));
 
-        // Actualizar partido
+        // Obtener partido
         Partido partido = partidoService.obtenerPartidoPorId(idPartido);
-        // Procesar tarjetas si existen
+
+        // Procesar jugadores participantes con sus goles (DetallePartido + Gol)
+        String cantidadJugadoresStr = request.getParameter("cantidadJugadores");
+        if (cantidadJugadoresStr != null && !cantidadJugadoresStr.isEmpty()) {
+            int cantidadJugadores = Integer.parseInt(cantidadJugadoresStr);
+
+            List<DetallePartido> detallesPartido = new ArrayList<>();
+
+            for (int i = 0; i < cantidadJugadores; i++) {
+                String jugadorIdStr = request.getParameter("jugador_" + i + "_id");
+                String equipoIdStr = request.getParameter("jugador_" + i + "_equipoId");
+                String dorsalStr = request.getParameter("jugador_" + i + "_dorsal");
+                String esCapitanStr = request.getParameter("jugador_" + i + "_capitan");
+
+                if (jugadorIdStr != null && equipoIdStr != null && dorsalStr != null) {
+                    DetallePartido detalle = new DetallePartido();
+
+                    // Obtener jugador y equipo
+                    Jugador jugador = jugadorService.obtenerJugadorPorId(Integer.parseInt(jugadorIdStr));
+                    Equipo equipo = equipoService.obtenerEquipoPorId(Integer.parseInt(equipoIdStr));
+
+                    detalle.setJugador(jugador);
+                    detalle.setPartido(partido);
+                    detalle.setEquipo(equipo);
+                    detalle.setDorsal(Integer.parseInt(dorsalStr));
+                    detalle.setEsCapitan("true".equals(esCapitanStr));
+
+                    // Procesar goles de este jugador
+                    List<Gol> golesJugador = new ArrayList<>();
+                    String cantidadGolesJugadorStr = request.getParameter("jugador_" + i + "_cantidadGoles");
+                    if (cantidadGolesJugadorStr != null && !cantidadGolesJugadorStr.isEmpty()) {
+                        int cantidadGolesJugador = Integer.parseInt(cantidadGolesJugadorStr);
+
+                        for (int j = 0; j < cantidadGolesJugador; j++) {
+                            String minutoGolStr = request.getParameter("jugador_" + i + "_gol_" + j + "_minuto");
+
+                            if (minutoGolStr != null && !minutoGolStr.isEmpty()) {
+                                Gol gol = new Gol();
+                                gol.setMinuto(Integer.parseInt(minutoGolStr));
+                                gol.setDetallePartido(detalle);
+                                golesJugador.add(gol);
+                            }
+                        }
+                    }
+
+                    System.out.println("➡ Detalle creado para jugador: " + jugador.getNombre() + " (ID: " + jugador.getIdJugador() + ")");
+                    System.out.println("   Equipo: " + equipo.getNombre());
+                    System.out.println("   Dorsal: " + detalle.getDorsal());
+                    System.out.println("   Capitán: " + detalle.isCapitan());
+
+                    if (golesJugador.isEmpty()) {
+                        System.out.println("   ⚠ No se registraron goles para este jugador.");
+                    } else {
+                        for (Gol g : golesJugador) {
+                            System.out.println("   🟢 Gol minuto: " + g.getMinuto());
+                        }
+                    }
+
+                    detalle.setGoles(golesJugador);
+                    detallesPartido.add(detalle);
+                }
+            }
+
+            System.out.println("TESTEANDO");
+            // Guardar detalles del partido (incluye goles internamente)
+            if (!detallesPartido.isEmpty()) {
+                System.out.println("TESTEANDO2");
+                detallePartidoService.guardarDetalles(detallesPartido);
+            }
+        }
+
+        // Procesar tarjetas (código existente)
         String cantidadTarjetasStr = request.getParameter("cantidadTarjetas");
         if (cantidadTarjetasStr != null && !cantidadTarjetasStr.isEmpty()) {
             int cantidadTarjetas = Integer.parseInt(cantidadTarjetasStr);
@@ -77,19 +147,9 @@ public class ActualizarPartidoServlet extends HttpServlet {
             }
         }
 
-
+        // Actualizar partido
         partidoService.actualizarPartido(partido, estado, golesLocal, golesVisitante);
 
-
         response.sendRedirect(request.getContextPath() + "/partidos");
-    }
-
-
-    private TablaPosiciones buscarTablaPosiciones(Session session, int idTorneo, int idEquipo) {
-        String hql = "FROM TablaPosiciones tp WHERE tp.torneo.idTorneo = :idTorneo AND tp.equipo.idEquipo = :idEquipo";
-        Query<TablaPosiciones> query = session.createQuery(hql, TablaPosiciones.class);
-        query.setParameter("idTorneo", idTorneo);
-        query.setParameter("idEquipo", idEquipo);
-        return query.uniqueResult();
     }
 }
