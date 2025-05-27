@@ -97,17 +97,10 @@
                     </div>
                     <!-- En la sección de botones de acción, cambiar el botón Editar -->
                     <div class="partido_acciones">
-                        <a class="boton_ver" href="#"
-                           data-id="<%=p.getIdPartido()%>"
-                           data-local="<%= nombreLocal%>"
-                           data-visitante="<%=nombreVisitante%>"
-                           data-goles-local="<%= p.getGolesLocal() %>"
-                           data-goles-visitante="<%= p.getGolesVisita() %>"
-                           data-torneo="<%=nombreTorneo%>"
-                           data-jornada="<%= p.getJornadaActual() %>"
-                           data-estado="<%= p.getEstado() %>">
+                        <a class="boton_ver" href="<%= request.getContextPath() + "/editarPartido?id=" + p.getIdPartido() + "&view=true" %>">
                             Ver detalles
                         </a>
+
 
                         <!-- CAMBIO: En lugar de abrir modal, redirigir a nueva página -->
                         <a class="accion_enlace <%= p.getEstado().equals("Finalizado") ? "disabled" : "" %>"

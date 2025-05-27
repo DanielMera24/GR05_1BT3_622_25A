@@ -3,7 +3,9 @@
 <%@ page import="com.gestorfutbol.dto.EquipoDTO" %>
 <%@ page import="com.gestorfutbol.dto.JugadorDTO" %>
 <%@ page import="com.gestorfutbol.dto.TarjetaDTO" %>
+<%@ page import="com.gestorfutbol.dto.GolDTO" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.gestorfutbol.dto.DetallePartidoDTO" %>
 
 <%
   PartidoDTO partido = (PartidoDTO) request.getAttribute("partido");
@@ -12,6 +14,9 @@
   List<JugadorDTO> jugadoresLocal = (List<JugadorDTO>) request.getAttribute("jugadoresLocal");
   List<JugadorDTO> jugadoresVisitante = (List<JugadorDTO>) request.getAttribute("jugadoresVisitante");
   List<TarjetaDTO> tarjetas = (List<TarjetaDTO>) request.getAttribute("tarjetas");
+  List<GolDTO> goles = (List<GolDTO>) request.getAttribute("goles");
+  List<DetallePartidoDTO> detallesEquipoLocal = (List<DetallePartidoDTO>) request.getAttribute("detallesEquipoLocal");
+  List<DetallePartidoDTO> detallesEquipoVisitante = (List<DetallePartidoDTO>) request.getAttribute("detallesEquipoVisitante");
 %>
 
 <!DOCTYPE html>
@@ -160,13 +165,26 @@
                 <tr>
                   <th>Dorsal</th>
                   <th>Jugador</th>
-                  <th>Goles</th>
                   <th>Capitán</th>
                   <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody id="jugadoresLocal">
-                <!-- Los jugadores se cargarán dinámicamente aquí -->
+                <% if (detallesEquipoLocal != null && !detallesEquipoLocal.isEmpty()) {
+                  for (DetallePartidoDTO detalle : detallesEquipoLocal) { %>
+                <tr data-jugador-id="<%= detalle.getIdJugador() %>">
+                  <td><%= detalle.getDorsal() %></td>
+                  <td><%= detalle.getNombreJugador() %></td>
+                  <td>
+                    <input type="radio" name="capitanLocal" value="<%= detalle.getIdJugador() %>"
+                           <% if(detalle.isEsCapitan()) { %>checked<% } %>
+                           onchange="actualizarCapitan('<%= detalle.getIdJugador() %>', 'local')" />
+                  </td>
+                  <td>
+                    <button type="button" class="btn_eliminar" onclick="eliminarJugadorDeTabla(this, '<%= detalle.getIdJugador() %>')">🗑️</button>
+                  </td>
+                </tr>
+                <% } } %>
                 </tbody>
               </table>
             </div>
@@ -188,18 +206,55 @@
                 <tr>
                   <th>Dorsal</th>
                   <th>Jugador</th>
-                  <th>Goles</th>
                   <th>Capitán</th>
                   <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody id="jugadoresVisitante">
-                <!-- Los jugadores se cargarán dinámicamente aquí -->
+                <% if (detallesEquipoVisitante != null && !detallesEquipoVisitante.isEmpty()) {
+                  for (DetallePartidoDTO detalle : detallesEquipoVisitante) { %>
+                <tr data-jugador-id="<%= detalle.getIdJugador() %>">
+                  <td><%= detalle.getDorsal() %></td>
+                  <td><%= detalle.getNombreJugador() %></td>
+                  <td>
+                    <input type="radio" name="capitanVisitante" value="<%= detalle.getIdJugador() %>"
+                           <% if(detalle.isEsCapitan()) { %>checked<% } %>
+                           onchange="actualizarCapitan('<%= detalle.getIdJugador() %>', 'visitante')" />
+                  </td>
+                  <td>
+                    <button type="button" class="btn_eliminar" onclick="eliminarJugadorDeTabla(this, '<%= detalle.getIdJugador() %>')">🗑️</button>
+                  </td>
+                </tr>
+                <% } } %>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Sección de goles -->
+      <div class="seccion_formulario">
+        <h2>Goles del Partido</h2>
+        <div class="contenedor_goles_partido" id="contenedorGoles">
+          <!-- Mostrar goles existentes -->
+          <% if (goles != null && !goles.isEmpty()) {
+            for (GolDTO gol : goles) {
+          %>
+          <div class="gol_partido">
+            <div class="indicador_gol">⚽</div>
+            <div class="info_gol">
+              <div class="nombre_jugador"><%= gol.getNombreJugador() %></div>
+              <div class="equipo_jugador"><%= gol.getEquipoJugador() %></div>
+              <div class="detalle_gol">Minuto <%= gol.getMinuto() %>'</div>
+            </div>
+            <button type="button" class="eliminar_gol">×</button>
+          </div>
+          <% } } %>
+        </div>
+        <button type="button" class="btn_agregar_gol" id="agregarGol">
+          + Nuevo Gol
+        </button>
       </div>
 
       <!-- Sección de tarjetas -->
@@ -248,13 +303,33 @@
           <option value="">Seleccione un jugador</option>
         </select>
       </div>
-      <div class="campo_modal">
-        <label for="golesJugador">Goles</label>
-        <input type="number" id="golesJugador" min="0" max="10" value="0" />
-      </div>
       <div class="acciones_modal">
         <button type="button" class="btn_cancelar_modal">Cancelar</button>
         <button type="submit" class="btn_agregar_modal">Agregar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal para agregar gol -->
+<div class="modal" id="modalAgregarGol">
+  <div class="modal_contenido">
+    <span class="cerrar_modal">&times;</span>
+    <h2>Nuevo Gol</h2>
+    <form id="formAgregarGol">
+      <div class="campo_modal">
+        <label for="jugadorGol">Jugador</label>
+        <select id="jugadorGol" required>
+          <option value="">Seleccione un jugador</option>
+        </select>
+      </div>
+      <div class="campo_modal">
+        <label for="minutoGol">Minuto</label>
+        <input type="number" id="minutoGol" min="1" max="90" required />
+      </div>
+      <div class="acciones_modal">
+        <button type="button" class="btn_cancelar_modal">Cancelar</button>
+        <button type="submit" class="btn_agregar_modal">Añadir Gol</button>
       </div>
     </form>
   </div>
@@ -337,6 +412,69 @@
       dorsal: <%= jugador.getDorsal() %>,
       posicion: "<%= jugador.getPosicion() %>"
     }<%= (i < jugadoresVisitante.size() - 1) ? "," : "" %>
+    <% } } %>
+  ];
+  // Inicializar jugadores participantes con los detalles existentes
+  window.jugadoresParticipantes = [
+    <% if (detallesEquipoLocal != null) {
+        for (int i = 0; i < detallesEquipoLocal.size(); i++) {
+            DetallePartidoDTO detalle = detallesEquipoLocal.get(i);
+    %>
+    {
+      id: <%= detalle.getIdJugador() %>,
+      nombre: "<%= detalle.getNombreJugador() %>",
+      dorsal: <%= detalle.getDorsal() %>,
+      equipoId: <%= detalle.getIdEquipo() %>,
+      equipo: "local",
+      esCapitan: <%= detalle.isEsCapitan() %>
+    }<%= (i < detallesEquipoLocal.size() - 1 || detallesEquipoVisitante != null && !detallesEquipoVisitante.isEmpty()) ? "," : "" %>
+    <% } } %>
+    <% if (detallesEquipoVisitante != null) {
+        for (int i = 0; i < detallesEquipoVisitante.size(); i++) {
+            DetallePartidoDTO detalle = detallesEquipoVisitante.get(i);
+    %>
+    {
+      id: <%= detalle.getIdJugador() %>,
+      nombre: "<%= detalle.getNombreJugador() %>",
+      dorsal: <%= detalle.getDorsal() %>,
+      equipoId: <%= detalle.getIdEquipo() %>,
+      equipo: "visitante",
+      esCapitan: <%= detalle.isEsCapitan() %>
+    }<%= (i < detallesEquipoVisitante.size() - 1) ? "," : "" %>
+    <% } } %>
+  ];
+
+  // Inicializar goles con los existentes
+  window.golesPartido = [
+    <% if (goles != null) {
+        for (int i = 0; i < goles.size(); i++) {
+            GolDTO gol = goles.get(i);
+    %>
+    {
+      jugadorId: <%= gol.getIdJugador() %>,
+      jugador: "<%= gol.getNombreJugador() %>",
+      dorsal: <%= gol.getDorsalJugador() %>,
+      equipo: "<%= gol.getEquipoJugador() %>",
+      minuto: <%= gol.getMinuto() %>
+    }<%= (i < goles.size() - 1) ? "," : "" %>
+    <% } } %>
+  ];
+
+  // Inicializar tarjetas con las existentes
+  window.tarjetasPartido = [
+    <% if (tarjetas != null) {
+        for (int i = 0; i < tarjetas.size(); i++) {
+            TarjetaDTO tarjeta = tarjetas.get(i);
+    %>
+    {
+      tipo: "<%= tarjeta.getTipoTarjeta() %>",
+      jugadorId: <%= tarjeta.getIdJugador() %>,
+      jugador: "<%= tarjeta.getNombreJugador() %>",
+      dorsal: <%= tarjeta.getDorsalJugador() %>,
+      equipo: "<%= tarjeta.getEquipoJugador() %>",
+      minuto: <%= tarjeta.getMinuto() %>,
+      motivo: "<%= tarjeta.getMotivo() %>"
+    }<%= (i < tarjetas.size() - 1) ? "," : "" %>
     <% } } %>
   ];
 </script>

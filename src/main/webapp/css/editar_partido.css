@@ -371,6 +371,91 @@ body {
     background: #fee2e2;
 }
 
+/* Sección de goles */
+.contenedor_goles_partido {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.gol_partido {
+    display: flex;
+    align-items: center;
+    background: #f0fdf4;
+    border-radius: 8px;
+    padding: 12px;
+    gap: 12px;
+    border-left: 4px solid #22c55e;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.indicador_gol {
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #dcfce7;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.info_gol {
+    flex: 1;
+}
+
+.info_gol .nombre_jugador {
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: #15803d;
+}
+
+.info_gol .equipo_jugador {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.info_gol .detalle_gol {
+    font-size: 14px;
+    color: #374151;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.eliminar_gol {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.eliminar_gol:hover {
+    background: #fee2e2;
+}
+
+.btn_agregar_gol {
+    background: #22c55e;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn_agregar_gol:hover {
+    background: #16a34a;
+}
+
 /* Sección de tarjetas */
 .contenedor_tarjetas_partido {
     display: flex;
@@ -451,7 +536,7 @@ body {
 }
 
 .btn_agregar_tarjeta {
-    background: #10b981;
+    background: #f59e0b;
     color: white;
     border: none;
     padding: 10px 16px;
@@ -462,7 +547,7 @@ body {
 }
 
 .btn_agregar_tarjeta:hover {
-    background: #059669;
+    background: #d97706;
 }
 
 /* Botones de acción */

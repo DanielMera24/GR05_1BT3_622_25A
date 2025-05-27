@@ -4,10 +4,14 @@ import com.gestorfutbol.dto.EquipoDTO;
 import com.gestorfutbol.dto.PartidoDTO;
 import com.gestorfutbol.dto.JugadorDTO;
 import com.gestorfutbol.dto.TarjetaDTO;
+import com.gestorfutbol.dto.GolDTO;
+import com.gestorfutbol.dto.DetallePartidoDTO;
 import com.gestorfutbol.service.PartidoService;
 import com.gestorfutbol.service.EquipoService;
 import com.gestorfutbol.service.JugadorService;
 import com.gestorfutbol.service.TarjetaService;
+import com.gestorfutbol.service.GolService;
+import com.gestorfutbol.service.DetallePartidoService;
 import com.gestorfutbol.entity.Partido;
 
 import jakarta.servlet.ServletException;
@@ -26,6 +30,8 @@ public class EditarPartidoServlet extends HttpServlet {
     private EquipoService equipoService;
     private JugadorService jugadorService;
     private TarjetaService tarjetaService;
+    private GolService golService;
+    private DetallePartidoService detallePartidoService;
 
     @Override
     public void init() throws ServletException {
@@ -33,6 +39,8 @@ public class EditarPartidoServlet extends HttpServlet {
         equipoService = new EquipoService();
         jugadorService = new JugadorService();
         tarjetaService = new TarjetaService();
+        golService = new GolService();
+        detallePartidoService = new DetallePartidoService();
     }
 
     @Override
@@ -41,7 +49,10 @@ public class EditarPartidoServlet extends HttpServlet {
 
         String partidoIdStr = request.getParameter("id");
 
-
+        if (partidoIdStr == null || partidoIdStr.trim().isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/partidos");
+            return;
+        }
 
         try {
             int partidoId = Integer.parseInt(partidoIdStr);
@@ -49,6 +60,10 @@ public class EditarPartidoServlet extends HttpServlet {
             // Obtener el partido
             Partido partido = partidoService.obtenerPartidoPorId(partidoId);
 
+            if (partido == null) {
+                response.sendRedirect(request.getContextPath() + "/partidos");
+                return;
+            }
 
             // Crear DTO del partido para la vista
             PartidoDTO partidoDTO = new PartidoDTO(
@@ -80,7 +95,7 @@ public class EditarPartidoServlet extends HttpServlet {
             );
             equipoVisitante.setIdEquipo(partido.getEquipoVisita().getIdEquipo());
 
-            // Obtener jugadores de ambos equipos
+            // Obtener jugadores de ambos equipos (todos los jugadores disponibles)
             List<JugadorDTO> jugadoresLocal = jugadorService.listarJugadoresPorEquipo(
                     partido.getEquipoLocal().getIdEquipo()
             );
@@ -88,8 +103,22 @@ public class EditarPartidoServlet extends HttpServlet {
                     partido.getEquipoVisita().getIdEquipo()
             );
 
+            // **NUEVO: Obtener detalles del partido (jugadores que participaron)**
+            List<DetallePartidoDTO> detallesPartido = detallePartidoService.listarDetallesPorPartido(partidoId);
+
+            // Separar detalles por equipo
+            List<DetallePartidoDTO> detallesEquipoLocal = detallePartidoService.listarDetallesPorPartidoYEquipo(
+                    partidoId, partido.getEquipoLocal().getIdEquipo()
+            );
+            List<DetallePartidoDTO> detallesEquipoVisitante = detallePartidoService.listarDetallesPorPartidoYEquipo(
+                    partidoId, partido.getEquipoVisita().getIdEquipo()
+            );
+
             // Obtener tarjetas del partido
             List<TarjetaDTO> tarjetas = tarjetaService.listarTarjetasPorPartido(partidoId);
+
+            // Obtener goles del partido
+            List<GolDTO> goles = golService.listarGolesPorPartido(partidoId);
 
             // Pasar todos los datos a la vista
             request.setAttribute("partido", partidoDTO);
@@ -98,11 +127,18 @@ public class EditarPartidoServlet extends HttpServlet {
             request.setAttribute("jugadoresLocal", jugadoresLocal);
             request.setAttribute("jugadoresVisitante", jugadoresVisitante);
             request.setAttribute("tarjetas", tarjetas);
+            request.setAttribute("goles", goles);
 
-            // Redirigir a la página de edición
+            // **NUEVO: Pasar detalles del partido**
+            request.setAttribute("detallesPartido", detallesPartido);
+            request.setAttribute("detallesEquipoLocal", detallesEquipoLocal);
+            request.setAttribute("detallesEquipoVisitante", detallesEquipoVisitante);
+
             request.getRequestDispatcher("/html/editarPartido.jsp").forward(request, response);
 
+
         } catch (NumberFormatException e) {
+            System.err.println("ID de partido inválido: " + partidoIdStr);
             response.sendRedirect(request.getContextPath() + "/partidos");
         } catch (Exception e) {
             e.printStackTrace();
