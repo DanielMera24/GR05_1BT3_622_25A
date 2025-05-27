@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar Partido - FútbolManager</title>
+    <link rel="stylesheet" href="/css/editar_partido.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Jaldi:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<div class="aplicacion">
+    <!-- Sidebar idéntica a las otras páginas -->
+    <aside class="barra_lateral">
+        <h2>
+            <img src="/imagenes/pelota.png" class="icono" />
+            FútbolManager
+        </h2>
+        <nav>
+            <a href="/listarTorneos">
+                <img src="/imagenes/trofeo.png" class="icono" />
+                <span class="opciones">Torneos</span>
+            </a>
+            <a href="/equipos">
+                <img src="/imagenes/equipo.png" class="icono" />
+                <span class="opciones">Equipos</span>
+            </a>
+            <a href="/mostrarTablaPosiciones">
+                <img src="/imagenes/tabla.png" class="icono" />
+                <span class="opciones">Tabla de Posiciones</span>
+            </a>
+            <a href="/partidos" class="activo">
+                <img src="/imagenes/calendario.png" class="icono" />
+                <span class="opciones">Partidos</span>
+            </a>
+            <a href="/jugadores">
+                <img src="/imagenes/jugador.png" class="icono" />
+                <span class="opciones">Jugadores</span>
+            </a>
+            <a href="/tarjetas">
+                <img src="/imagenes/tarjetas.png" class="icono" />
+                <span class="opciones">Tarjetas</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="contenido_principal">
+        <!-- Header con navegación de vuelta -->
+        <div class="encabezado">
+            <div class="navegacion">
+                <a href="/partidos" class="btn_volver">
+                    <img src="/imagenes/flechaIzq.png" class="icono" />
+                    Volver a Partidos
+                </a>
+                <h1>Editar Encuentro</h1>
+            </div>
+        </div>
+
+        <!-- Información del partido -->
+        <div class="info_partido_header">
+            <div class="equipos_enfrentamiento">
+                <div class="equipo_header">
+                    <img src="/imagenes/LDU.png" class="escudo_grande" />
+                    <span class="nombre_equipo_header">Liga de Quito</span>
+                </div>
+                <div class="vs_header">VS</div>
+                <div class="equipo_header">
+                    <img src="/imagenes/BSC.png" class="escudo_grande" />
+                    <span class="nombre_equipo_header">Barcelona SC</span>
+                </div>
+            </div>
+            <div class="detalles_partido">
+                <span class="torneo_info">Liga Española • Jornada 15</span>
+                <span class="fecha_info">15 de Enero, 2025 - 15:30</span>
+            </div>
+        </div>
+
+        <form id="formEditarPartido" class="formulario_partido">
+            <!-- Sección de datos básicos del partido -->
+            <div class="seccion_formulario">
+                <h2>Detalles del Encuentro</h2>
+                <div class="campos_grupo">
+                    <div class="campo_formulario">
+                        <label for="estadoPartido">Estado del Partido</label>
+                        <select id="estadoPartido" name="estadoPartido">
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="En curso" selected>En curso</option>
+                            <option value="Finalizado">Finalizado</option>
+                        </select>
+                    </div>
+                    <div class="campo_formulario">
+                        <label for="estadioPartido">Estadio</label>
+                        <input type="text" id="estadioPartido" name="estadioPartido" value="Camp Nou" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de marcador -->
+            <div class="seccion_formulario">
+                <h2>Marcador</h2>
+                <div class="marcador_section">
+                    <div class="marcador_equipo">
+                        <img src="/imagenes/LDU.png" class="icono_marcador" />
+                        <span class="nombre_equipo_marcador">Liga de Quito</span>
+                        <select class="select_goles" name="golesLocal">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2" selected>2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="separador_marcador">-</div>
+                    <div class="marcador_equipo">
+                        <select class="select_goles" name="golesVisitante">
+                            <option value="0">0</option>
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <span class="nombre_equipo_marcador">Barcelona SC</span>
+                        <img src="/imagenes/BSC.png" class="icono_marcador" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de jugadores participantes -->
+            <div class="seccion_formulario">
+                <h2>Jugadores Participantes</h2>
+
+                <div class="separador">
+                    <!-- Equipo Local -->
+                    <div class="equipo_participantes">
+                        <div class="header_equipo_participantes">
+                            <img src="/imagenes/LDU.png" class="icono_equipo" />
+                            <h3>Liga de Quito</h3>
+                            <button type="button" class="btn_agregar_jugador" data-equipo="local">
+                                + Agregar Jugador
+                            </button>
+                        </div>
+
+                        <div class="tabla_jugadores">
+                            <table class="tabla_participantes">
+                                <thead>
+                                <tr>
+                                    <th>Dorsal</th>
+                                    <th>Jugador</th>
+                                    <th>Goles</th>
+                                    <th>Capitán</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody id="jugadoresLocal">
+                                <!-- Jugadores ejemplo -->
+                                <tr>
+                                    <td>10</td>
+                                    <td>Lionel Messi</td>
+                                    <td>
+                                        <input type="number" class="input_goles" value="2" min="0" max="10" />
+                                    </td>
+                                    <td>
+                                        <input type="radio" name="capitanLocal" value="10" checked />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn_eliminar">🗑️</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td>Luis Suárez</td>
+                                    <td>
+                                        <input type="number" class="input_goles" value="0" min="0" max="10" />
+                                    </td>
+                                    <td>
+                                        <input type="radio" name="capitanLocal" value="9" />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn_eliminar">🗑️</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Equipo Visitante -->
+                    <div class="equipo_participantes">
+                        <div class="header_equipo_participantes">
+                            <img src="/imagenes/BSC1.png" class="icono_equipo" />
+                            <h3>Barcelona SC</h3>
+                            <button type="button" class="btn_agregar_jugador" data-equipo="visitante">
+                                + Agregar Jugador
+                            </button>
+                        </div>
+
+                        <div class="tabla_jugadores">
+                            <table class="tabla_participantes">
+                                <thead>
+                                <tr>
+                                    <th>Dorsal</th>
+                                    <th>Jugador</th>
+                                    <th>Goles</th>
+                                    <th>Capitán</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody id="jugadoresVisitante">
+                                <!-- Jugadores ejemplo -->
+                                <tr>
+                                    <td>7</td>
+                                    <td>Cristiano Ronaldo</td>
+                                    <td>
+                                        <input type="number" class="input_goles" value="1" min="0" max="10" />
+                                    </td>
+                                    <td>
+                                        <input type="radio" name="capitanVisitante" value="7" checked />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn_eliminar">🗑️</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Sección de tarjetas (ya existente) -->
+            <div class="seccion_formulario">
+                <h2>Tarjetas del Partido</h2>
+                <div class="contenedor_tarjetas_partido" id="contenedorTarjetas">
+                    <!-- Tarjeta ejemplo -->
+                    <div class="tarjeta_partido amarilla">
+                        <div class="indicador_tarjeta amarilla"></div>
+                        <div class="info_tarjeta">
+                            <div class="nombre_jugador">Sergio Ramos</div>
+                            <div class="equipo_jugador">Real Madrid</div>
+                            <div class="detalle_tarjeta">Minuto 45' - Falta táctica</div>
+                        </div>
+                        <button type="button" class="eliminar_tarjeta">×</button>
+                    </div>
+                </div>
+                <button type="button" class="btn_agregar_tarjeta" id="agregarTarjeta">
+                    + Nueva Tarjeta
+                </button>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="acciones_formulario">
+                <a href="/partidos" class="btn_cancelar">Cancelar</a>
+                <button type="submit" class="btn_guardar">Guardar Cambios</button>
+            </div>
+        </form>
+    </main>
+</div>
+
+<!-- Modal para agregar jugador -->
+<div class="modal" id="modalAgregarJugador">
+    <div class="modal_contenido">
+        <span class="cerrar_modal">&times;</span>
+        <h2>Agregar Jugador al Partido</h2>
+        <form id="formAgregarJugador">
+            <div class="campo_modal">
+                <label for="jugadorSelect">Seleccionar Jugador</label>
+                <select id="jugadorSelect" required>
+                    <option value="">Seleccione un jugador</option>
+                    <option value="1" data-dorsal="10">Lionel Messi (#10)</option>
+                    <option value="2" data-dorsal="9">Luis Suárez (#9)</option>
+                    <option value="3" data-dorsal="8">Andrés Iniesta (#8)</option>
+                </select>
+            </div>
+            <div class="campo_modal">
+                <label for="golesJugador">Goles</label>
+                <input type="number" id="golesJugador" min="0" max="10" value="0" />
+            </div>
+            <div class="acciones_modal">
+                <button type="button" class="btn_cancelar_modal">Cancelar</button>
+                <button type="submit" class="btn_agregar_modal">Agregar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para agregar tarjeta -->
+<div class="modal" id="modalAgregarTarjeta">
+    <div class="modal_contenido">
+        <span class="cerrar_modal">&times;</span>
+        <h2>Nueva Tarjeta</h2>
+        <form id="formAgregarTarjeta">
+            <div class="campo_modal">
+                <label for="tipoTarjeta">Tipo de Tarjeta</label>
+                <select id="tipoTarjeta" required>
+                    <option value="">Seleccione un tipo</option>
+                    <option value="AMARILLA">Amarilla</option>
+                    <option value="ROJA">Roja</option>
+                </select>
+            </div>
+            <div class="campo_modal">
+                <label for="jugadorTarjeta">Jugador</label>
+                <select id="jugadorTarjeta" required>
+                    <option value="">Seleccione un jugador</option>
+                    <!-- Se llenará dinámicamente -->
+                </select>
+            </div>
+            <div class="campo_modal">
+                <label for="minutoTarjeta">Minuto</label>
+                <input type="number" id="minutoTarjeta" min="1" max="90" required />
+            </div>
+            <div class="campo_modal">
+                <label for="motivoTarjeta">Motivo</label>
+                <textarea id="motivoTarjeta" rows="3" required></textarea>
+            </div>
+            <div class="acciones_modal">
+                <button type="button" class="btn_cancelar_modal">Cancelar</button>
+                <button type="submit" class="btn_agregar_modal">Añadir Tarjeta</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/editar-partido.js"></script>
+</body>
+</html>
