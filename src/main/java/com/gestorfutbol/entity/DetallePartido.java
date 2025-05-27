@@ -51,7 +51,7 @@ public class DetallePartido {
         this.idDetallePartido = idDetallePartido;
     }
 
-    public boolean isEsCapitan() {
+    public boolean isCapitan() {
         return esCapitan;
     }
 
@@ -98,4 +98,5 @@ public class DetallePartido {
     public void setGoles(List<Gol> goles) {
         this.goles = goles;
     }
+
 }
