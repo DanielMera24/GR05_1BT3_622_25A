@@ -250,6 +250,10 @@ public class TarjetaService {
         );
     }
 
+    public List<Tarjeta> obtenerPorPartido(int idPartido) {
+        List<Tarjeta> tarjetas = tarjetaDAO.obtenerPorPartido(idPartido);
+        return tarjetas != null ? tarjetas : new ArrayList<>();
+    }
 
 
 }
