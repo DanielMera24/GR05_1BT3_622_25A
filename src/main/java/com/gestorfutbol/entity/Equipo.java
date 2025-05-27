@@ -3,6 +3,7 @@ package com.gestorfutbol.entity;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -108,4 +109,28 @@ public class Equipo {
     public void setPosiciones(List<TablaPosiciones> posiciones) {
         this.posiciones = posiciones;
     }
+
+    @Override
+
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Equipo equipo = (Equipo) o;
+
+        return Objects.equals(idEquipo, equipo.idEquipo);
+
+    }
+
+    @Override
+
+    public int hashCode() {
+
+        return Objects.hash(idEquipo);
+
+    }
+
+
 }

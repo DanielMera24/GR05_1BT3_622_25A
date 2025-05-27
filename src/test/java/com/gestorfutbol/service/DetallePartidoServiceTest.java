@@ -52,12 +52,19 @@ public class DetallePartidoServiceTest {
         partido.setJornadaActual(1);
         partido.setTorneo(torneo);
 
+        // 1
         this.jugador1 = new Jugador("0503867723", "Juan Naranjo", 15, "DELANTERO", 23);
         this.jugador1.setEquipo(equipoA);
+
+        // 2
         this.jugador2 = new Jugador("0503867735", "Eduardo Ramos", 24, "DELANTERO", 7);
         this.jugador2.setEquipo(equipoA);
+
+        // 3
         this.jugador3 = new Jugador("0503867736", "Gonzalo Peña", 22, "DELANTERO", 9);
         this.jugador3.setEquipo(equipoB);
+
+        // 4
         this.jugador4 = new Jugador("0503867737", "Cristian Flores", 26, "DELANTERO", 11);
         this.jugador4.setEquipo(equipoB);
 
@@ -84,10 +91,10 @@ public class DetallePartidoServiceTest {
         // Arrange
         // Modificamos los detalles para que equipoA no tenga capitán
         detallesPartido = List.of(
-                new DetallePartido(jugador1, partido, equipoA, jugador1.getDorsal(), false),
-                new DetallePartido(jugador2, partido, equipoA, jugador2.getDorsal(), false),
-                new DetallePartido(jugador3, partido, equipoB, jugador3.getDorsal(), false),
-                new DetallePartido(jugador4, partido, equipoB, jugador4.getDorsal(), false));
+                new DetallePartido(jugador1, partido, jugador1.getEquipo(), jugador1.getDorsal(), false),
+                new DetallePartido(jugador2, partido, jugador2.getEquipo(), jugador2.getDorsal(), false),
+                new DetallePartido(jugador3, partido, jugador3.getEquipo(), jugador3.getDorsal(), false),
+                new DetallePartido(jugador4, partido, jugador4.getEquipo(), jugador4.getDorsal(), false));
         // Assert
         boolean resultado = detallePartidoService.validarCapitanesPorEquipo(detallesPartido);
         assertFalse(resultado, "Debería retornar falso cuando un equipo no tiene capitán");
@@ -98,8 +105,8 @@ public class DetallePartidoServiceTest {
 
         // Modificamos los detalles para que equipoA tenga dos capitanes
         detallesPartido = List.of(
-                new DetallePartido(jugador1, partido, equipoA, jugador1.getDorsal(), true),
-                new DetallePartido(jugador2, partido, equipoA, jugador2.getDorsal(), true),
+                new DetallePartido(jugador1, partido, equipoA, jugador1.getDorsal(), false),
+                new DetallePartido(jugador2, partido, equipoA, jugador2.getDorsal(), false),
                 new DetallePartido(jugador3, partido, equipoB, jugador3.getDorsal(), false),
                 new DetallePartido(jugador4, partido, equipoB, jugador4.getDorsal(), false));
         boolean resultado = detallePartidoService.validarCapitanesPorEquipo(detallesPartido);

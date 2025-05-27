@@ -1,62 +1,56 @@
-
 package com.gestorfutbol.entity;
 
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
 public class DetallePartido {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idDetallePartido; // Corrección: era "idDatallePartido"
+    private int idDetallePartido;
 
-    private boolean esCapitan;
-
-    // Dorsal específico para este partido (puede cambiar entre partidos)
+    @Column(nullable = false)
     private int dorsal;
 
+    @Column(name = "capitan", nullable = false)
+    private boolean esCapitan;
+
     @ManyToOne
-    @JoinColumn(name = "idJugador")
+    @JoinColumn(name = "idJugador", nullable = false)
     private Jugador jugador;
 
     @ManyToOne
-    @JoinColumn(name = "idPartido")
-    private Partido partido;
-
-    // Equipo al que pertenece en este partido específico
-    @ManyToOne
-    @JoinColumn(name = "idEquipo")
+    @JoinColumn(name = "idEquipo", nullable = false)
     private Equipo equipo;
 
-    @OneToMany(mappedBy = "detallePartido", cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "idPartido", nullable = false)
+    private Partido partido;
+
+    @OneToMany(mappedBy = "detallePartido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Gol> goles;
 
-    // Constructores
-    public DetallePartido() {}
-
-    public DetallePartido(Jugador jugador, Partido partido, Equipo equipo, int dorsal, boolean esCapitan) {
-        this.jugador = jugador;
+    public DetallePartido(Jugador jugador1, Partido partido, Equipo equipoA, int dorsal, boolean b) {
+        this.jugador = jugador1;
         this.partido = partido;
-        this.equipo = equipo;
+        this.equipo = equipoA;
         this.dorsal = dorsal;
-        this.esCapitan = esCapitan;
+        this.esCapitan = b;
     }
 
-    // Getters y Setters
+    public DetallePartido() {
+
+    }
+
+    // Getters y setters
     public int getIdDetallePartido() {
         return idDetallePartido;
     }
 
     public void setIdDetallePartido(int idDetallePartido) {
         this.idDetallePartido = idDetallePartido;
-    }
-
-    public boolean isCapitan() {
-        return esCapitan;
-    }
-
-    public void setEsCapitan(boolean esCapitan) {
-        this.esCapitan = esCapitan;
     }
 
     public int getDorsal() {
@@ -67,20 +61,20 @@ public class DetallePartido {
         this.dorsal = dorsal;
     }
 
+    public boolean isCapitan() {
+        return esCapitan;
+    }
+
+    public void setEsCapitan(boolean esCapitan) {
+        this.esCapitan = esCapitan;
+    }
+
     public Jugador getJugador() {
         return jugador;
     }
 
     public void setJugador(Jugador jugador) {
         this.jugador = jugador;
-    }
-
-    public Partido getPartido() {
-        return partido;
-    }
-
-    public void setPartido(Partido partido) {
-        this.partido = partido;
     }
 
     public Equipo getEquipo() {
@@ -91,12 +85,24 @@ public class DetallePartido {
         this.equipo = equipo;
     }
 
+    public Partido getPartido() {
+        return partido;
+    }
+
+    public void setPartido(Partido partido) {
+        this.partido = partido;
+    }
+
     public List<Gol> getGoles() {
         return goles;
     }
 
     public void setGoles(List<Gol> goles) {
         this.goles = goles;
+        if (goles != null) {
+            for (Gol g : goles) {
+                g.setDetallePartido(this);
+            }
+        }
     }
-
 }

@@ -61,4 +61,7 @@ public class Gol {
     public int getDorsal() {
         return detallePartido != null ? detallePartido.getDorsal() : 0;
     }
+
+
+
 }
