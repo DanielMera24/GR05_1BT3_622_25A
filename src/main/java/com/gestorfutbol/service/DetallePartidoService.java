@@ -1,7 +1,9 @@
 package com.gestorfutbol.service;
 
+import com.gestorfutbol.dao.interfaces.DetallePartidoDAO;
 import com.gestorfutbol.entity.DetallePartido;
 import com.gestorfutbol.entity.Equipo;
+import com.gestorfutbol.entity.Gol;
 
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +13,74 @@ import java.util.stream.Collectors;
 
 
 public class DetallePartidoService {
+    private DetallePartidoDAO detallePartidoDAO;
+
+    public DetallePartidoService(DetallePartidoDAO detallePartidoDAO) {
+        this.detallePartidoDAO = detallePartidoDAO;
+    }
+
+
+
+    public DetallePartidoService() {
+
+    }
+    public boolean guardarDetalles(List<DetallePartido> detalles) {
+        if (detalles == null || detalles.isEmpty()) {
+            return false;
+        }
+
+        if (!validarCapitanesPorEquipo(detalles)) {
+            return false;
+        }
+
+        if (!cumpleEquipoNumeroDeJugadores(detalles)) {
+            return false;
+        }
+
+        if (poseeJugadoresDuplicados(detalles)) {
+
+            return false;
+        }
+
+        if (!partidoNoFinalizado(detalles)) {
+            return false;
+        }
+
+        for (DetallePartido detalle : detalles) {
+            if (detalle.getGoles() != null) {
+                for (Gol gol : detalle.getGoles()) {
+                    if (!validarMinutoGol(gol.getMinuto())) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        for (DetallePartido detalle : detalles) {
+            if (marcoJugadorMismoMinuto(detalle)) {
+                return false;
+            }
+        }
+
+        // Validar que no se registre un jugador dos veces
+        if (jugadorYaHaSidoRegistrado(detalles)) {
+            return false;
+        }
+
+        // Si todas las validaciones pasaron, guardar todos
+        for (DetallePartido detalle : detalles) {
+            boolean guardado = detallePartidoDAO.guardar(detalle);
+            if (!guardado) {
+                return false;
+            }
+        }
+
+
+        return true;
+    }
+
+
+
     public boolean validarCapitanesPorEquipo(List<DetallePartido> jugadoresRegistrados) {
         // Validación más estricta del parámetro de entrada
         if (jugadoresRegistrados == null) {
@@ -134,17 +204,6 @@ public class DetallePartidoService {
     }
 
 
-    // Validar que no haya más de un capitan por equipo
-    // Validar mínimo y maxim de jugadores por equipo
-    // Validar que los equipos tengan el mismo número de jugadores asociados
-    // Validar que el registro de jugadores se realice previo al partido.
-    // Validar que no existan jugadores duplicados en el registro.
-
-    // Validar el minuto en la cual anoto gol este dentro del rango válido.
-    // Validar que un jugador no anota dos goles en el mismo minuto.
-    // Validar que no existan goles de diferentes jugadores (equipo) en el mismo minuto.
-
-    // Validar que exista un capitan por equipo
 
 
 
