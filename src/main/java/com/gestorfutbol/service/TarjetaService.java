@@ -8,10 +8,7 @@ import com.gestorfutbol.entity.Jugador;
 import com.gestorfutbol.entity.Tarjeta;
 import org.hibernate.SessionFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TarjetaService {
@@ -47,7 +44,6 @@ public class TarjetaService {
         if (tarjetas == null || tarjetas.isEmpty()) {
             return false;
         }
-
         // Validar cada tarjeta individualmente
         if (!sonTarjetasValidas(tarjetas)) {
             return false;
@@ -90,6 +86,26 @@ public class TarjetaService {
 
         return tarjetasPorJugador.values().stream()
                 .allMatch(this::esValidaCantidadTarjetasPorJugador);
+    }
+    public boolean tieneMasDosTarjetasAmarillas(List<Tarjeta> tarjetasDeUnJugador) {
+        int contadorTarjetasAmarillas = 0;
+        for (Tarjeta tarjeta : tarjetasDeUnJugador) {
+            if (Objects.equals(tarjeta.getTipoTarjeta(), "AMARILLA"))  {
+                contadorTarjetasAmarillas++;
+            }
+        }
+        return contadorTarjetasAmarillas <= 2;
+    }
+
+    public boolean tieneMasUnaTarjetaRoja(List<Tarjeta> tarjetas)
+    {
+        int contadorTarjetasRojas = 0;
+        for (Tarjeta tarjeta : tarjetas) {
+            if (Objects.equals(tarjeta.getTipoTarjeta(), "ROJA")) {
+                contadorTarjetasRojas++;
+            }
+        }
+        return contadorTarjetasRojas <= 1;
     }
 
     /**
@@ -238,4 +254,6 @@ public class TarjetaService {
         List<Tarjeta> tarjetas = tarjetaDAO.obtenerPorPartido(idPartido);
         return tarjetas != null ? tarjetas : new ArrayList<>();
     }
+
+
 }
