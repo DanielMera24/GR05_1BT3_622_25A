@@ -111,4 +111,7 @@ public class Jugador {
         return Objects.hash(idJugador);
     }
 
+    public void setCedula(String number) {
+        cedula = number;
+    }
 }
