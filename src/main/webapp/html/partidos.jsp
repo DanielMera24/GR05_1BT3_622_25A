@@ -95,6 +95,7 @@
                         <span class="jornada">Jornada <%= p.getJornadaActual() %></span>
                         <span class="fecha_partido"><%= fechaFormateada %></span>
                     </div>
+                    <!-- En la sección de botones de acción, cambiar el botón Editar -->
                     <div class="partido_acciones">
                         <a class="boton_ver" href="#"
                            data-id="<%=p.getIdPartido()%>"
@@ -107,17 +108,11 @@
                            data-estado="<%= p.getEstado() %>">
                             Ver detalles
                         </a>
+
+                        <!-- CAMBIO: En lugar de abrir modal, redirigir a nueva página -->
                         <a class="accion_enlace <%= p.getEstado().equals("Finalizado") ? "disabled" : "" %>"
-                           href="#"
-                                <%= p.getEstado().equals("Finalizado") ? "disabled" : "" %>
-                           data-id="<%=p.getIdPartido()%>"
-                           data-local="<%= nombreLocal%>"
-                           data-visitante="<%=nombreVisitante%>"
-                           data-goles-local="<%= p.getGolesLocal() %>"
-                           data-goles-visitante="<%= p.getGolesVisita() %>"
-                           data-torneo="<%=nombreTorneo%>"
-                           data-jornada="<%= p.getJornadaActual() %>"
-                           data-estado="<%= p.getEstado() %>">
+                           href="<%= p.getEstado().equals("Finalizado") ? "#" : request.getContextPath() + "/editarPartido?id=" + p.getIdPartido() %>"
+                                <%= p.getEstado().equals("Finalizado") ? "onclick='return false;'" : "" %>>
                             Editar
                         </a>
                     </div>
