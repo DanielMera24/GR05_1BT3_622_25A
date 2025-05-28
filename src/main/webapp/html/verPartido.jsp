@@ -254,7 +254,7 @@
       <!-- Botones de acción -->
       <div class="acciones_formulario">
         <button id="btnExportarPDF" class="btn_guardar">Exportar a PDF</button>
-        <a href="#" class="btn_cancelar">Volver</a>
+        <a href="/partidos" class="btn_cancelar">Volver</a>
       </div>
     </form>
   </main>

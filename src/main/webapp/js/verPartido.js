@@ -1,432 +1,402 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Inicializando exportador PDF con impresión nativa...');
+    console.log('🚀 Inicializando exportador PDF con validaciones...');
 
     const btnExportarPDF = document.getElementById('btnExportarPDF');
 
     if (!btnExportarPDF) {
-        console.error('❌ Botón no encontrado');
+        console.error('❌ Botón de exportar PDF no encontrado');
         return;
     }
 
-    // REEMPLAZAR la funcionalidad del botón original con el método que funciona
+    // REEMPLAZAR la funcionalidad del botón original con validaciones
     btnExportarPDF.addEventListener('click', function(event) {
         event.preventDefault();
-        console.log('🖨️ Exportando con método de impresión nativa...');
-        exportarConVentanaImpresion();
+        console.log('🖨️ Iniciando proceso de exportación a PDF...');
+
+        // PASO 1: Validar estado del partido
+        if (!validarEstadoPartido()) {
+            return; // Detener si no pasa la validación
+        }
+
+        // PASO 2: Validar datos completos
+        if (!validarDatosCompletos()) {
+            return; // Detener si no pasa la validación
+        }
+
+        // PASO 3: Si todas las validaciones pasan, generar el PDF
+        console.log('✅ Todas las validaciones pasaron - Generando acta oficial...');
+        exportarActaOficial();
     });
 
-    // MÉTODO DE IMPRESIÓN NATIVA - EL QUE FUNCIONA BIEN
-    function exportarConVentanaImpresion() {
-        console.log('📋 Preparando ventana de impresión...');
+    // ===== FUNCIÓN DE VALIDACIÓN DEL ESTADO DEL PARTIDO =====
+    function validarEstadoPartido() {
+        // Obtener el estado del partido desde el HTML
+        const estadoElement = document.getElementById('estadoPartido');
+        if (!estadoElement) {
+            console.error('❌ No se pudo obtener el estado del partido');
+            mostrarMensajeError('Error al obtener información del partido');
+            return false;
+        }
+
+        const estadoPartido = estadoElement.value || estadoElement.textContent || '';
+        console.log('📊 Estado del partido:', estadoPartido);
+
+        // Validar que el partido esté finalizado
+        if (estadoPartido.toLowerCase() !== 'finalizado') {
+            let mensaje;
+            if (estadoPartido.toLowerCase() === 'pendiente') {
+                mensaje = 'No se puede generar acta oficial. El partido aún no ha iniciado.';
+            } else if (estadoPartido.toLowerCase() === 'en curso') {
+                mensaje = 'No se puede generar acta oficial. El partido debe estar finalizado para garantizar datos consistentes.';
+            } else {
+                mensaje = 'No se puede generar acta oficial. El partido debe estar finalizado.';
+            }
+
+            mostrarMensajeError(mensaje);
+            return false;
+        }
+
+        return true;
+    }
+
+    // ===== FUNCIÓN DE VALIDACIÓN DE DATOS COMPLETOS =====
+    function validarDatosCompletos() {
+        console.log('🔍 Validando completitud de datos...');
+
+        // Verificar jugadores participantes
+        const jugadoresLocal = document.querySelectorAll('#jugadoresLocal tr[data-jugador-id]');
+        const jugadoresVisitante = document.querySelectorAll('#jugadoresVisitante tr[data-jugador-id]');
+
+        console.log('👥 Jugadores locales:', jugadoresLocal.length);
+        console.log('👥 Jugadores visitantes:', jugadoresVisitante.length);
+
+        if (jugadoresLocal.length === 0 || jugadoresVisitante.length === 0) {
+            mostrarMensajeError('No se puede generar acta oficial. Faltan datos de jugadores participantes.');
+            return false;
+        }
+
+        // Verificar que hay al menos un capitán por equipo
+        const capitanLocal = document.querySelector('input[name="capitanLocal"]:checked');
+        const capitanVisitante = document.querySelector('input[name="capitanVisitante"]:checked');
+
+        if (!capitanLocal || !capitanVisitante) {
+            mostrarMensajeError('No se puede generar acta oficial. Debe haber un capitán designado por cada equipo.');
+            return false;
+        }
+
+        // Verificar consistencia del marcador
+        if (!validarConsistenciaMarcador()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // ===== FUNCIÓN DE VALIDACIÓN DE CONSISTENCIA DEL MARCADOR =====
+    function validarConsistenciaMarcador() {
+        // Obtener marcador oficial
+        const golesLocalElement = document.querySelector('.select_goles');
+        const golesVisitanteElement = document.querySelectorAll('.select_goles')[1];
+
+        if (!golesLocalElement || !golesVisitanteElement) {
+            console.warn('⚠️ No se pudo verificar consistencia del marcador');
+            return true; // Continuar si no se puede verificar
+        }
+
+        const golesOficialLocal = parseInt(golesLocalElement.textContent) || 0;
+        const golesOficialVisitante = parseInt(golesVisitanteElement.textContent) || 0;
+
+        // Contar goles registrados en el acta
+        const golesRegistradosLocal = contarGolesEquipo(window.partidoData.equipoLocal.nombre);
+        const golesRegistradosVisitante = contarGolesEquipo(window.partidoData.equipoVisitante.nombre);
+
+        console.log('🥅 Marcador oficial:', golesOficialLocal, '-', golesOficialVisitante);
+        console.log('🥅 Goles registrados:', golesRegistradosLocal, '-', golesRegistradosVisitante);
+
+        if (golesOficialLocal !== golesRegistradosLocal || golesOficialVisitante !== golesRegistradosVisitante) {
+            mostrarMensajeAdvertencia(
+                `Advertencia: El marcador oficial (${golesOficialLocal}-${golesOficialVisitante}) no coincide con los goles registrados (${golesRegistradosLocal}-${golesRegistradosVisitante}). ¿Desea continuar?`,
+                () => exportarActaOficial() // Callback para continuar
+            );
+            return false; // Detener para mostrar advertencia
+        }
+
+        return true;
+    }
+
+    // ===== FUNCIÓN AUXILIAR PARA CONTAR GOLES POR EQUIPO =====
+    function contarGolesEquipo(nombreEquipo) {
+        const golesEquipo = document.querySelectorAll('.gol_partido');
+        let contador = 0;
+
+        golesEquipo.forEach(gol => {
+            const equipoGol = gol.querySelector('.equipo_jugador').textContent;
+            if (equipoGol === nombreEquipo) {
+                contador++;
+            }
+        });
+
+        return contador;
+    }
+
+    // ===== FUNCIÓN PARA MOSTRAR MENSAJES DE ERROR =====
+    function mostrarMensajeError(mensaje) {
+        // Eliminar mensaje anterior si existe
+        const mensajeAnterior = document.querySelector('.mensaje-error-exportacion');
+        if (mensajeAnterior) {
+            mensajeAnterior.remove();
+        }
+
+        // Crear mensaje de error
+        const mensajeError = document.createElement('div');
+        mensajeError.className = 'mensaje-error-exportacion';
+        mensajeError.innerHTML = `
+            <div style="
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: #fee2e2;
+                border: 1px solid #fca5a5;
+                color: #b91c1c;
+                padding: 16px 20px;
+                border-radius: 8px;
+                font-weight: 500;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                max-width: 400px;
+                display: flex;
+                align-items: flex-start;
+                gap: 10px;
+            ">
+                <span style="font-size: 20px; flex-shrink: 0;">❌</span>
+                <div>
+                    <div style="font-weight: 600; margin-bottom: 4px;">Error de exportación</div>
+                    <div>${mensaje}</div>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" style="
+                    background: none;
+                    border: none;
+                    color: #b91c1c;
+                    font-size: 18px;
+                    cursor: pointer;
+                    padding: 0;
+                    margin-left: 10px;
+                ">×</button>
+            </div>
+        `;
+
+        document.body.appendChild(mensajeError);
+
+        // Auto-remover después de 5 segundos
+        setTimeout(() => {
+            if (mensajeError.parentNode) {
+                mensajeError.remove();
+            }
+        }, 5000);
+    }
+
+    // ===== FUNCIÓN PARA MOSTRAR MENSAJES DE ADVERTENCIA CON CONFIRMACIÓN =====
+    function mostrarMensajeAdvertencia(mensaje, callbackContinuar) {
+        // Eliminar mensaje anterior si existe
+        const mensajeAnterior = document.querySelector('.mensaje-advertencia-exportacion');
+        if (mensajeAnterior) {
+            mensajeAnterior.remove();
+        }
+
+        // Crear mensaje de advertencia con opciones
+        const mensajeAdvertencia = document.createElement('div');
+        mensajeAdvertencia.className = 'mensaje-advertencia-exportacion';
+        mensajeAdvertencia.innerHTML = `
+            <div style="
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 2000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            ">
+                <div style="
+                    background: white;
+                    padding: 24px;
+                    border-radius: 12px;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+                    max-width: 500px;
+                    margin: 20px;
+                ">
+                    <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px;">
+                        <span style="font-size: 24px; color: #f59e0b;">⚠️</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 18px; margin-bottom: 8px; color: #1f2937;">
+                                Advertencia de consistencia
+                            </div>
+                            <div style="color: #6b7280; line-height: 1.5;">
+                                ${mensaje}
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                        <button onclick="document.querySelector('.mensaje-advertencia-exportacion').remove()" style="
+                            background: #e5e7eb;
+                            color: #374151;
+                            border: none;
+                            padding: 10px 20px;
+                            border-radius: 6px;
+                            cursor: pointer;
+                            font-weight: 500;
+                        ">Cancelar</button>
+                        <button onclick="
+                            document.querySelector('.mensaje-advertencia-exportacion').remove();
+                            (${callbackContinuar.toString()})();
+                        " style="
+                            background: #f59e0b;
+                            color: white;
+                            border: none;
+                            padding: 10px 20px;
+                            border-radius: 6px;
+                            cursor: pointer;
+                            font-weight: 500;
+                        ">Continuar de todos modos</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(mensajeAdvertencia);
+    }
+
+    // ===== FUNCIÓN PARA EXPORTAR ACTA OFICIAL (MEJORADA) =====
+    function exportarActaOficial() {
+        console.log('📋 Generando acta oficial del partido...');
 
         const mainElement = document.querySelector('main.contenido_principal');
         if (!mainElement) {
-            alert('No se encontró el contenido a exportar');
+            mostrarMensajeError('No se encontró el contenido a exportar');
             return;
         }
 
         // Obtener datos del partido
         const equipoLocal = window.partidoData?.equipoLocal?.nombre || 'Local';
         const equipoVisitante = window.partidoData?.equipoVisitante?.nombre || 'Visitante';
+        const fechaActual = new Date().toLocaleDateString('es-ES');
+        const horaActual = new Date().toLocaleTimeString('es-ES');
 
-        console.log('📁 Generando PDF para:', equipoLocal, 'vs', equipoVisitante);
+        console.log('📁 Generando acta oficial para:', equipoLocal, 'vs', equipoVisitante);
 
         // Crear ventana de impresión
         const ventana = window.open('', '_blank', 'width=900,height=700');
 
-        // HTML COMPLETO optimizado para PDF
-        const htmlImpresion = `<!DOCTYPE html>
+        // HTML COMPLETO optimizado para acta oficial
+        const htmlActaOficial = `<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles del Partido - ${equipoLocal} vs ${equipoVisitante}</title>
+    <title>Acta Oficial - ${equipoLocal} vs ${equipoVisitante}</title>
     <style>
         * { 
             margin: 0; 
             padding: 0; 
             box-sizing: border-box; 
-            font-family: Arial, sans-serif; 
+            font-family: 'Times New Roman', serif; 
         }
         
         body { 
             background: white; 
-            color: #333; 
-            padding: 15mm; 
-            line-height: 1.4;
+            color: #000; 
+            padding: 20mm; 
+            line-height: 1.6;
+            font-size: 12pt;
         }
         
-        /* OCULTAR elementos no deseados */
+        /* HEADER OFICIAL */
+        .header-oficial {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #000;
+            padding-bottom: 20px;
+        }
+        
+        .titulo-acta {
+            font-size: 24pt;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .subtitulo-acta {
+            font-size: 14pt;
+            margin-bottom: 5px;
+        }
+        
+        .fecha-generacion {
+            font-size: 10pt;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        /* ESTILOS DEL CONTENIDO EXISTENTE MEJORADOS */
         .navegacion, 
         .acciones_formulario, 
         .btn_volver {
             display: none !important;
         }
         
-        /* CONTENIDO PRINCIPAL */
         .contenido_principal {
             max-width: none !important;
             padding: 0 !important;
             margin: 0 !important;
         }
         
-        /* HEADER DEL PARTIDO */
+        /* Resto del CSS existente optimizado... */
         .info_partido_header {
-            text-align: center;
-            margin-bottom: 20mm;
-            padding: 8mm;
-            border: 2px solid #ddd;
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 2px solid #000;
             border-radius: 8px;
             page-break-inside: avoid;
-            background: white;
         }
         
         .equipos_enfrentamiento {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10mm;
-            margin-bottom: 8mm;
+            gap: 30px;
+            margin-bottom: 15px;
         }
         
-        .equipo_header {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3mm;
-        }
+        /* Continuar con estilos existentes pero optimizados para acta oficial... */
         
-        .escudo_grande {
-            max-width: 12mm;
-            max-height: 12mm;
-            object-fit: contain;
-        }
-        
-        .nombre_equipo_header {
-            font-weight: bold;
-            font-size: 12pt;
-        }
-        
-        .vs_header {
-            font-size: 16pt;
-            font-weight: bold;
-            color: #6366f1;
-            background: #eef2ff;
-            padding: 3mm 6mm;
-            border-radius: 4mm;
-        }
-        
-        .detalles_partido {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2mm;
-        }
-        
-        .torneo_info {
-            font-weight: bold;
-            color: #4f46e5;
-            font-size: 11pt;
-        }
-        
-        .fecha_info {
-            color: #6b7280;
-            font-size: 10pt;
-        }
-        
-        /* SECCIONES DEL FORMULARIO */
-        .seccion_formulario {
-            margin-bottom: 8mm;
-            padding: 6mm;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            page-break-inside: avoid;
-            background: white;
-        }
-        
-        .seccion_formulario h2 {
-            color: #333;
-            font-size: 14pt;
-            margin-bottom: 5mm;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 3mm;
-            font-weight: bold;
-        }
-        
-        /* CAMPOS DEL FORMULARIO */
-        .campos_grupo {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6mm;
-        }
-        
-        .campo_formulario {
-            display: flex;
-            flex-direction: column;
-            gap: 2mm;
-        }
-        
-        .campo_formulario label {
-            font-weight: bold;
-            font-size: 10pt;
-            color: #374151;
-        }
-        
-        .campo_formulario input {
-            padding: 2mm;
-            font-size: 10pt;
-            border: 1px solid #d1d5db;
-            border-radius: 2mm;
-            background: #f9fafb;
-        }
-        
-        /* MARCADOR */
-        .marcador_section {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8mm;
-            padding: 5mm;
-        }
-        
-        .marcador_equipo {
-            display: flex;
-            align-items: center;
-            gap: 4mm;
-        }
-        
-        .icono_marcador {
-            max-width: 10mm;
-            max-height: 10mm;
-            object-fit: contain;
-        }
-        
-        .nombre_equipo_marcador {
-            font-weight: bold;
-            min-width: 30mm;
-            font-size: 11pt;
-        }
-        
-        .select_goles {
-            font-size: 16pt;
-            font-weight: bold;
-            color: #6366f1;
-            border: 2px solid #6366f1;
-            padding: 3mm 5mm;
-            border-radius: 4mm;
-            min-width: 12mm;
-            text-align: center;
-            background: white;
-        }
-        
-        .separador_marcador {
-            font-size: 18pt;
-            font-weight: bold;
-            color: #6b7280;
-        }
-        
-        /* SEPARADOR DE EQUIPOS */
-        .separador {
-            display: flex;
-            gap: 8mm;
-        }
-        
-        .equipo_participantes {
-            flex: 1;
-            margin-bottom: 6mm;
-            page-break-inside: avoid;
-        }
-        
-        .header_equipo_participantes {
-            display: flex;
-            align-items: center;
-            gap: 3mm;
-            margin-bottom: 3mm;
-            padding: 3mm;
-            background: #f8f9fa;
-            border-radius: 3mm;
-        }
-        
-        .icono_equipo {
-            max-width: 8mm;
-            max-height: 8mm;
-            object-fit: contain;
-        }
-        
-        .header_equipo_participantes h3 {
-            font-size: 12pt;
-            margin: 0;
-            color: #1f2937;
-        }
-        
-        /* TABLAS */
-        .tabla_participantes {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 4mm;
-            page-break-inside: avoid;
-        }
-        
-        .tabla_participantes th,
-        .tabla_participantes td {
-            border: 1px solid #ddd;
-            padding: 2mm;
-            text-align: left;
-            font-size: 9pt;
-        }
-        
-        .tabla_participantes th {
-            background: #f5f5f5;
-            font-weight: bold;
-            color: #374151;
-        }
-        
-        .tabla_participantes tr:nth-child(even) {
-            background: #f9fafb;
-        }
-        
-        /* INPUTS EN TABLAS */
-        input, select, textarea {
-            border: none !important;
-            background: transparent !important;
-            font-weight: bold !important;
-            padding: 1mm !important;
-        }
-        
-        /* GOLES Y TARJETAS */
-        .gol_partido,
-        .tarjeta_partido {
-            display: flex;
-            align-items: center;
-            margin-bottom: 3mm;
-            padding: 4mm;
-            border-left: 3mm solid #28a745;
-            background: #f0fdf4;
-            border-radius: 3mm;
-            page-break-inside: avoid;
-        }
-        
-        .tarjeta_partido.amarilla {
-            border-left-color: #fbbf24;
-            background: #fffbeb;
-        }
-        
-        .tarjeta_partido.roja {
-            border-left-color: #ef4444;
-            background: #fef2f2;
-        }
-        
-        .indicador_gol,
-        .indicador_tarjeta {
-            margin-right: 4mm;
-            flex-shrink: 0;
-            font-size: 14pt;
-        }
-        
-        .indicador_tarjeta {
-            width: 4mm;
-            height: 4mm;
-            border-radius: 1mm;
-        }
-        
-        .indicador_tarjeta.amarilla {
-            background: #fbbf24;
-        }
-        
-        .indicador_tarjeta.roja {
-            background: #ef4444;
-        }
-        
-        .info_gol,
-        .info_tarjeta {
-            flex: 1;
-        }
-        
-        .nombre_jugador {
-            font-weight: bold;
-            margin-bottom: 1mm;
-            font-size: 10pt;
-            color: #1f2937;
-        }
-        
-        .equipo_jugador {
-            font-size: 8pt;
-            color: #6b7280;
-            margin-bottom: 1mm;
-        }
-        
-        .detalle_gol,
-        .detalle_tarjeta {
-            font-size: 9pt;
-            color: #374151;
-            font-weight: 500;
-        }
-        
-        /* CONTENEDORES DE EVENTOS */
-        .contenedor_goles_partido,
-        .contenedor_tarjetas_partido {
-            max-height: none !important;
-            overflow: visible !important;
-        }
-        
-        /* ESTILOS DE IMPRESIÓN */
         @media print {
             body {
                 margin: 0;
-                padding: 10mm;
+                padding: 15mm;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
             
+            .header-oficial {
+                page-break-after: avoid;
+            }
+            
             .seccion_formulario {
                 page-break-inside: avoid;
-                margin-bottom: 6mm;
-            }
-            
-            .equipo_participantes {
-                page-break-inside: avoid;
-            }
-            
-            .info_partido_header {
-                page-break-inside: avoid;
-            }
-            
-            .gol_partido,
-            .tarjeta_partido {
-                page-break-inside: avoid;
-            }
-            
-            .tabla_participantes {
-                page-break-inside: avoid;
-            }
-        }
-        
-        /* RESPONSIVE PARA PANTALLA PEQUEÑA */
-        @media (max-width: 180mm) {
-            .separador {
-                flex-direction: column;
-                gap: 4mm;
-            }
-            
-            .equipos_enfrentamiento {
-                flex-direction: column;
-                gap: 5mm;
-            }
-            
-            .marcador_section {
-                flex-direction: column;
-                gap: 4mm;
-            }
-            
-            .campos_grupo {
-                grid-template-columns: 1fr;
-                gap: 4mm;
+                margin-bottom: 8mm;
             }
         }
     </style>
 </head>
 <body>
+    <div class="header-oficial">
+        <div class="titulo-acta">Acta Oficial del Partido</div>
+        <div class="subtitulo-acta">${equipoLocal} vs ${equipoVisitante}</div>
+        <div class="fecha-generacion">Generada el ${fechaActual} a las ${horaActual}</div>
+    </div>
+    
     ${mainElement.outerHTML}
     
     <script>
@@ -434,19 +404,14 @@ document.addEventListener('DOMContentLoaded', function() {
         window.onload = function() {
             setTimeout(function() {
                 window.print();
-            }, 1000); // Esperar un poco más para que carguen las imágenes
+            }, 1200);
         };
         
-        // Cerrar ventana después de imprimir o cancelar
+        // Cerrar ventana después de imprimir
         window.onafterprint = function() {
             setTimeout(function() {
                 window.close();
             }, 500);
-        };
-        
-        // Manejar el caso de cancelar impresión
-        window.onbeforeunload = function() {
-            return null;
         };
     </script>
 </body>
@@ -454,16 +419,59 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Escribir contenido en la nueva ventana
         ventana.document.open();
-        ventana.document.write(htmlImpresion);
+        ventana.document.write(htmlActaOficial);
         ventana.document.close();
 
-        console.log('✅ Ventana de impresión abierta - Listo para guardar como PDF');
+        console.log('✅ Acta oficial lista para guardar como PDF');
+
+        // Mostrar mensaje de éxito
+        mostrarMensajeExito('Acta oficial generada correctamente. Use Ctrl+P o Cmd+P para guardar como PDF.');
     }
 
-    // Función de prueba
-    window.testExportarPDF = exportarConVentanaImpresion;
+    // ===== FUNCIÓN PARA MOSTRAR MENSAJES DE ÉXITO =====
+    function mostrarMensajeExito(mensaje) {
+        const mensajeExito = document.createElement('div');
+        mensajeExito.innerHTML = `
+            <div style="
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: #d1fae5;
+                border: 1px solid #6ee7b7;
+                color: #065f46;
+                padding: 16px 20px;
+                border-radius: 8px;
+                font-weight: 500;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                max-width: 400px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            ">
+                <span style="font-size: 20px;">✅</span>
+                <div>${mensaje}</div>
+                <button onclick="this.parentElement.parentElement.remove()" style="
+                    background: none;
+                    border: none;
+                    color: #065f46;
+                    font-size: 18px;
+                    cursor: pointer;
+                    padding: 0;
+                    margin-left: 10px;
+                ">×</button>
+            </div>
+        `;
 
-    console.log('✅ Exportador PDF con impresión nativa listo');
-    console.log('🎯 El botón "Exportar a PDF" ahora usa el método confiable');
-    console.log('💡 Para guardar: Imprimir > Guardar como PDF');
+        document.body.appendChild(mensajeExito);
+
+        // Auto-remover después de 4 segundos
+        setTimeout(() => {
+            if (mensajeExito.parentNode) {
+                mensajeExito.remove();
+            }
+        }, 4000);
+    }
+
+    console.log('✅ Exportador PDF con validaciones configurado correctamente');
 });

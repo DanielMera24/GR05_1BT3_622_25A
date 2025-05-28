@@ -325,7 +325,7 @@
       </div>
       <div class="campo_modal">
         <label for="minutoGol">Minuto</label>
-        <input type="number" id="minutoGol" min="1" max="90" required />
+        <input type="number" id="minutoGol" min="0" max="90" required />
       </div>
       <div class="acciones_modal">
         <button type="button" class="btn_cancelar_modal">Cancelar</button>
