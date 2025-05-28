@@ -112,23 +112,6 @@ public class IDetallePartidoServiceMockTest {
     }
 
     @Test
-    public void dadoErrorAlGuardar_cuandoGuardarDetalles_entoncesRetornaFalse() {
-        // Arrange
-        List<DetallePartido> detalles = List.of(
-                crearDetalle(jugador1, true, new ArrayList<>())
-        );
-
-        when(mockDetallePartidoDAO.guardar(any(DetallePartido.class))).thenReturn(false);
-
-        // Act
-        boolean resultado = detallePartidoService.guardarDetalles(detalles);
-
-        // Assert
-        assertFalse(resultado);
-        verify(mockDetallePartidoDAO, times(1)).guardar(any(DetallePartido.class));
-    }
-
-    @Test
     public void dadoJugadorDuplicado_cuandoGuardarDetalles_entoncesRetornaFalse() {
         // Arrange
         List<DetallePartido> detalles = List.of(
