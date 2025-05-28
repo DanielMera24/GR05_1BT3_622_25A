@@ -25,6 +25,8 @@ public class DetallePartidoServiceTest {
     private Jugador jugador2;
     private Jugador jugador3;
     private Jugador jugador4;
+    private Jugador jugador5;
+    private Jugador jugador6;
 
     private List<DetallePartido> detallesPartido;
 
@@ -67,6 +69,10 @@ public class DetallePartidoServiceTest {
         // 4
         this.jugador4 = new Jugador("0503867737", "Cristian Flores", 26, "DELANTERO", 11);
         this.jugador4.setEquipo(equipoB);
+        this.jugador5 = new Jugador("0503867738", "Luis Torres", 20, "DEFENSA", 5);
+        this.jugador5.setEquipo(equipoA);
+        this.jugador6 = new Jugador("0503867739", "Carlos Pérez", 21, "DEFENSA", 4);
+        this.jugador6.setEquipo(equipoB);
 
     }
 
@@ -74,9 +80,12 @@ public class DetallePartidoServiceTest {
     public void dadoJugadores_cuandoUnCapitanPorEquipo_entoncesRetornaVerdadero() {
         // Definición de Jugadores
         detallesPartido = List.of(
-                new DetallePartido(jugador1, partido, jugador1.getEquipo(), jugador1.getDorsal(), false),
+
                 new DetallePartido(jugador2, partido, jugador2.getEquipo(), jugador2.getDorsal(), true),
                 new DetallePartido(jugador3, partido, jugador3.getEquipo(), jugador3.getDorsal(), false),
+                new DetallePartido(jugador5, partido, jugador5.getEquipo(), jugador5.getDorsal(), false),
+                new DetallePartido(jugador6, partido, jugador6.getEquipo(), jugador6.getDorsal(), false),
+                new DetallePartido(jugador1, partido, jugador1.getEquipo(), jugador1.getDorsal(), false),
                 new DetallePartido(jugador4, partido, jugador4.getEquipo(), jugador4.getDorsal(), true));
 
         // Act
@@ -138,10 +147,6 @@ public class DetallePartidoServiceTest {
         boolean resultado = detallePartidoService.poseeJugadoresDuplicados(detallesPartido);
         assertTrue(resultado, "Debería retornar verdadero cuando se repitan jugadores en el registro");
     }
-
-
-
-
 
     @Test
     public void dado_registraMinutoDelGol_cuandoMinutoEsInvalido_entonces_retornarFalso(){

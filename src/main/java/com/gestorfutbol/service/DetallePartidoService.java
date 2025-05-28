@@ -25,6 +25,9 @@ public class DetallePartidoService {
     }
 
     public DetallePartidoService(DetallePartidoDAO mockDetallePartidoDAO) {
+        this.detallePartidoDAO = mockDetallePartidoDAO;
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        this.golDAO = new GolDAOImpl(sessionFactory);
     }
 
     public boolean guardarDetalles(List<DetallePartido> detalles) {

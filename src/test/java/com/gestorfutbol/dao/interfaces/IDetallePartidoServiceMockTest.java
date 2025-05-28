@@ -8,7 +8,10 @@ import com.gestorfutbol.entity.Partido;
 import com.gestorfutbol.service.DetallePartidoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class IDetallePartidoServiceMockTest {
 
+    @Mock
     private DetallePartidoDAO mockDetallePartidoDAO;
+
+    @InjectMocks
     private DetallePartidoService detallePartidoService;
 
     private Equipo equipoA;
@@ -34,9 +41,6 @@ public class IDetallePartidoServiceMockTest {
 
     @BeforeEach
     public void setUp() {
-        mockDetallePartidoDAO = Mockito.mock(DetallePartidoDAO.class);
-        detallePartidoService = new DetallePartidoService(mockDetallePartidoDAO);
-
         equipoA = new Equipo();
         equipoA.setIdEquipo(1);
         equipoA.setNombre("Equipo A");
@@ -49,81 +53,154 @@ public class IDetallePartidoServiceMockTest {
         partido.setIdPartido(1);
         partido.setEstado("En progreso");
 
-        jugador1 = new Jugador();
-        jugador1.setCedula("1111111111");
-        jugador1.setNombre("Jugador 1");
-        jugador1.setEquipo(equipoA);
+        jugador1 = crearJugador("1111111111", "Jugador 1", equipoA, 10);
+        jugador2 = crearJugador("2222222222", "Jugador 2", equipoA, 11);
+        jugador3 = crearJugador("3333333333", "Jugador 3", equipoB, 9);
+        jugador4 = crearJugador("4444444444", "Jugador 4", equipoB, 8);
+        jugador5 = crearJugador("5555555555", "Jugador 5", equipoA, 12);
+        jugador6 = crearJugador("6666666666", "Jugador 6", equipoB, 7);
+    }
 
-        jugador2 = new Jugador();
-        jugador2.setCedula("2222222222");
-        jugador2.setNombre("Jugador 2");
-        jugador2.setEquipo(equipoA);
+    private Jugador crearJugador(String cedula, String nombre, Equipo equipo, int dorsal) {
+        Jugador jugador = new Jugador();
+        jugador.setCedula(cedula);
+        jugador.setNombre(nombre);
+        jugador.setEquipo(equipo);
+        jugador.setDorsal(dorsal);
+        return jugador;
+    }
 
-        jugador3 = new Jugador();
-        jugador3.setCedula("3333333333");
-        jugador3.setNombre("Jugador 3");
-        jugador3.setEquipo(equipoB);
-
-        jugador4 = new Jugador();
-        jugador4.setCedula("4444444444");
-        jugador4.setNombre("Jugador 4");
-        jugador4.setEquipo(equipoB);
-
-        jugador5 = new Jugador();
-        jugador5.setCedula("5555555555");
-        jugador5.setNombre("Jugador 5");
-        jugador5.setEquipo(equipoA);
-
-        jugador6 = new Jugador();
-        jugador6.setCedula("6666666666");
-        jugador6.setNombre("Jugador 6");
-        jugador6.setEquipo(equipoB);
+    private DetallePartido crearDetalle(Jugador jugador, boolean esCapitan, List<Gol> goles) {
+        DetallePartido detalle = new DetallePartido(jugador, partido, jugador.getEquipo(), jugador.getDorsal(), esCapitan);
+        detalle.setGoles(goles);
+        return detalle;
     }
 
     @Test
     public void dadoDetallesValidosConCamposCompletos_cuandoGuardarDetalles_entoncesGuardaTodos() {
-        List<DetallePartido> detalles = new ArrayList<>();
+        // Arrange
+        List<DetallePartido> detalles = List.of(
+                crearDetalle(jugador1, true, List.of(new Gol(15, null), new Gol(30, null))),
+                crearDetalle(jugador2, false, new ArrayList<>()),
+                crearDetalle(jugador3, true, List.of(new Gol(45, null))),
+                crearDetalle(jugador4, false, new ArrayList<>()),
+                crearDetalle(jugador5, false, new ArrayList<>()),
+                crearDetalle(jugador6, false, new ArrayList<>())
+        );
 
-        DetallePartido dp1 = new DetallePartido(jugador1, partido, equipoA, jugador1.getDorsal(), true);
-        List<Gol> goles1 = new ArrayList<>();
-        goles1.add(new Gol(15, dp1));
-        goles1.add(new Gol(30, dp1));
-        dp1.setGoles(goles1);
-
-        DetallePartido dp2 = new DetallePartido(jugador2, partido, equipoA, 11, false);
-        dp2.setGoles(new ArrayList<>());
-
-        DetallePartido dp3 = new DetallePartido(jugador3, partido, equipoB, 9, true);
-        List<Gol> goles3 = new ArrayList<>();
-        goles3.add(new Gol(45, dp3));
-        dp3.setGoles(goles3);
-
-        DetallePartido dp4 = new DetallePartido(jugador4, partido, equipoB, 8, false);
-        dp4.setGoles(new ArrayList<>());
-
-        DetallePartido dp5 = new DetallePartido(jugador5, partido, equipoA, 12, false);
-        dp5.setGoles(new ArrayList<>());
-
-        DetallePartido dp6 = new DetallePartido(jugador6, partido, equipoB, 7, false);
-        dp6.setGoles(new ArrayList<>());
-
-
-
-
-        detalles.add(dp1);
-        detalles.add(dp2);
-        detalles.add(dp3);
-        detalles.add(dp4);
-        detalles.add(dp5);
-        detalles.add(dp6);
-
-        // Mock DAO para que siempre devuelva true
         when(mockDetallePartidoDAO.guardar(any(DetallePartido.class))).thenReturn(true);
 
+        // Act
         boolean resultado = detallePartidoService.guardarDetalles(detalles);
 
-        assertTrue(resultado, "Debe retornar true cuando todo es válido y se guardan todos");
-
+        // Assert
+        assertTrue(resultado);
         verify(mockDetallePartidoDAO, times(detalles.size())).guardar(any(DetallePartido.class));
+    }
+
+    @Test
+    public void dadoListaVacia_cuandoGuardarDetalles_entoncesRetornaFalse() {
+        // Arrange
+        List<DetallePartido> detallesVacios = new ArrayList<>();
+
+        // Act
+        boolean resultado = detallePartidoService.guardarDetalles(detallesVacios);
+
+        // Assert
+        assertFalse(resultado);
+        verify(mockDetallePartidoDAO, never()).guardar(any());
+    }
+
+    @Test
+    public void dadoErrorAlGuardar_cuandoGuardarDetalles_entoncesRetornaFalse() {
+        // Arrange
+        List<DetallePartido> detalles = List.of(
+                crearDetalle(jugador1, true, new ArrayList<>())
+        );
+
+        when(mockDetallePartidoDAO.guardar(any(DetallePartido.class))).thenReturn(false);
+
+        // Act
+        boolean resultado = detallePartidoService.guardarDetalles(detalles);
+
+        // Assert
+        assertFalse(resultado);
+        verify(mockDetallePartidoDAO, times(1)).guardar(any(DetallePartido.class));
+    }
+
+    @Test
+    public void dadoJugadorDuplicado_cuandoGuardarDetalles_entoncesRetornaFalse() {
+        // Arrange
+        List<DetallePartido> detalles = List.of(
+                crearDetalle(jugador1, true, new ArrayList<>()),
+                crearDetalle(jugador1, false, new ArrayList<>()) // Mismo jugador
+        );
+
+        // Act
+        boolean resultado = detallePartidoService.guardarDetalles(detalles);
+
+        // Assert
+        assertFalse(resultado);
+        verify(mockDetallePartidoDAO, never()).guardar(any());
+    }
+
+    @Test
+    public void dadoPartidoFinalizado_cuandoGuardarDetalles_entoncesRetornaFalse() {
+        // Arrange
+        partido.setEstado("Finalizado");
+        List<DetallePartido> detalles = List.of(
+                crearDetalle(jugador1, true, new ArrayList<>())
+        );
+
+        // Act
+        boolean resultado = detallePartidoService.guardarDetalles(detalles);
+
+        // Assert
+        assertFalse(resultado);
+        verify(mockDetallePartidoDAO, never()).guardar(any());
+    }
+
+    @Test
+    public void dadoEquipoSinCapitan_cuandoGuardarDetalles_entoncesRetornaFalse() {
+        // Arrange
+        List<DetallePartido> detalles = List.of(
+                crearDetalle(jugador1, false, new ArrayList<>()), // Equipo A sin capitán
+                crearDetalle(jugador3, true, new ArrayList<>())   // Equipo B con capitán
+        );
+
+        // Act
+        boolean resultado = detallePartidoService.guardarDetalles(detalles);
+
+        // Assert
+        assertFalse(resultado);
+        verify(mockDetallePartidoDAO, never()).guardar(any());
+    }
+
+    @Test
+    public void dadoGolMinutoInvalido_cuandoGuardarDetalles_entoncesRetornaFalse() {
+        // Arrange
+        List<DetallePartido> detalles = List.of(
+                crearDetalle(jugador1, true, List.of(new Gol(91, null))) // Minuto inválido
+        );
+
+        // Act
+        boolean resultado = detallePartidoService.guardarDetalles(detalles);
+
+        // Assert
+        assertFalse(resultado);
+        verify(mockDetallePartidoDAO, never()).guardar(any());
+    }
+
+    @Test
+    public void dadoJugadorConGolesMismoMinuto_cuandoGuardarDetalles_entoncesRetornaFalse() {
+        // Arrange
+        List<DetallePartido> detalles = List.of(
+                crearDetalle(jugador1, true, List.of(new Gol(15, null), new Gol(15, null))) // Dos goles mismo minuto
+        );
+        // Act
+        boolean resultado = detallePartidoService.guardarDetalles(detalles);
+        // Assert
+        assertFalse(resultado);
+        verify(mockDetallePartidoDAO, never()).guardar(any());
     }
 }

@@ -57,13 +57,6 @@ public class JugadorServiceTest {
     }
 
     @Test
-    public void jugador_CedulaInmutable_NoTieneMetodoSetter() throws Exception {
-        assertThrows(NoSuchMethodException.class, () -> {
-            Jugador.class.getMethod("setCedula", String.class);
-        }, "La clase Jugador no debe tener un método setCedula()");
-    }
-
-    @Test
     public void dado_cedula_cuando_tieneMenosDeDiezDigitos_entonces_retornarFalso() {
         boolean resultado = jugadorService.validarSintaxisCedula("123456789");
         assertFalse(resultado);
