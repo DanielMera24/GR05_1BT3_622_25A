@@ -174,20 +174,24 @@ public class DetallePartidoService {
             return false;
         }
 
-        // Agrupar jugadores por equipo y por cédula
-        Map<Equipo, Map<String, Long>> conteoPorEquipoYCedula = listaJugadores.stream()
-                .collect(Collectors.groupingBy(
-                        DetallePartido::getEquipo,
-                        Collectors.groupingBy(
-                                dp -> dp.getJugador().getCedula(),
-                                Collectors.counting()
-                        )
-                ));
+        // Mapa para rastrear cédulas por equipo
+        Map<Equipo, Set<String>> cedulasPorEquipo = new HashMap<>();
 
-        // Verificar si algún equipo tiene cédulas repetidas
-        return conteoPorEquipoYCedula.values().stream()
-                .anyMatch(cedulaMap -> cedulaMap.values().stream()
-                        .anyMatch(count -> count > 1));
+        for (DetallePartido detalle : listaJugadores) {
+            Equipo equipo = detalle.getEquipo();
+            String cedula = detalle.getJugador().getCedula();
+
+            // Inicializar el conjunto de cédulas si es la primera vez que vemos este equipo
+            cedulasPorEquipo.putIfAbsent(equipo, new HashSet<>());
+
+            // Intentar agregar la cédula al conjunto del equipo
+            if (!cedulasPorEquipo.get(equipo).add(cedula)) {
+                // Si no se puede agregar (porque ya existe), tenemos un duplicado
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean validarMinutoGol(int minuto) {
