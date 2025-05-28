@@ -37,10 +37,11 @@ public class DetallePartidoService {
         }
 
 
-        /*if (!cumpleEquipoNumeroDeJugadores(detalles)) {
+        if (!cumpleEquipoNumeroDeJugadores(detalles)) {
+            System.out.println("Error: No se cumple el número de jugadores por equipo");
             return false;
         }
-        */
+
 
         if (poseeJugadoresDuplicados(detalles)) {
             System.out.println("Error: Hay jugadores duplicados en los detalles del partido");
