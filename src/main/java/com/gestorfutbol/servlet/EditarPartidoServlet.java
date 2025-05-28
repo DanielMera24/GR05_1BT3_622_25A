@@ -48,6 +48,7 @@ public class EditarPartidoServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String partidoIdStr = request.getParameter("id");
+        String viewParam = request.getParameter("view");
 
         if (partidoIdStr == null || partidoIdStr.trim().isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/partidos");
@@ -134,8 +135,11 @@ public class EditarPartidoServlet extends HttpServlet {
             request.setAttribute("detallesEquipoLocal", detallesEquipoLocal);
             request.setAttribute("detallesEquipoVisitante", detallesEquipoVisitante);
 
-            request.getRequestDispatcher("/html/editarPartido.jsp").forward(request, response);
-
+            if (viewParam != null && viewParam.equalsIgnoreCase("true")) {
+                request.getRequestDispatcher("/html/verPartido.jsp").forward(request, response);
+            } else {
+                request.getRequestDispatcher("/html/editarPartido.jsp").forward(request, response);
+            }
 
         } catch (NumberFormatException e) {
             System.err.println("ID de partido inválido: " + partidoIdStr);
